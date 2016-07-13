@@ -1,6 +1,5 @@
 package unknown.thegeniusapp;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +22,7 @@ public class MainMenu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent offline_activity = new Intent(MainMenu.this, OfflineMode.class);
+                offline_activity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(offline_activity);
             }
         });
@@ -52,4 +52,10 @@ public class MainMenu extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    public void onBackPressed(){
+        // Disable back button
+    }
+
 }
