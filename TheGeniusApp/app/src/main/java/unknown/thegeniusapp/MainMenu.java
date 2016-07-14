@@ -21,17 +21,17 @@ public class MainMenu extends AppCompatActivity {
         offline_mode_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent offline_activity = new Intent(MainMenu.this, OfflineMode.class);
-                offline_activity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(offline_activity);
+                Intent offline_mode_activity = new Intent(MainMenu.this, OfflineMode.class);
+                offline_mode_activity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(offline_mode_activity);
             }
         });
 
         settings_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent settings_activity = new Intent(MainMenu.this, Settings.class);
-//                startActivity(settings_activity);
+                Intent settings_activity = new Intent(MainMenu.this, Settings.class);
+                startActivity(settings_activity);
             }
         });
 
@@ -46,7 +46,7 @@ public class MainMenu extends AppCompatActivity {
         quit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                finishAffinity(); //Requires API 14, keep or change to Intent
                 System.exit(0);
             }
         });
