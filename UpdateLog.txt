@@ -1,4 +1,7 @@
-WL:7/13
+WL: 7/14
+Modified settings layout. Created UnknownFunctionGenerator class and testing random number generator.
+
+WL: 7/13
 Modified Main Menu layout, the layout of the buttons will be changed to form the shape of "G"
 Created Settings Window, empty
 
