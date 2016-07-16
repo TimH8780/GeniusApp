@@ -1,3 +1,9 @@
+WL: 7/16
+Implemented random function generator by creating an array of methods and choosing a random method using a random number generator;
+function selects a function, calculates, and returns the value.
+To test: run the code in debug mode, and click on Offline Mode button, navigate to Android Monitor in lowerleft of Android studio to see
+the system output.
+
 WL: 7/14
 Modified settings layout. Created UnknownFunctionGenerator class and testing random number generator.
 

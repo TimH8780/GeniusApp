@@ -12,6 +12,10 @@ import android.view.View;
  */
 public class OfflineMode extends AppCompatActivity{
 
+    private long final_answer;
+    int tempCounter = 100;
+    int testing;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -22,15 +26,16 @@ public class OfflineMode extends AppCompatActivity{
             actionBar.hide();
         }
 
-        //Testing the random number generator to see if it gives same output every time
+        //Initializes the class and generates the answer, can be used to compare with players' answers
         UnknownFunctionGenerator test = new UnknownFunctionGenerator();
-        int testing = test.RandomGenerator();
-        Log.d("Number", Double.toString(testing));
-        while (testing > 0){
-            testing = test.RandomGenerator();
-            Log.d("Number", Double.toString(testing));
-        }
+        final_answer = test.unknownFunctionGenerator();
 
+        //Used to test the random number generator, UnknownFunctionGenerator::randomGenerator()
+//        while (tempCounter > 0){
+//            testing = test.randomGenerator();
+//            Log.d("Number", Long.toString(testing));
+//            tempCounter--;
+//        }
     }
 
     @Override
