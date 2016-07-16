@@ -1,158 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:layout_margin="15dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Game Page"
-        android:textSize="35sp"/>
-
-    <!-- May change the following LinearLayouts into TableLayout and TableRow -->
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@color/LightBlue">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginBottom="5dp"
+            android:text="Player 1"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6"
+            android:src="@drawable/boy_icon_1"/>
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:background="@color/green">
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:text="BOX_1"
-                android:gravity="center_horizontal"
-                android:textSize="25sp"/>
+                android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:textSize="13sp"
+                android:text="Score: "/>
+
+            <TextView
+                android:id="@+id/player1_score"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="13sp"
+                android:text="0"/>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:orientation="horizontal"
-            android:background="@color/green">
+        <Button
+            android:id="@+id/player1_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:layout_weight="3"
+            android:textSize="12sp"
+            android:text="Answer"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="BOX_2"
-                android:gravity="center_horizontal"
-                android:textSize="25sp"/>
-
-        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:background="@color/green">
+        <include
+            android:id="@+id/question"
+            layout="@layout/question_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
-            <TextView
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="BOX_3"
-                android:gravity="center_horizontal"
-                android:textSize="25sp"/>
+                android:orientation="vertical"
+                android:background="@color/silver">
 
-        </LinearLayout>
+                <include
+                    layout="@layout/hint_layout"
+                    android:id="@+id/hint_1" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:orientation="horizontal"
-            android:background="@color/green">
+                <include
+                    layout="@layout/hint_layout"
+                    android:id="@+id/hint_2" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="BOX_4"
-                android:gravity="center_horizontal"
-                android:textSize="25sp"/>
+                <include
+                    layout="@layout/hint_layout"
+                    android:id="@+id/hint_3" />
 
-        </LinearLayout>
+                <include
+                    layout="@layout/hint_layout"
+                    android:id="@+id/hint_4" />
+
+                <include
+                    layout="@layout/hint_layout"
+                    android:id="@+id/hint_5" />
+
+                <include
+                    layout="@layout/hint_layout"
+                    android:id="@+id/hint_6" />
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@color/LightRed">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:text="Player 2"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6"
+            android:src="@drawable/boy_icon_2"/>
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:background="@color/green">
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:text="BOX_5"
-                android:gravity="center_horizontal"
-                android:textSize="25sp"/>
+                android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:textSize="13sp"
+                android:text="Score: "/>
+
+            <TextView
+                android:id="@+id/player2_score"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="13sp"
+                android:text="0"/>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:orientation="horizontal"
-            android:background="@color/green">
+        <Button
+            android:id="@+id/player2_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:layout_weight="3"
+            android:textSize="12sp"
+            android:text="Answer"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="BOX_6"
-                android:gravity="center_horizontal"
-                android:textSize="25sp"/>
-
-        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"/>
 
     </LinearLayout>
-
-
-    <Button
-        android:layout_marginTop="15dp"
-        android:text="Temporary Back"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="back"/>
 
 </LinearLayout>

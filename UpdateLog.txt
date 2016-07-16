@@ -1,3 +1,7 @@
+ZH: 7/16
+Redesigned the Game UI; Put the random function generator into use; Implemented some buttons' function; Added score system; 
+Added codes to test the random function generator and Game UI;
+
 WL: 7/16
 Implemented random function generator by creating an array of methods and choosing a random method using a random number generator;
 function selects a function, calculates, and returns the value.
@@ -12,7 +16,7 @@ Modified Main Menu layout, the layout of the buttons will be changed to form the
 Created Settings Window, empty
 
 ZH: 7/13
-Finished Offline Mode layout, disabled back button in main menu
+Finished Offline Mode layout (temparory), disabled back button in main menu
  
 WL: 7/12
 Created main menu layout and linked new activity for Offline Mode.

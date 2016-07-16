@@ -5,40 +5,54 @@ import android.util.Log;
 import java.util.Random;
 
 /**
- * Created by Unknown on 7/14/2016.
+ *Created by Unknown on 7/14/2016.
  */
 public class UnknownFunctionGenerator {
 
-    public int random_num_a = 2, random_num_b = 3, final_answer;
+    //public int random_num_a, random_num_b, final_answer;
 
     private int MAX_FUNCTIONS = 3;
     private Random generator = new Random();
+    private UnknownFunction random_function;
 
-    int addition(){
-        //For debugging
-        final_answer = random_num_a + random_num_b;
-        Log.d("Addition: ", Integer.toString(final_answer));
-
-        return random_num_a + random_num_b;
+    public UnknownFunctionGenerator(){
+        random_function = unknownFunctionGenerator();
     }
 
-    int multiplication(){
+    private int addition(int a, int b){
         //For debugging
-        final_answer = random_num_a * random_num_b;
-        Log.d("Multiplication: ", Integer.toString(final_answer));
+//        final_answer = random_num_a + random_num_b;
+//        Log.d("Addition: ", Integer.toString(final_answer));
+//
+//        return random_num_a + random_num_b;
 
-        return random_num_a * random_num_b;
+        Log.d("Addition: ", Integer.toString(a + b));
+        return a + b;
     }
 
-    int subtraction(){
+    private int multiplication(int a, int b){
         //For debugging
-        final_answer = Math.max(random_num_a, random_num_b) - Math.min(random_num_a, random_num_b);
-        Log.d("Subtraction: ", Integer.toString(final_answer));
+//        final_answer = random_num_a * random_num_b;
+//        Log.d("Multiplication: ", Integer.toString(final_answer));
+//
+//        return random_num_a * random_num_b;
 
-        return Math.max(random_num_a, random_num_b) - Math.min(random_num_a, random_num_b);
+        Log.d("Multiplication: ", Integer.toString(a * b));
+        return a * b;
     }
 
-    int randomGenerator(){
+    private int subtraction(int a, int b){
+        //For debugging
+//        final_answer = Math.max(random_num_a, random_num_b) - Math.min(random_num_a, random_num_b);
+//        Log.d("Subtraction: ", Integer.toString(final_answer));
+//
+//        return Math.max(random_num_a, random_num_b) - Math.min(random_num_a, random_num_b);
+
+        Log.d("Subtraction: ", Integer.toString(Math.abs(a - b)));
+        return Math.abs(a - b);
+    }
+
+    private int randomGenerator(){
         // Seems to work
         //return  generator.nextInt(MAX_FUNCTIONS + 1);
 
@@ -46,20 +60,24 @@ public class UnknownFunctionGenerator {
         return (int)(((long)System.currentTimeMillis()) % MAX_FUNCTIONS);
     }
 
-    long unknownFunctionGenerator(){
+    private UnknownFunction unknownFunctionGenerator(){
 
         int function_number = randomGenerator();
-        return functionArray[function_number].calculate();
+        return functionArray[function_number];
+    }
+
+    public int getResult(int a, int b){
+        return random_function.calculate(a, b);
     }
 
     //Referenced http://stackoverflow.com/questions/4280727/java-creating-an-array-of-methods
-    interface UnknownFunction{ int calculate(); }
+    interface UnknownFunction{ int calculate(int a, int b); }
 
-    public UnknownFunction[] functionArray = new UnknownFunction[]{
+    private UnknownFunction[] functionArray = new UnknownFunction[]{
 
-        new UnknownFunction() { public int calculate() { return addition(); }}, //functionArray[0]
-        new UnknownFunction() { public int calculate() { return subtraction(); }}, //functionArray[1]
-        new UnknownFunction() { public int calculate() { return multiplication(); }}, //functionArray[2]
+        new UnknownFunction() { public int calculate(int a, int b) { return addition(a, b); }}, //functionArray[0]
+        new UnknownFunction() { public int calculate(int a, int b) { return subtraction(a, b); }}, //functionArray[1]
+        new UnknownFunction() { public int calculate(int a, int b) { return multiplication(a, b); }}, //functionArray[2]
     };
 
 }
