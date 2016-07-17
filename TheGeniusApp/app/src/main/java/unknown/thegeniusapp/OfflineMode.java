@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 /**
  *Created by Unknown on 7/11/2016.
  */
@@ -24,6 +26,8 @@ public class OfflineMode extends AppCompatActivity{
     private Button player2_button;
     private TextView player1_score;
     private TextView player2_score;
+    private TextView input1_view;
+    private TextView input2_view;
     private TextView[] hint_inputs = new TextView[12];
     private TextView[] hint_answer = new TextView[6];
 
@@ -52,8 +56,8 @@ public class OfflineMode extends AppCompatActivity{
         Log.d("Input2", String.valueOf(input2));
 
         View questionContainer = findViewById(R.id.question);
-        TextView input1_view = (TextView) questionContainer.findViewById(R.id.input1);
-        TextView input2_view = (TextView) questionContainer.findViewById(R.id.input2);
+        input1_view = (TextView) questionContainer.findViewById(R.id.input1);
+        input2_view = (TextView) questionContainer.findViewById(R.id.input2);
         input1_view.setText(String.valueOf(input1));
         input2_view.setText(String.valueOf(input2));
 
@@ -127,12 +131,7 @@ public class OfflineMode extends AppCompatActivity{
         final_answer = unknownFunction.getResult(input1, input2);
 
         // Testing
-        int random_pos = (int) Math.floor(Math.random() * 6.0);
-        int random_inp1 = (int) Math.floor(Math.random() * 10000.0);
-        int random_inp2 = (int) Math.floor(Math.random() * 10000.0);
-        hint_inputs[random_pos * 2].setText(String.valueOf(random_inp1));
-        hint_inputs[random_pos * 2 + 1].setText(String.valueOf(random_inp2));
-        hint_answer[random_pos].setText(String.valueOf(unknownFunction.getResult(random_inp1, random_inp2)));
+        testing();
 
         //Used to test the random number generator, UnknownFunctionGenerator::randomGenerator()
 //        while (tempCounter > 0){
@@ -147,7 +146,7 @@ public class OfflineMode extends AppCompatActivity{
         // Disable back button
     }
 
-    View.OnClickListener answer_button = new View.OnClickListener() {
+    private View.OnClickListener answer_button = new View.OnClickListener() {
         @Override
         public void onClick(final View v) {
             AlertDialog.Builder builder = new AlertDialog.Builder(OfflineMode.this);
@@ -164,9 +163,11 @@ public class OfflineMode extends AppCompatActivity{
                     if(answer.getText().length() > 0 && Long.valueOf(answer.getText().toString()) == final_answer){
                         change = 1;
                         Toast.makeText(OfflineMode.this, "Correct", Toast.LENGTH_SHORT).show();
+                        nextRound();
                     } else {
                         change = -1;
                         Toast.makeText(OfflineMode.this, "Incorrect", Toast.LENGTH_SHORT).show();
+                        testing();
                     }
 
                     // Update score
@@ -182,5 +183,33 @@ public class OfflineMode extends AppCompatActivity{
             builder.create().show();
         }
     };
+
+    private void nextRound(){
+        input1 = (int)Math.round(Math.random() * 1000.0) % 1000;
+        input2 = (int)Math.round(Math.random() * 1000.0) % 1000;
+        input1_view.setText(String.valueOf(input1));
+        input2_view.setText(String.valueOf(input2));
+        unknownFunction = new UnknownFunctionGenerator();
+        final_answer = unknownFunction.getResult(input1, input2);
+        for(TextView view: hint_inputs){
+            view.setText("");
+        }
+        for(TextView view: hint_answer){
+            view.setText("");
+        }
+        pos = 0;
+        testing();
+    }
+
+    // Test code
+    int pos = 0;
+    private void testing(){
+        int random_inp1 = (int) Math.floor(Math.random() * 10000.0);
+        int random_inp2 = (int) Math.floor(Math.random() * 10000.0);
+        hint_inputs[pos * 2].setText(String.valueOf(random_inp1));
+        hint_inputs[pos * 2 + 1].setText(String.valueOf(random_inp2));
+        hint_answer[pos].setText(String.valueOf(unknownFunction.getResult(random_inp1, random_inp2)));
+        pos = (pos + 1) % 6;
+    }
 
 }
