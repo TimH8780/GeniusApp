@@ -1,17 +1,20 @@
 package unknown.thegeniusapp;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
-/**
- * Created by Unknown on 7/13/2016.
- */
 public class Settings extends AppCompatActivity {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.hide();
+        }
     }
 
     @Override

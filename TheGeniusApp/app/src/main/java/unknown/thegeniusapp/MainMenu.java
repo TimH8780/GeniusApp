@@ -1,6 +1,7 @@
 package unknown.thegeniusapp;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,11 @@ public class MainMenu extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.hide();
+        }
 
         final Button offline_mode_button = (Button) findViewById(R.id.offline_mode_button);
         final Button settings_button = (Button) findViewById(R.id.settings_button);
@@ -32,6 +38,7 @@ public class MainMenu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent settings_activity = new Intent(MainMenu.this, Settings.class);
+                settings_activity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(settings_activity);
             }
         });
@@ -39,15 +46,16 @@ public class MainMenu extends AppCompatActivity {
         tutorial_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent tutorial_activity = new Intent(MainMenu.this, Tutorial.class);
-//                startActivity(tutorial_activity);
+                Intent tutorial_activity = new Intent(MainMenu.this, TestClass.class);
+                tutorial_activity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(tutorial_activity);
             }
         });
 
         quit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finishAffinity(); //Requires API 14, keep or change to Intent
+                finishAffinity();
                 System.exit(0);
             }
         });

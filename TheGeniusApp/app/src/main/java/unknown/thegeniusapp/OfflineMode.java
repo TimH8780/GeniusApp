@@ -15,11 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-/**
- *Created by Unknown on 7/11/2016.
- */
 public class OfflineMode extends AppCompatActivity{
 
     private Button player1_button;
@@ -32,9 +27,13 @@ public class OfflineMode extends AppCompatActivity{
     private TextView[] hint_answer = new TextView[6];
 
     private UnknownFunctionGenerator unknownFunction;
+    private RandomNumberGenerators randomNumberGenerator;
+    private CountDownTimerSeconds countDown = new CountDownTimerSeconds();;
     private int final_answer;
     private int input1;
     private int input2;
+    private int ROUND_MAX_VALUE = 99;
+    private int HINT_MAX_VALUE = 9999;
     int tempCounter = 100;
     int testing;
 
@@ -42,6 +41,7 @@ public class OfflineMode extends AppCompatActivity{
     protected void onCreate(final Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.offline_mode_window);
+        randomNumberGenerator = new RandomNumberGenerators();
 
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
@@ -49,8 +49,10 @@ public class OfflineMode extends AppCompatActivity{
         }
 
         // Obtain two random inputs and display them
-        input1 = (int)Math.round(Math.random() * 1000.0) % 1000;
-        input2 = (int)Math.round(Math.random() * 1000.0) % 1000;
+//        input1 = (int)(Math.round(Math.random() * 1000.0) % 100);
+//        input2 = (int)(Math.round(Math.random() * 1000.0) % 100);
+        input1 = randomNumberGenerator.randomNumber(ROUND_MAX_VALUE);
+        input2 = randomNumberGenerator.randomNumber(ROUND_MAX_VALUE);
 
         Log.d("Input1", String.valueOf(input1));
         Log.d("Input2", String.valueOf(input2));
@@ -139,6 +141,12 @@ public class OfflineMode extends AppCompatActivity{
 //            Log.d("Number", Long.toString(testing));
 //            tempCounter--;
 //        }
+
+        //Testing CountDownTimer
+
+        countDown.start(11);
+        Log.d("Count: ", Long.toString(countDown.time_left));
+        //countDown.stop();
     }
 
     @Override
@@ -147,8 +155,11 @@ public class OfflineMode extends AppCompatActivity{
     }
 
     private View.OnClickListener answer_button = new View.OnClickListener() {
+
+        //Test
         @Override
         public void onClick(final View v) {
+            countDown.stop();
             AlertDialog.Builder builder = new AlertDialog.Builder(OfflineMode.this);
             builder.setTitle("Enter your answer:");
             final EditText answer = new EditText(OfflineMode.this);
@@ -185,8 +196,10 @@ public class OfflineMode extends AppCompatActivity{
     };
 
     private void nextRound(){
-        input1 = (int)Math.round(Math.random() * 1000.0) % 1000;
-        input2 = (int)Math.round(Math.random() * 1000.0) % 1000;
+//        input1 = (int)Math.round(Math.random() * 1000.0) % 1000;
+//        input2 = (int)Math.round(Math.random() * 1000.0) % 1000;
+        input1 = randomNumberGenerator.randomNumber(ROUND_MAX_VALUE);
+        input2 = randomNumberGenerator.randomNumber(ROUND_MAX_VALUE);
         input1_view.setText(String.valueOf(input1));
         input2_view.setText(String.valueOf(input2));
         unknownFunction = new UnknownFunctionGenerator();

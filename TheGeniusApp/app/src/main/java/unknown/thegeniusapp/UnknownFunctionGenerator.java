@@ -4,65 +4,39 @@ import android.util.Log;
 
 import java.util.Random;
 
-/**
- *Created by Unknown on 7/14/2016.
- */
 public class UnknownFunctionGenerator {
 
-    //public int random_num_a, random_num_b, final_answer;
-
-    private int MAX_FUNCTIONS = 3;
+    private static int MAX_FUNCTIONS = 3;
     private Random generator = new Random();
     private UnknownFunction random_function;
+    private RandomNumberGenerators randomNumberGenerator = new RandomNumberGenerators();
 
-    public UnknownFunctionGenerator(){
-        random_function = unknownFunctionGenerator();
-    }
+    public UnknownFunctionGenerator(){ random_function = unknownFunctionGenerator(); }
 
     private int addition(int a, int b){
-        //For debugging
-//        final_answer = random_num_a + random_num_b;
-//        Log.d("Addition: ", Integer.toString(final_answer));
-//
-//        return random_num_a + random_num_b;
 
         Log.d("Addition: ", Integer.toString(a + b));
         return a + b;
     }
 
     private int multiplication(int a, int b){
-        //For debugging
-//        final_answer = random_num_a * random_num_b;
-//        Log.d("Multiplication: ", Integer.toString(final_answer));
-//
-//        return random_num_a * random_num_b;
 
         Log.d("Multiplication: ", Integer.toString(a * b));
         return a * b;
     }
 
     private int subtraction(int a, int b){
-        //For debugging
-//        final_answer = Math.max(random_num_a, random_num_b) - Math.min(random_num_a, random_num_b);
-//        Log.d("Subtraction: ", Integer.toString(final_answer));
-//
-//        return Math.max(random_num_a, random_num_b) - Math.min(random_num_a, random_num_b);
 
         Log.d("Subtraction: ", Integer.toString(Math.abs(a - b)));
         return Math.abs(a - b);
     }
 
-    private int randomGenerator(){
-        // Seems to work
-        //return  generator.nextInt(MAX_FUNCTIONS + 1);
-
-        //Seems to only increment based on time, but might work in real time
-        return (int)(((long)System.currentTimeMillis()) % MAX_FUNCTIONS);
-    }
+//    private static int randomGenerator(int arg1){ return (int)(Math.random() * 1000.0) % MAX_FUNCTIONS; }
 
     private UnknownFunction unknownFunctionGenerator(){
 
-        int function_number = randomGenerator();
+        //int function_number = randomGenerator(MAX_FUNCTIONS);
+        int function_number = randomNumberGenerator.randomNumber(MAX_FUNCTIONS);
         return functionArray[function_number];
     }
 

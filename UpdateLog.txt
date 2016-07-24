@@ -1,3 +1,7 @@
+WL: 7/17
+Removed the extra launchers created into the device, contains only one now.
+Created RandomNumberGenerator class which can accept the maximum range.
+
 ZH: 7/16
 Redesigned the Game UI; Put the random function generator into use; Implemented some buttons' function; Added score system; 
 Added codes to test the random function generator and Game UI;
