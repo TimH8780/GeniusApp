@@ -1,3 +1,7 @@
+ZH: 7/26
+Incorporated timer into game play; Obtained hint from user; Setup time limit for answering, entering hints and game round;
+Added settings dialog; Added 4 additional functions
+
 WL: 7/17
 Removed the extra launchers created into the device, contains only one now.
 Created RandomNumberGenerator class which can accept the maximum range.

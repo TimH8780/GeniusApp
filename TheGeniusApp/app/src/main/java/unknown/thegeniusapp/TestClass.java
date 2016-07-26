@@ -9,25 +9,34 @@ import android.view.View;
 import android.widget.Button;
 
 /**
- * Created by Unknown on 7/22/2016.
+ *Created by Unknown on 7/22/2016.
  */
 public class TestClass extends AppCompatActivity {
 
-    CountDownTimerSeconds counter = new CountDownTimerSeconds();
+    CountDownTimerSeconds counter;
     long time_seconds = 10;
 
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.countdowntest);
+        counter = new CountDownTimerSeconds(time_seconds, "TestClass");
 
         final Button starting = (Button) findViewById(R.id.start_button);
         final Button stoping = (Button) findViewById(R.id.stop_button);
         final Button resuming = (Button) findViewById(R.id.resume_button);
+        final Button pausing = (Button) findViewById(R.id.pause_button);
 
         starting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                counter.start(time_seconds);
+                counter.start();
+            }
+        });
+
+        pausing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                counter.pause();
             }
         });
 

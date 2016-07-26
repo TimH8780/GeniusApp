@@ -15,6 +15,8 @@
         android:layout_weight="3"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:clickable="false"
+        android:onClick="hintInput"
         android:textSize="20sp" />
 
     <ImageView
@@ -33,6 +35,8 @@
         android:layout_weight="3"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:clickable="false"
+        android:onClick="hintInput"
         android:textSize="20sp"/>
 
     <ImageView
@@ -48,7 +52,7 @@
     <TextView
         android:id="@+id/ans"
         android:layout_width="0dp"
-        android:layout_weight="3"
+        android:layout_weight="7"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="20sp"/>

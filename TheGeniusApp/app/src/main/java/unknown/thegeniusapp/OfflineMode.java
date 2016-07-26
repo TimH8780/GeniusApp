@@ -1,12 +1,14 @@
 package unknown.thegeniusapp;
 
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +17,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static unknown.thegeniusapp.CountDownTimerSeconds.*;
+
 public class OfflineMode extends AppCompatActivity{
+
+    public static final int NUMBER_OF_HINTS = 6;
+    public static final int ROUND_MAX_VALUE = 99;
+    public static final int HINT_MAX_VALUE = 9999;
+    public static final long SECOND_PER_ROUND = 180;
+    public static final long HINT_INPUT_WAIT_TIME = 20;
+    public static final long ANSWER_WAIT_TIME = 10;
+    public static final long PENALTY_TIME = 30;
 
     private Button player1_button;
     private Button player2_button;
@@ -23,17 +39,21 @@ public class OfflineMode extends AppCompatActivity{
     private TextView player2_score;
     private TextView input1_view;
     private TextView input2_view;
+    private ImageView settings_button;
     private TextView[] hint_inputs = new TextView[12];
     private TextView[] hint_answer = new TextView[6];
+    private boolean answerActive = false;
 
     private UnknownFunctionGenerator unknownFunction;
-    private RandomNumberGenerators randomNumberGenerator;
-    private CountDownTimerSeconds countDown = new CountDownTimerSeconds();;
+    private CountDownTimerSeconds[] countDown;
+    private ObtainHintsForRound hintTimer;
+    private Timer timer;
     private int final_answer;
     private int input1;
     private int input2;
-    private int ROUND_MAX_VALUE = 99;
-    private int HINT_MAX_VALUE = 9999;
+    private int hintIndex;
+    private HashMap<TextView, Boolean> hintTable;
+    private AlertDialog dialog;
     int tempCounter = 100;
     int testing;
 
@@ -41,21 +61,16 @@ public class OfflineMode extends AppCompatActivity{
     protected void onCreate(final Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.offline_mode_window);
-        randomNumberGenerator = new RandomNumberGenerators();
 
+        // Remove action bar
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
             actionBar.hide();
         }
 
         // Obtain two random inputs and display them
-//        input1 = (int)(Math.round(Math.random() * 1000.0) % 100);
-//        input2 = (int)(Math.round(Math.random() * 1000.0) % 100);
-        input1 = randomNumberGenerator.randomNumber(ROUND_MAX_VALUE);
-        input2 = randomNumberGenerator.randomNumber(ROUND_MAX_VALUE);
-
-        Log.d("Input1", String.valueOf(input1));
-        Log.d("Input2", String.valueOf(input2));
+        input1 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
+        input2 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
 
         View questionContainer = findViewById(R.id.question);
         input1_view = (TextView) questionContainer.findViewById(R.id.input1);
@@ -64,14 +79,8 @@ public class OfflineMode extends AppCompatActivity{
         input2_view.setText(String.valueOf(input2));
 
         // Add Click event and touch effect to the settings button (image)
-        ImageView settings_button = (ImageView) questionContainer.findViewById(R.id.settings_button);
-        settings_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // it is supposed to be a settings button, but for now it will only be acted as quit button
-                finish();
-            }
-        });
+        settings_button = (ImageView) questionContainer.findViewById(R.id.settings_button);
+        settings_button.setOnClickListener(pause_button);
         settings_button.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -84,7 +93,6 @@ public class OfflineMode extends AppCompatActivity{
                     case MotionEvent.ACTION_UP:
                         view.setImageResource(R.drawable.settings_icon_black);
                         break;
-
                 }
                 return false;
             }
@@ -100,7 +108,7 @@ public class OfflineMode extends AppCompatActivity{
         player1_score = (TextView) findViewById(R.id.player1_score);
         player2_score = (TextView) findViewById(R.id.player2_score);
 
-        // Initialize all hint input buttons
+        // Initialize all hintTable input 'buttons'
         View hint1 = findViewById(R.id.hint_1);
         View hint2 = findViewById(R.id.hint_2);
         View hint3 = findViewById(R.id.hint_3);
@@ -119,8 +127,11 @@ public class OfflineMode extends AppCompatActivity{
         hint_inputs[9] = (TextView) hint5.findViewById(R.id.num2);
         hint_inputs[10] = (TextView) hint6.findViewById(R.id.num1);
         hint_inputs[11] = (TextView) hint6.findViewById(R.id.num2);
+        for(TextView view: hint_inputs){
+            view.setClickable(false);
+        }
 
-        // Initialize all hint answer field
+        // Initialize all hintTable answer fields
         hint_answer[0] = (TextView) hint1.findViewById(R.id.ans);
         hint_answer[1] = (TextView) hint2.findViewById(R.id.ans);
         hint_answer[2] = (TextView) hint3.findViewById(R.id.ans);
@@ -128,25 +139,21 @@ public class OfflineMode extends AppCompatActivity{
         hint_answer[4] = (TextView) hint5.findViewById(R.id.ans);
         hint_answer[5] = (TextView) hint6.findViewById(R.id.ans);
 
-        //Initializes the class and generates the answer, can be used to compare with players' answers
+        // Initializes the function generator and generates the answer, can be used to compare with players' answers
         unknownFunction = new UnknownFunctionGenerator();
         final_answer = unknownFunction.getResult(input1, input2);
 
-        // Testing
-        testing();
+        // Initializes four CountDownTimers
+        countDown = new CountDownTimerSeconds[4];
+        countDown[0] = new CountDownTimerSeconds(SECOND_PER_ROUND, "Game");         // 0: Round Timer
+        countDown[1] = new CountDownTimerSeconds(HINT_INPUT_WAIT_TIME, "Hint");    // 1: HintChecker Timer
+        countDown[2] = new CountDownTimerSeconds(ANSWER_WAIT_TIME, "Answer");      // 2: Answer Timer
+        countDown[3] = new CountDownTimerSeconds(PENALTY_TIME, "Penalty");         // 3: Penalty Timer
 
-        //Used to test the random number generator, UnknownFunctionGenerator::randomGenerator()
-//        while (tempCounter > 0){
-//            testing = test.randomGenerator();
-//            Log.d("Number", Long.toString(testing));
-//            tempCounter--;
-//        }
-
-        //Testing CountDownTimer
-
-        countDown.start(11);
-        Log.d("Count: ", Long.toString(countDown.time_left));
-        //countDown.stop();
+        // Start round timer and obtain first hintTable inputs
+        hintIndex = 0;
+        countDown[0].start();
+        callHintTimer();
     }
 
     @Override
@@ -154,75 +161,393 @@ public class OfflineMode extends AppCompatActivity{
         // Disable back button
     }
 
+    // The onClickListener for the two answer buttons
     private View.OnClickListener answer_button = new View.OnClickListener() {
-
-        //Test
         @Override
         public void onClick(final View v) {
-            countDown.stop();
-            AlertDialog.Builder builder = new AlertDialog.Builder(OfflineMode.this);
-            builder.setTitle("Enter your answer:");
-            final EditText answer = new EditText(OfflineMode.this);
-            answer.setInputType(InputType.TYPE_CLASS_NUMBER);
-            builder.setCancelable(false);
-            builder.setView(answer);
-            builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Check answer
-                    int change;
-                    if(answer.getText().length() > 0 && Long.valueOf(answer.getText().toString()) == final_answer){
-                        change = 1;
-                        Toast.makeText(OfflineMode.this, "Correct", Toast.LENGTH_SHORT).show();
-                        nextRound();
-                    } else {
-                        change = -1;
-                        Toast.makeText(OfflineMode.this, "Incorrect", Toast.LENGTH_SHORT).show();
-                        testing();
-                    }
+            // Ensure only one button can invoke the listener
+            if(!answerActive) {
+                answerActive = true;
 
-                    // Update score
-                    if(v == player1_button){
-                        int currentScore = Integer.valueOf(player1_score.getText().toString());
-                        player1_score.setText(String.valueOf(currentScore + change));
-                    } else {
-                        int currentScore = Integer.valueOf(player2_score.getText().toString());
-                        player2_score.setText(String.valueOf(currentScore + change));
+                // Pause timers
+                countDown[0].pause();
+                countDown[1].pause();
+                countDown[3].pause();
+
+                // Build the answer dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(OfflineMode.this);
+                String name = getPlayerName(v);
+                builder.setTitle("Enter your (" + name + ") answer:");
+                builder.setCancelable(false);
+                LayoutInflater inflater = getLayoutInflater();
+                View popupView = inflater.inflate(R.layout.answer_popup, null);
+                final EditText answer = (EditText) popupView.findViewById(R.id.answer);
+                builder.setView(popupView);
+
+                // Submit event
+                builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Check answer
+                        int change;
+                        if (answer.getText().length() > 0 && Long.valueOf(answer.getText().toString()) == final_answer) {
+                            change = 1;
+                            Toast.makeText(OfflineMode.this, "Correct", Toast.LENGTH_SHORT).show();
+                        } else {
+                            change = -1;
+                            Toast.makeText(OfflineMode.this, "Incorrect", Toast.LENGTH_SHORT).show();
+                        }
+
+                        // Update score
+                        updateScore(change, v);
+                        countDown[2].stop();
+
+                        // Resume all paused timers
+                        countDown[0].resume();
+                        countDown[1].resume();
+                        countDown[3].resume();
+                        answerActive = false;
+                        if (change == 1) {
+                            nextRound();
+                        }
                     }
-                }
-            });
-            builder.create().show();
+                });
+
+                // Display dialog and execute AnswerChecker
+                AlertDialog alertDialog = builder.create();
+                new AnswerChecker(v, alertDialog).execute();
+                alertDialog.show();
+            }
         }
     };
 
+    // Update the score on either player
+    private void updateScore(int change, View view){
+        TextView score = (view == player1_button)? player1_score: player2_score;
+        int currentScore = Integer.valueOf(score.getText().toString());
+        score.setText(String.valueOf(currentScore + change));
+    }
+
+    // Obtain the name of either player
+    private String getPlayerName(View view){
+        return (view == player1_button)? "Player 1": "Player 2";
+    }
+
+    // The onClickListener for the settings (pause) buttons
+    private View.OnClickListener pause_button = new View.OnClickListener() {
+        @Override
+        public void onClick(final View v) {
+            // Pause all timers
+            for(CountDownTimerSeconds timer: countDown) {
+                timer.pause();
+            }
+
+            // Build the settings dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(OfflineMode.this);
+            builder.setTitle("Game Paused");
+            builder.setCancelable(false);
+            LayoutInflater inflater = getLayoutInflater();
+            View popupView = inflater.inflate(R.layout.game_pause_popup, null);
+            builder.setView(popupView);
+            final AlertDialog alertDialog = builder.create();
+
+            // Function of resume button
+            Button resume = (Button) popupView.findViewById(R.id.resume_button);
+            resume.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Resume all paused timers and close dialog
+                    for(CountDownTimerSeconds timer: countDown) {
+                        timer.resume();
+                    }
+                    alertDialog.dismiss();
+                }
+            });
+
+            // Function of settings button
+            Button settings = (Button) popupView.findViewById(R.id.settings_button);
+            settings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO: Settings Page
+                    Toast.makeText(OfflineMode.this, "Pending", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            // Function of quit button
+            Button quit = (Button) popupView.findViewById(R.id.quit_button);
+            quit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Stop all timers, quit game, and return to main page
+                    for(CountDownTimerSeconds timer: countDown) {
+                        timer.stop();
+                    }
+                    alertDialog.dismiss();
+                    timer.cancel();
+                    finish();
+                }
+            });
+
+            // Display dialog
+            alertDialog.show();
+        }
+    };
+
+    // Clear all fields and timers for next round
     private void nextRound(){
-//        input1 = (int)Math.round(Math.random() * 1000.0) % 1000;
-//        input2 = (int)Math.round(Math.random() * 1000.0) % 1000;
-        input1 = randomNumberGenerator.randomNumber(ROUND_MAX_VALUE);
-        input2 = randomNumberGenerator.randomNumber(ROUND_MAX_VALUE);
+        // Stop timer for getting hints
+        hintTimer.cancel(true);
+
+        // Regenerate two numbers, unknown function and answer
+        input1 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
+        input2 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
         input1_view.setText(String.valueOf(input1));
         input2_view.setText(String.valueOf(input2));
         unknownFunction = new UnknownFunctionGenerator();
         final_answer = unknownFunction.getResult(input1, input2);
+
+        // Clear all fields
         for(TextView view: hint_inputs){
             view.setText("");
         }
         for(TextView view: hint_answer){
             view.setText("");
         }
-        pos = 0;
-        testing();
+
+        // Stop all timers
+        for(CountDownTimerSeconds timer: countDown) {
+            timer.stop();
+        }
+
+        // Reset and restart round timer and timer for getting hints
+        countDown[0] = new CountDownTimerSeconds(SECOND_PER_ROUND, "Game");
+        hintIndex = 0;
+        countDown[0].start();
     }
 
-    // Test code
-    int pos = 0;
-    private void testing(){
-        int random_inp1 = (int) Math.floor(Math.random() * 10000.0);
-        int random_inp2 = (int) Math.floor(Math.random() * 10000.0);
-        hint_inputs[pos * 2].setText(String.valueOf(random_inp1));
-        hint_inputs[pos * 2 + 1].setText(String.valueOf(random_inp2));
-        hint_answer[pos].setText(String.valueOf(unknownFunction.getResult(random_inp1, random_inp2)));
-        pos = (pos + 1) % 6;
+    // Get hintTable from players for fields, index * 2 and index * 2 + 1
+    private void getHintInput(int index){
+        if(index > 5){
+            return;
+        }
+        new HintChecker(index).execute();
+    }
+
+    // Change the appearance of hintTable field before and after obtaining hintTable input from players
+    private void changeAppearance(TextView view, boolean before){
+        if(before){
+            // Change text to "Click", color to RED, and clickable
+            view.setText("Click");
+            view.setTextColor(0xFFFF0000);
+            view.setClickable(true);
+        } else {
+            // Change color to BLACK, and unclickable
+            view.setTextColor(0xFF000000);
+            view.setClickable(false);
+        }
+    }
+
+    // The onClickListener for all hintTable fields
+    public void hintInput(final View view) {
+        // Build dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(OfflineMode.this);
+        builder.setTitle("Enter your Input for HintChecker:");
+        LayoutInflater inflater = getLayoutInflater();
+        View popupView = inflater.inflate(R.layout.answer_popup, null);
+        final EditText input = (EditText) popupView.findViewById(R.id.answer);
+        input.setHint("Integer range from 0 to 9999");
+        builder.setView(popupView);
+
+        // Submit event
+        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Validate the input
+                if(input.getText().toString().length() > 4 || input.getText().toString().equals("")){
+                    Toast.makeText(OfflineMode.this, "Invalid value", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Set hintTable field to input-value
+                ((TextView)view).setText(input.getText().toString());
+                hintTable.put((TextView)view, true);
+            }
+        });
+
+        // Display dialog
+        dialog = builder.create();
+        dialog.show();
+    }
+
+    // Repeatedly call ObtainHintsForRound every 0.45 second
+    private void callHintTimer() {
+        final Handler handler = new Handler();
+        timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() {
+                        hintTimer = new ObtainHintsForRound();
+                        hintTimer.execute();
+                    }
+                });
+            }
+        };
+        timer.schedule(task, 0, 450);     // Execute in every 0.45 second
+    }
+
+    // AsyncTask #1
+    private class HintChecker extends AsyncTask<Void, Void, Void> {
+        private int index;
+        private TextView left;
+        private TextView right;
+
+        private HintChecker(int index){
+            this.index = index;
+            countDown[1] = new CountDownTimerSeconds(HINT_INPUT_WAIT_TIME, "Hint");
+            left = hint_inputs[index * 2];
+            right = hint_inputs[index * 2 + 1];
+        }
+
+        @Override
+        protected  void onPreExecute(){
+            // Pause timers
+            countDown[0].pause();
+            countDown[2].pause();
+            countDown[3].pause();
+
+            // Create a table to check if hint is entered
+            hintTable = new HashMap<>();
+            hintTable.put(left, false);
+            hintTable.put(right, false);
+
+            // Change the appearance of both hint fields and disable the two answer buttons
+            changeAppearance(left, true);
+            changeAppearance(right, true);
+            player1_button.setClickable(false);
+            player2_button.setClickable(false);
+            settings_button.setClickable(false);
+
+            // Start HintChecker timer
+            countDown[1].start();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // Loop until the HintChecker timer is done or both hint fields is entered by players
+            while(!countDown[1].isFinished() && !(hintTable.get(left) && hintTable.get(right)));
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            // Stop HintChecker timer
+            countDown[1].stop();
+
+            // Enable answer buttons and change back the appearance of the hint fields
+            player1_button.setClickable(true);
+            player2_button.setClickable(true);
+            settings_button.setClickable(true);
+            changeAppearance(left, false);
+            changeAppearance(right, false);
+
+            // Remove the dialog if it is displayed
+            if(dialog != null && dialog.isShowing()){
+                dialog.dismiss();
+            }
+
+            // Randomly generate the hint if it is not entered by player
+            if(!hintTable.get(left)){
+                left.setText(String.valueOf(RandomNumberGenerators.randomNumber(HINT_MAX_VALUE)));
+            }
+            if(!hintTable.get(right)){
+                right.setText(String.valueOf(RandomNumberGenerators.randomNumber(HINT_MAX_VALUE)));
+            }
+
+            // Calculate the hint answer
+            int inp1 = Integer.valueOf(left.getText().toString());
+            int inp2 = Integer.valueOf(right.getText().toString());
+            hint_answer[index].setText(String.valueOf(unknownFunction.getResult(inp1, inp2)));
+
+            // Resume timers
+            countDown[0].resume();
+            countDown[2].resume();
+            countDown[3].resume();
+        }
+    }
+
+    // AsyncTask #2
+    private class AnswerChecker extends AsyncTask<Void, Void, Void>{
+        private View view;
+        private AlertDialog dialog;
+
+        private AnswerChecker(View view, AlertDialog dialog){
+            this.view = view;
+            this.dialog = dialog;
+        }
+
+        @Override
+        protected  void onPreExecute(){
+            // Reset and start Answer Timer
+            countDown[2] = new CountDownTimerSeconds(ANSWER_WAIT_TIME, "Answer");
+            countDown[2].start();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // Loop until the Answer timer is done
+            while(!countDown[2].isFinished());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            // Stop Answer timer
+            countDown[2].stop();
+
+            // Remove dialog, deduce score and resume timers if the dialog is displayed
+            if(dialog != null && dialog.isShowing()){
+                dialog.dismiss();
+                answerActive = false;
+                updateScore(-1, view);
+                countDown[0].resume();
+                countDown[1].resume();
+                countDown[3].resume();
+            }
+        }
+    }
+
+    // AsyncTask #3
+    private class ObtainHintsForRound extends AsyncTask<Void, Boolean, Boolean>{
+        private long requireTime;
+
+        public ObtainHintsForRound(){
+            // Calculate the timing to get hint inputs from players
+            long hintInterval = SECOND_PER_ROUND / NUMBER_OF_HINTS * hintIndex;
+            requireTime = (SECOND_PER_ROUND  - hintInterval) * SECOND_TO_MILLISECOND;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // Return if timing is valid
+            if(hintIndex > 5 || countDown[0].isPaused() || Math.abs(countDown[0].getTimerTime() - requireTime) > 1000){
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            // Get hint inputs if result is true
+            if(result){
+                Log.d("Res", "True");
+                getHintInput(hintIndex++);
+            } else {
+                Log.d("Res", "False");
+            }
+        }
     }
 
 }

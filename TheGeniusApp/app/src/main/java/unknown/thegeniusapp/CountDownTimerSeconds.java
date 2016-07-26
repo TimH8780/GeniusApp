@@ -1,56 +1,91 @@
 package unknown.thegeniusapp;
 
-import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 /**
- * Created by Unknown on 7/17/2016.
+ *Created by Unknown on 7/17/2016.
  */
-public class CountDownTimerSeconds extends AppCompatActivity {
+public class CountDownTimerSeconds {
 
-    long time_left = 0;
-    private CountDownTimer counter;
-    private static long frequency = 1000;
-    boolean pause = false;
+    public static final long SECOND_TO_MILLISECOND = 1000;
+    public static final long FREQUENCY = 200;
 
+    private long time_left;
+    private Timer counter;
+    private boolean pause;
+    private boolean ongoing;
+    private String id;
 
-    public void start(long total_seconds){
-        counter = new CountDownTimer(total_seconds*frequency, frequency) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                time_left = millisUntilFinished/frequency;
-                Log.d("start: ", Long.toString(time_left));
-            }
+    private class Timer extends CountDownTimer{
 
-            @Override
-            public void onFinish() {
+        private Timer(long millisInFuture) {
+            super(millisInFuture, FREQUENCY);
+            time_left = millisInFuture;
+            pause = false;
+            ongoing = false;
+        }
 
-            }
-        }.start();
+        @Override
+        public void onTick(long millisUntilFinished) {
+            time_left = millisUntilFinished;
+            Log.d("Ongoing - " + id, Double.toString(time_left / 1000.0));
+        }
+
+        @Override
+        public void onFinish() {
+            time_left = 0;
+            ongoing = false;
+            Log.d("FINISH - " + id, "");
+        }
+    }
+
+    public CountDownTimerSeconds(long total_second, String id){
+        counter = new Timer(total_second * SECOND_TO_MILLISECOND);
+        this.id = id;
+    }
+
+    public void start(){
+        if(!ongoing) {
+            counter.start();
+            pause = false;
+            ongoing = true;
+        }
+        Log.d("start - " + id, Double.toString(time_left / 1000.0));
     }
 
     public void stop(){
-        counter.cancel();
-        Log.d("stop: ", Long.toString(time_left));
+        if(ongoing) {
+            counter.cancel();
+            pause = false;
+            time_left = 0;
+            ongoing = false;
+        }
+        Log.d("stop - " + id, Double.toString(time_left / 1000.0));
     }
 
-    public void resume() {
-        Log.d("stop: ", Long.toString(time_left));
-        counter = new CountDownTimer(time_left*frequency, frequency) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                time_left = millisUntilFinished/frequency;
-                Log.d("resume: ", Long.toString(time_left));
-            }
-
-            @Override
-            public void onFinish() {
-                time_left = 0;
-            }
-        }.start();
-
+    public void pause(){
+        if(ongoing) {
+            counter.cancel();
+            pause = true;
+            ongoing = false;
+        }
+        Log.d("pause - " + id, Double.toString(time_left / 1000.0));
     }
+
+    public void resume(){
+        if(pause && !ongoing) {
+            counter = new Timer(time_left);
+            counter.start();
+            pause = false;
+            ongoing = true;
+        }
+        Log.d("resume - " + id, Double.toString(time_left / 1000.0));
+    }
+
+    public boolean isPaused(){ return  pause; }
+    public boolean isFinished(){
+        return time_left == 0;
+    }
+    public long getTimerTime(){ return time_left; }
 }
