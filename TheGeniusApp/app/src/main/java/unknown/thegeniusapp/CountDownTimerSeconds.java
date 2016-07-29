@@ -2,6 +2,9 @@ package unknown.thegeniusapp;
 
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.widget.Toast;
+
+import static unknown.thegeniusapp.OfflineMode.*;
 
 /**
  *Created by Unknown on 7/17/2016.
@@ -16,6 +19,7 @@ public class CountDownTimerSeconds {
     private boolean pause;
     private boolean ongoing;
     private String id;
+    private OfflineMode game;
 
     private class Timer extends CountDownTimer{
 
@@ -36,13 +40,24 @@ public class CountDownTimerSeconds {
         public void onFinish() {
             time_left = 0;
             ongoing = false;
+            if(id.equals(ROUND_ID) && game != null){
+                Toast.makeText(game.getApplicationContext(), "Time Up for this Round!", Toast.LENGTH_SHORT).show();
+                game.nextRound();
+            }
             Log.d("FINISH - " + id, "");
         }
+    }
+
+    public CountDownTimerSeconds(long total_second, String id, OfflineMode game){
+        counter = new Timer(total_second * SECOND_TO_MILLISECOND);
+        this.id = id;
+        this.game = game;
     }
 
     public CountDownTimerSeconds(long total_second, String id){
         counter = new Timer(total_second * SECOND_TO_MILLISECOND);
         this.id = id;
+        this.game = null;
     }
 
     public void start(){

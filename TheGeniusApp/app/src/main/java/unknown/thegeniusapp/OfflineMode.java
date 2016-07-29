@@ -32,6 +32,10 @@ public class OfflineMode extends AppCompatActivity{
     public static final long HINT_INPUT_WAIT_TIME = 20;
     public static final long ANSWER_WAIT_TIME = 10;
     public static final long PENALTY_TIME = 30;
+    public static final String ROUND_ID = "Round";
+    public static final String HINT_ID = "Hint";
+    public static final String ANSWER_ID = "Answer";
+    public static final String PENALTY_ID = "Penalty";
 
     private Button player1_button;
     private Button player2_button;
@@ -48,7 +52,7 @@ public class OfflineMode extends AppCompatActivity{
     private CountDownTimerSeconds[] countDown;
     private ObtainHintsForRound hintTimer;
     private Timer timer;
-    private int final_answer;
+    private long final_answer;
     private int input1;
     private int input2;
     private int hintIndex;
@@ -108,7 +112,7 @@ public class OfflineMode extends AppCompatActivity{
         player1_score = (TextView) findViewById(R.id.player1_score);
         player2_score = (TextView) findViewById(R.id.player2_score);
 
-        // Initialize all hintTable input 'buttons'
+        // Initialize all hint input 'buttons'
         View hint1 = findViewById(R.id.hint_1);
         View hint2 = findViewById(R.id.hint_2);
         View hint3 = findViewById(R.id.hint_3);
@@ -131,7 +135,7 @@ public class OfflineMode extends AppCompatActivity{
             view.setClickable(false);
         }
 
-        // Initialize all hintTable answer fields
+        // Initialize all hint answer fields
         hint_answer[0] = (TextView) hint1.findViewById(R.id.ans);
         hint_answer[1] = (TextView) hint2.findViewById(R.id.ans);
         hint_answer[2] = (TextView) hint3.findViewById(R.id.ans);
@@ -145,12 +149,12 @@ public class OfflineMode extends AppCompatActivity{
 
         // Initializes four CountDownTimers
         countDown = new CountDownTimerSeconds[4];
-        countDown[0] = new CountDownTimerSeconds(SECOND_PER_ROUND, "Game");         // 0: Round Timer
-        countDown[1] = new CountDownTimerSeconds(HINT_INPUT_WAIT_TIME, "Hint");    // 1: HintChecker Timer
-        countDown[2] = new CountDownTimerSeconds(ANSWER_WAIT_TIME, "Answer");      // 2: Answer Timer
-        countDown[3] = new CountDownTimerSeconds(PENALTY_TIME, "Penalty");         // 3: Penalty Timer
+        countDown[0] = new CountDownTimerSeconds(SECOND_PER_ROUND, ROUND_ID, this);         // 0: Round Timer
+        countDown[1] = new CountDownTimerSeconds(HINT_INPUT_WAIT_TIME, HINT_ID);    // 1: HintChecker Timer
+        countDown[2] = new CountDownTimerSeconds(ANSWER_WAIT_TIME, ANSWER_ID);      // 2: Answer Timer
+        countDown[3] = new CountDownTimerSeconds(PENALTY_TIME, PENALTY_ID);         // 3: Penalty Timer
 
-        // Start round timer and obtain first hintTable inputs
+        // Start round timer and obtain first hint inputs
         hintIndex = 0;
         countDown[0].start();
         callHintTimer();
@@ -295,7 +299,7 @@ public class OfflineMode extends AppCompatActivity{
     };
 
     // Clear all fields and timers for next round
-    private void nextRound(){
+    protected void nextRound(){
         // Stop timer for getting hints
         hintTimer.cancel(true);
 
@@ -321,12 +325,12 @@ public class OfflineMode extends AppCompatActivity{
         }
 
         // Reset and restart round timer and timer for getting hints
-        countDown[0] = new CountDownTimerSeconds(SECOND_PER_ROUND, "Game");
+        countDown[0] = new CountDownTimerSeconds(SECOND_PER_ROUND, ROUND_ID, this);
         hintIndex = 0;
         countDown[0].start();
     }
 
-    // Get hintTable from players for fields, index * 2 and index * 2 + 1
+    // Get hint from players for fields, index * 2 and index * 2 + 1
     private void getHintInput(int index){
         if(index > 5){
             return;
@@ -334,7 +338,7 @@ public class OfflineMode extends AppCompatActivity{
         new HintChecker(index).execute();
     }
 
-    // Change the appearance of hintTable field before and after obtaining hintTable input from players
+    // Change the appearance of hint field before and after obtaining hint input from players
     private void changeAppearance(TextView view, boolean before){
         if(before){
             // Change text to "Click", color to RED, and clickable
@@ -348,7 +352,7 @@ public class OfflineMode extends AppCompatActivity{
         }
     }
 
-    // The onClickListener for all hintTable fields
+    // The onClickListener for all hint fields
     public void hintInput(final View view) {
         // Build dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(OfflineMode.this);
@@ -369,7 +373,7 @@ public class OfflineMode extends AppCompatActivity{
                     return;
                 }
 
-                // Set hintTable field to input-value
+                // Set hint field to input-value
                 ((TextView)view).setText(input.getText().toString());
                 hintTable.put((TextView)view, true);
             }
@@ -406,7 +410,7 @@ public class OfflineMode extends AppCompatActivity{
 
         private HintChecker(int index){
             this.index = index;
-            countDown[1] = new CountDownTimerSeconds(HINT_INPUT_WAIT_TIME, "Hint");
+            countDown[1] = new CountDownTimerSeconds(HINT_INPUT_WAIT_TIME, HINT_ID);
             left = hint_inputs[index * 2];
             right = hint_inputs[index * 2 + 1];
         }
@@ -491,7 +495,7 @@ public class OfflineMode extends AppCompatActivity{
         @Override
         protected  void onPreExecute(){
             // Reset and start Answer Timer
-            countDown[2] = new CountDownTimerSeconds(ANSWER_WAIT_TIME, "Answer");
+            countDown[2] = new CountDownTimerSeconds(ANSWER_WAIT_TIME, ANSWER_ID);
             countDown[2].start();
         }
 
