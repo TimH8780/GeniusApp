@@ -1,13 +1,13 @@
 package unknown.thegeniusapp;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,12 +22,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static unknown.thegeniusapp.CountDownTimerSeconds.*;
+import static unknown.thegeniusapp.ModeSelection.*;
 
 public class OfflineMode extends AppCompatActivity{
 
     public static final int NUMBER_OF_HINTS = 6;
-    public static final int ROUND_MAX_VALUE = 99;
-    public static final int HINT_MAX_VALUE = 9999;
+    public static final int ROUND_MAX_VALUE = 50;
+    public static final int HINT_MAX_VALUE = 99;
     public static final long SECOND_PER_ROUND = 180;
     public static final long HINT_INPUT_WAIT_TIME = 20;
     public static final long ANSWER_WAIT_TIME = 10;
@@ -58,8 +59,9 @@ public class OfflineMode extends AppCompatActivity{
     private int hintIndex;
     private HashMap<TextView, Boolean> hintTable;
     private AlertDialog dialog;
-    int tempCounter = 100;
-    int testing;
+    private String gameType;
+    private int RoundCounter;
+    private int gameLimit;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState){
@@ -71,6 +73,16 @@ public class OfflineMode extends AppCompatActivity{
         if(actionBar != null){
             actionBar.hide();
         }
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            gameType = bundle.getString("Type");
+            gameLimit = bundle.getInt("Limit");
+        } else {
+            // For debug purpose
+            throw new IndexOutOfBoundsException("No Extra Bundle");
+        }
+        RoundCounter = 1;
 
         // Obtain two random inputs and display them
         input1 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
@@ -91,11 +103,12 @@ public class OfflineMode extends AppCompatActivity{
                 ImageView view = (ImageView) v;
                 switch (event.getAction()){
                     case MotionEvent.ACTION_DOWN:
-                        view.setImageResource(R.drawable.settings_icon_purple);
+                        view.setImageResource(R.drawable.pause_icon_blue);
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setImageResource(R.drawable.settings_icon_black);
+                    case MotionEvent.ACTION_CANCEL:
+                        view.setImageResource(R.drawable.pause_icon_black);
                         break;
                 }
                 return false;
@@ -150,9 +163,9 @@ public class OfflineMode extends AppCompatActivity{
         // Initializes four CountDownTimers
         countDown = new CountDownTimerSeconds[4];
         countDown[0] = new CountDownTimerSeconds(SECOND_PER_ROUND, ROUND_ID, this);         // 0: Round Timer
-        countDown[1] = new CountDownTimerSeconds(HINT_INPUT_WAIT_TIME, HINT_ID);    // 1: HintChecker Timer
-        countDown[2] = new CountDownTimerSeconds(ANSWER_WAIT_TIME, ANSWER_ID);      // 2: Answer Timer
-        countDown[3] = new CountDownTimerSeconds(PENALTY_TIME, PENALTY_ID);         // 3: Penalty Timer
+        countDown[1] = new CountDownTimerSeconds(HINT_INPUT_WAIT_TIME, HINT_ID);            // 1: HintChecker Timer
+        countDown[2] = new CountDownTimerSeconds(ANSWER_WAIT_TIME, ANSWER_ID);              // 2: Answer Timer
+        countDown[3] = new CountDownTimerSeconds(PENALTY_TIME, PENALTY_ID);                 // 3: Penalty Timer
 
         // Start round timer and obtain first hint inputs
         hintIndex = 0;
@@ -196,10 +209,10 @@ public class OfflineMode extends AppCompatActivity{
                         int change;
                         if (answer.getText().length() > 0 && Long.valueOf(answer.getText().toString()) == final_answer) {
                             change = 1;
-                            Toast.makeText(OfflineMode.this, "Correct", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OfflineMode.this, "Congratulation! Correct Answer!", Toast.LENGTH_LONG).show();
                         } else {
                             change = -1;
-                            Toast.makeText(OfflineMode.this, "Incorrect", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OfflineMode.this, "Incorrect Answer", Toast.LENGTH_SHORT).show();
                         }
 
                         // Update score
@@ -273,8 +286,9 @@ public class OfflineMode extends AppCompatActivity{
             settings.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO: Settings Page
-                    Toast.makeText(OfflineMode.this, "Pending", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(OfflineMode.this, Settings.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
                 }
             });
 
@@ -324,10 +338,67 @@ public class OfflineMode extends AppCompatActivity{
             timer.stop();
         }
 
-        // Reset and restart round timer and timer for getting hints
-        countDown[0] = new CountDownTimerSeconds(SECOND_PER_ROUND, ROUND_ID, this);
-        hintIndex = 0;
-        countDown[0].start();
+        // Check whether there is a next round
+        if(!endGame()) {
+            // Reset and restart round timer and timer for getting hints
+            RoundCounter++;
+            countDown[0] = new CountDownTimerSeconds(SECOND_PER_ROUND, ROUND_ID, this);
+            hintIndex = 0;
+            countDown[0].start();
+        } else {
+            endGameDialog();
+        }
+    }
+
+    // Check if the game should be ended
+    private boolean endGame(){
+        int p1_score = Integer.valueOf(player1_score.getText().toString());
+        int p2_score = Integer.valueOf(player2_score.getText().toString());
+        if(p1_score == p2_score){
+            // Over Time if both players have same score
+            return false;
+        }
+
+        if(gameType.equals(score)) {
+            // Score Mode
+            return Math.abs(p1_score) >= gameLimit || Math.abs(p2_score) >= gameLimit;
+        }
+        // Round Mode
+        return RoundCounter >= gameLimit;
+    }
+
+    // Get the winning player
+    private String getWinner(){
+        int p1_score = Integer.valueOf(player1_score.getText().toString());
+        int p2_score = Integer.valueOf(player2_score.getText().toString());
+        return (p1_score > p2_score)? "Player 1": "Player 2";
+    }
+
+    // Build the end game dialog
+    private void endGameDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(OfflineMode.this);
+        builder.setTitle("Game Over");
+        builder.setMessage("Congratulations! " + getWinner() + " wins the game!!");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Next Game", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                timer.cancel();
+                dialog.dismiss();
+                Intent intent = new Intent(OfflineMode.this, ModeSelection.class);
+                finish();
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Quit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                timer.cancel();
+                dialog.dismiss();
+                finish();
+            }
+        });
+        builder.create().show();
     }
 
     // Get hint from players for fields, index * 2 and index * 2 + 1
@@ -536,20 +607,14 @@ public class OfflineMode extends AppCompatActivity{
         @Override
         protected Boolean doInBackground(Void... params) {
             // Return if timing is valid
-            if(hintIndex > 5 || countDown[0].isPaused() || Math.abs(countDown[0].getTimerTime() - requireTime) > 1000){
-                return false;
-            }
-            return true;
+            return !(hintIndex > 5 || countDown[0].isPaused() || Math.abs(countDown[0].getTimerTime() - requireTime) > 1000);
         }
 
         @Override
         protected void onPostExecute(Boolean result) {
             // Get hint inputs if result is true
             if(result){
-                Log.d("Res", "True");
                 getHintInput(hintIndex++);
-            } else {
-                Log.d("Res", "False");
             }
         }
     }

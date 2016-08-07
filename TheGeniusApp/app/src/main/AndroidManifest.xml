@@ -34,6 +34,14 @@
         </activity>
 
         <activity
+            android:name=".ModeSelection"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".TestClass"
             android:screenOrientation="landscape">
             <intent-filter>

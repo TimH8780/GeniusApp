@@ -24,15 +24,17 @@ public class MainMenu extends AppCompatActivity {
         final Button tutorial_button = (Button) findViewById(R.id.tutorial_button);
         final Button quit_button = (Button) findViewById(R.id.quit_button);
 
+        assert offline_mode_button != null;
         offline_mode_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent offline_mode_activity = new Intent(MainMenu.this, OfflineMode.class);
+                Intent offline_mode_activity = new Intent(MainMenu.this, ModeSelection.class);
                 offline_mode_activity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(offline_mode_activity);
             }
         });
 
+        assert settings_button != null;
         settings_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,6 +44,7 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
+        assert tutorial_button != null;
         tutorial_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,6 +54,7 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
+        assert quit_button != null;
         quit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

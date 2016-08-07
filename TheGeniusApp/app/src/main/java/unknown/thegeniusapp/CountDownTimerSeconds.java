@@ -44,7 +44,6 @@ public class CountDownTimerSeconds {
                 Toast.makeText(game.getApplicationContext(), "Time Up for this Round!", Toast.LENGTH_SHORT).show();
                 game.nextRound();
             }
-            Log.d("FINISH - " + id, "");
         }
     }
 
@@ -66,7 +65,6 @@ public class CountDownTimerSeconds {
             pause = false;
             ongoing = true;
         }
-        Log.d("start - " + id, Double.toString(time_left / 1000.0));
     }
 
     public void stop(){
@@ -76,7 +74,6 @@ public class CountDownTimerSeconds {
             time_left = 0;
             ongoing = false;
         }
-        Log.d("stop - " + id, Double.toString(time_left / 1000.0));
     }
 
     public void pause(){
@@ -85,7 +82,6 @@ public class CountDownTimerSeconds {
             pause = true;
             ongoing = false;
         }
-        Log.d("pause - " + id, Double.toString(time_left / 1000.0));
     }
 
     public void resume(){
@@ -95,7 +91,6 @@ public class CountDownTimerSeconds {
             pause = false;
             ongoing = true;
         }
-        Log.d("resume - " + id, Double.toString(time_left / 1000.0));
     }
 
     public boolean isPaused(){ return  pause; }

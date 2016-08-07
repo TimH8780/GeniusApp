@@ -1,13 +1,9 @@
 package unknown.thegeniusapp;
 
-import java.util.Random;
-
 /**
  *Created by Unknown on 7/17/2016.
  */
 public class RandomNumberGenerators {
-
-//    private Random generator = new Random();
 
     public static int randomNumber(int maxValue) {
 

@@ -1,3 +1,6 @@
+ZH: 8/07
+Changed the pause icon; Added the end game condition; Added two game modes; Added unknown functions
+
 ZH: 7/29
 Completed the timeout result (move to next round); Changed hint answer and question answer to type long
 
