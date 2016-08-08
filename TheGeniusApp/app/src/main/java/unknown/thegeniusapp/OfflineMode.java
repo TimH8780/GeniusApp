@@ -80,7 +80,7 @@ public class OfflineMode extends AppCompatActivity{
             gameLimit = bundle.getInt("Limit");
         } else {
             // For debug purpose
-            throw new IndexOutOfBoundsException("No Extra Bundle");
+            throw new Error("No Extra Bundle");
         }
         RoundCounter = 1;
 

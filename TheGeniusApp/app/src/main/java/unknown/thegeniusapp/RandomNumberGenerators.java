@@ -13,6 +13,6 @@ public class RandomNumberGenerators {
         //Seems to only increment based on time, but computer time is very fast, so might work in real time
         //return (int) (((long) System.currentTimeMillis()) % maxValue);
 
-        return (int)(Math.random() * maxValue);
+        return 7;//(int)(Math.random() * maxValue);
     }
 }

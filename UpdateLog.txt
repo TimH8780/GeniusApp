@@ -1,3 +1,7 @@
+WL: 8/07
+Updated Main Menu, pressing button changes button color, moving/dragging out of button region changes back to default
+Changes from the discussion
+
 ZH: 8/07
 Changed the pause icon; Added the end game condition; Added two game modes; Added unknown functions
 

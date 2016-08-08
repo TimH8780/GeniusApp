@@ -1,7 +1,5 @@
 package unknown.thegeniusapp;
 
-import android.util.Log;
-
 public class UnknownFunctionGenerator {
 
     //Referenced http://stackoverflow.com/questions/4280727/java-creating-an-array-of-methods
@@ -28,26 +26,26 @@ public class UnknownFunctionGenerator {
             new UnknownFunction() { public long calculate(int a, int b) { return multiplication(a, b); }},          // functionArray[2]
             new UnknownFunction() { public long calculate(int a, int b) { return numberOfClosedArea(a, b); }},      // functionArray[3]
             new UnknownFunction() { public long calculate(int a, int b) { return numberOfOne(a, b); }},             // functionArray[4]
-            new UnknownFunction() { public long calculate(int a, int b) { return reviseLarger(a, b); }},            // functionArray[5]
-            new UnknownFunction() { public long calculate(int a, int b) { return reviseSmaller(a, b); }},           // functionArray[6]
+            new UnknownFunction() { public long calculate(int a, int b) { return reverseLarger(a, b); }},            // functionArray[5]
+            new UnknownFunction() { public long calculate(int a, int b) { return reverseSmaller(a, b); }},           // functionArray[6]
             new UnknownFunction() { public long calculate(int a, int b) { return integerCounter(a, b); }},          // functionArray[7]
 
             /* ------------------ Hard ------------------ */
             new UnknownFunction() { public long calculate(int a, int b) { return binarySumUnder10(a, b); }},        // functionArray[+ 1]
             new UnknownFunction() { public long calculate(int a, int b) { return binaryMinusUnder10(a, b); }},      // functionArray[+ 2]
-            new UnknownFunction() { public long calculate(int a, int b) { return reviseSum(a, b); }},               // functionArray[+ 3]
-            new UnknownFunction() { public long calculate(int a, int b) { return reviseSub(a, b); }},               // functionArray[+ 4]
+            new UnknownFunction() { public long calculate(int a, int b) { return reverseSum(a, b); }},               // functionArray[+ 3]
+            new UnknownFunction() { public long calculate(int a, int b) { return reverseSub(a, b); }},               // functionArray[+ 4]
     };
 
     /* ------------------------------------- Lookup Tables ------------------------------------- */
     int[] circleTable = {1, 0, 0, 0, 1, 0, 1, 0, 2, 1};
 
     /* ------------------------------------- Helper Functions ------------------------------------- */
-    private long reviseNumber(int num){
+    private long reverseNumber(int num){
         long result = 0;
         while(num > 0){
-            result += num % 10;
             result *= 10;
+            result += num % 10;
             num /= 10;
         }
         return result;
@@ -94,13 +92,13 @@ public class UnknownFunctionGenerator {
     }
 
     //TODO - check
-    private long reviseLarger(int a, int b){
-        return reviseNumber(Math.max(a, b));
+    private long reverseLarger(int a, int b){
+        return reverseNumber(Math.max(a, b));
     }
 
     //TODO - check
-    private long reviseSmaller(int a, int b){
-        return reviseNumber(Math.min(a, b));
+    private long reverseSmaller(int a, int b){
+        return reverseNumber(Math.min(a, b));
     }
 
     //TODO - check
@@ -117,9 +115,9 @@ public class UnknownFunctionGenerator {
         } while (b > 0);
 
         long result = 0;
-        for(int i: table){
+        for(int i = 9; i >= 0; i--){
             result *= 10;
-            result += i;
+            result += table[i];
         }
         return result;
     }
@@ -141,12 +139,12 @@ public class UnknownFunctionGenerator {
     }
 
     //TODO - check
-    private long reviseSum(int a, int b){
-        return reviseNumber(a + b);
+    private long reverseSum(int a, int b){
+        return reverseNumber(a + b);
     }
 
     //TODO - check
-    private long reviseSub(int a, int b){
-        return reviseNumber(Math.abs(a - b));
+    private long reverseSub(int a, int b){
+        return reverseNumber(Math.abs(a - b));
     }
 }
