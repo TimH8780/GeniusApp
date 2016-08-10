@@ -10,10 +10,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class MainMenu extends AppCompatActivity {
 
     private Rect rect;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,13 +26,50 @@ public class MainMenu extends AppCompatActivity {
             actionBar.hide();
         }
 
-
-
         final Button offline_mode_button = (Button) findViewById(R.id.offline_mode_button);
         final Button settings_button = (Button) findViewById(R.id.settings_button);
         final Button tutorial_button = (Button) findViewById(R.id.tutorial_button);
         final Button quit_button = (Button) findViewById(R.id.quit_button);
         final ImageView main_menu_buttons = (ImageView) findViewById(R.id.main_menu_buttons);
+        final ImageView main_menu_background = (ImageView) findViewById(R.id.main_menu_background);
+
+        //Covers only the background, not inside main_menu_button
+        main_menu_background.setOnTouchListener(new OnSwipeTouchListener(MainMenu.this) {
+            public void onSwipeTop() {
+                Toast.makeText(MainMenu.this, "top", Toast.LENGTH_SHORT).show();
+            }
+
+            public void onSwipeRight() {
+                Toast.makeText(MainMenu.this, "right", Toast.LENGTH_SHORT).show();
+            }
+
+            public void onSwipeLeft() {
+                Toast.makeText(MainMenu.this, "left", Toast.LENGTH_SHORT).show();
+            }
+
+            public void onSwipeBottom() {
+                Toast.makeText(MainMenu.this, "bottom", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Does not make a big difference, only areas without buttons can be registered
+        main_menu_buttons.setOnTouchListener(new OnSwipeTouchListener(MainMenu.this) {
+            public void onSwipeTop() {
+                Toast.makeText(MainMenu.this, "top", Toast.LENGTH_SHORT).show();
+            }
+
+            public void onSwipeRight() {
+                Toast.makeText(MainMenu.this, "right", Toast.LENGTH_SHORT).show();
+            }
+
+            public void onSwipeLeft() {
+                Toast.makeText(MainMenu.this, "left", Toast.LENGTH_SHORT).show();
+            }
+
+            public void onSwipeBottom() {
+                Toast.makeText(MainMenu.this, "bottom", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         assert offline_mode_button != null;
         offline_mode_button.setOnClickListener(new View.OnClickListener() {

@@ -1,3 +1,6 @@
+WL: 8/9
+Added new class for swipe detection, swiping in main menu will display a toast with the correct direction
+
 WL: 8/07
 Updated Main Menu, pressing button changes button color, moving/dragging out of button region changes back to default
 Changes from the discussion
