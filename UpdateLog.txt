@@ -1,3 +1,6 @@
+WL: 8/10
+Disabled play button, using "joystick/logo" as the new play button, new plans for the layout to be discussed in the future
+
 WL: 8/9
 Added new class for swipe detection, swiping in main menu will display a toast with the correct direction
 

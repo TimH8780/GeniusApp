@@ -7,8 +7,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -20,10 +23,11 @@ public class ModeSelection extends AppCompatActivity {
     public static final String score = "SCORE_MODE";
     public static final String round = "ROUND_MODE";
 
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mode_selector);
+        setContentView(R.layout.activity_mode_selector_new);
 
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
@@ -32,6 +36,7 @@ public class ModeSelection extends AppCompatActivity {
 
         Button scoreMode = (Button) findViewById(R.id.score_mode);
         Button roundMode = (Button) findViewById(R.id.round_mode);
+        ImageButton joystick = (ImageButton) findViewById(R.id.joystick);
 
         assert scoreMode != null;
         scoreMode.setOnClickListener(new View.OnClickListener() {
@@ -46,6 +51,14 @@ public class ModeSelection extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showPicker(round);
+            }
+        });
+
+        assert joystick !=null;
+        joystick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
@@ -80,6 +93,8 @@ public class ModeSelection extends AppCompatActivity {
         });
         builder.create().show();
     }
+
+
 
     @Override
     public void onBackPressed(){

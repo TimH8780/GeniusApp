@@ -9,12 +9,15 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 public class MainMenu extends AppCompatActivity {
 
     private Rect rect;
+    private int min_distance = 100;
+    private float downX, downY, upX, upY;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -32,8 +35,9 @@ public class MainMenu extends AppCompatActivity {
         final Button quit_button = (Button) findViewById(R.id.quit_button);
         final ImageView main_menu_buttons = (ImageView) findViewById(R.id.main_menu_buttons);
         final ImageView main_menu_background = (ImageView) findViewById(R.id.main_menu_background);
+        final ImageButton joystick = (ImageButton) findViewById(R.id.joystick);
 
-        //Covers only the background, not inside main_menu_button
+        //Swipe Listener, Covers only the background, not inside main_menu_button
         main_menu_background.setOnTouchListener(new OnSwipeTouchListener(MainMenu.this) {
             public void onSwipeTop() {
                 Toast.makeText(MainMenu.this, "top", Toast.LENGTH_SHORT).show();
@@ -75,17 +79,9 @@ public class MainMenu extends AppCompatActivity {
         offline_mode_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent offline_mode_activity = new Intent(MainMenu.this, ModeSelection.class);
-                offline_mode_activity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(offline_mode_activity);
-            }
-        });
-
-        offline_mode_button.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                return false;
+//                Intent offline_mode_activity = new Intent(MainMenu.this, ModeSelection.class);
+//                offline_mode_activity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                startActivity(offline_mode_activity);
             }
         });
 
@@ -210,6 +206,20 @@ public class MainMenu extends AppCompatActivity {
                             main_menu_buttons.setImageResource(R.drawable.main_menu_buttons);
                             break;
                         }
+                }
+                return false;
+            }
+        });
+
+        joystick.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        Intent offline_mode_activity = new Intent(MainMenu.this, ModeSelection.class);
+                        //offline_mode_activity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(offline_mode_activity);
+                        break;
                 }
                 return false;
             }
