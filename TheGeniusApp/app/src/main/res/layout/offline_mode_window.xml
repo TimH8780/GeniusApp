@@ -67,6 +67,16 @@
             android:text="Answer"/>
 
         <TextView
+            android:id="@+id/player1_answer_time"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/red"
+            android:textStyle="bold"
+            android:text="00:10"/>
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3"/>
@@ -79,17 +89,28 @@
         android:layout_weight="4"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/timeout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:background="@color/silver"
+            android:text="Round_1 - 180 Seconds (20)"/>
+
         <include
             android:id="@+id/question"
             layout="@layout/question_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="2"/>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="4">
+            android:layout_weight="8">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -188,6 +209,16 @@
             android:layout_weight="3"
             android:textSize="12sp"
             android:text="Answer"/>
+
+        <TextView
+            android:id="@+id/player2_answer_time"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/blue"
+            android:textStyle="bold"
+            android:text="00:10"/>
 
         <TextView
             android:layout_width="match_parent"

@@ -1,31 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_margin="10dp">
+    android:background="#44FF0000">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Game Mode"
-        android:textSize="35sp"/>
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerInParent="true"
+        android:id="@+id/joystick"
+        android:src="@drawable/boy_icon_1"
+        android:background="@null" />
 
     <Button
         android:id="@+id/score_mode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="Score Match"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_toLeftOf="@+id/joystick"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:text="Score Match"
+        android:background="#44FF0000"/>
 
     <Button
         android:id="@+id/round_mode"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_toRightOf="@+id/joystick"
+        android:text="Round Match"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:background="#44FF0000"/>
+
+    <TextView
+        android:id="@+id/Text_E"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="Round Match"/>
+        android:layout_alignLeft="@id/joystick"
+        android:layout_alignRight="@id/joystick"
+        android:layout_above="@id/joystick"
+        android:text="E"
+        android:textSize="25sp"
+        android:gravity="center"/>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/Text_M"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/joystick"
+        android:layout_alignRight="@id/joystick"
+        android:layout_above="@id/Text_E"
+        android:text="M"
+        android:textSize="25sp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/Text_A"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/joystick"
+        android:layout_alignRight="@id/joystick"
+        android:layout_above="@id/Text_M"
+        android:text="A"
+        android:textSize="25sp"
+        android:gravity="center"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/joystick"
+        android:layout_alignRight="@id/joystick"
+        android:layout_above="@id/Text_A"
+        android:text="G"
+        android:textSize="25sp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/Text_M2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/joystick"
+        android:layout_alignRight="@id/joystick"
+        android:layout_below="@id/joystick"
+        android:text="M"
+        android:textSize="25sp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/Text_O"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/joystick"
+        android:layout_alignRight="@id/joystick"
+        android:layout_below="@+id/Text_M2"
+        android:text="O"
+        android:textSize="25sp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/Text_D"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/joystick"
+        android:layout_alignRight="@id/joystick"
+        android:layout_below="@+id/Text_O"
+        android:text="D"
+        android:textSize="25sp"
+        android:gravity="center"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/joystick"
+        android:layout_alignRight="@id/joystick"
+        android:layout_below="@+id/Text_D"
+        android:text="E"
+        android:textSize="25sp"
+        android:gravity="center"/>
+
+</RelativeLayout>

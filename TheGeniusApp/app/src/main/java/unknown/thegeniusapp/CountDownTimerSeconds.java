@@ -1,7 +1,6 @@
 package unknown.thegeniusapp;
 
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.widget.Toast;
 
 import static unknown.thegeniusapp.OfflineMode.*;
@@ -32,31 +31,50 @@ public class CountDownTimerSeconds {
 
         @Override
         public void onTick(long millisUntilFinished) {
+            if((time_left / 1000) != (millisUntilFinished / 1000)){
+                switch (id){
+                    case ROUND_ID:
+                        game.updateGameTime(millisUntilFinished);
+                        break;
+                    case HINT_ID:
+                        game.updateHintTime(millisUntilFinished);
+                        break;
+                    case ANSWER_ID:
+                        game.updateAnswerTime(millisUntilFinished);
+                        break;
+                    case PENALTY_ID:
+                        game.updatePenaltyTime(millisUntilFinished);
+                        break;
+                }
+            }
             time_left = millisUntilFinished;
-            Log.d("Ongoing - " + id, Double.toString(time_left / 1000.0));
         }
 
         @Override
         public void onFinish() {
             time_left = 0;
             ongoing = false;
-            if(id.equals(ROUND_ID) && game != null){
-                Toast.makeText(game.getApplicationContext(), "Time Up for this Round!", Toast.LENGTH_SHORT).show();
+            if(isGameTimer()){
+                Toast.makeText(game.getApplicationContext(), "Time Up for this Round!", Toast.LENGTH_LONG).show();
                 game.nextRound();
+            } else if(isPenaltyTimer()){
+                game.unlockAnswerButton();
             }
         }
+    }
+
+    private boolean isGameTimer(){
+        return id.equals(ROUND_ID);
+    }
+
+    private boolean isPenaltyTimer(){
+        return id.equals(PENALTY_ID);
     }
 
     public CountDownTimerSeconds(long total_second, String id, OfflineMode game){
         counter = new Timer(total_second * SECOND_TO_MILLISECOND);
         this.id = id;
         this.game = game;
-    }
-
-    public CountDownTimerSeconds(long total_second, String id){
-        counter = new Timer(total_second * SECOND_TO_MILLISECOND);
-        this.id = id;
-        this.game = null;
     }
 
     public void start(){

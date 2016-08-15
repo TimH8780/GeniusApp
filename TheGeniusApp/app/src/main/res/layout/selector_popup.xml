@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20sp"
-        android:text="The game ends whenever a player reaches +/- the limit"
+        android:text="The game ends whenever a player reaches +/- of target score"
         android:textSize="17dp"/>
 
     <NumberPicker

@@ -2,6 +2,7 @@ package unknown.thegeniusapp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,10 +31,10 @@ public class OfflineMode extends AppCompatActivity{
     public static final int NUMBER_OF_HINTS = 6;
     public static final int ROUND_MAX_VALUE = 50;
     public static final int HINT_MAX_VALUE = 99;
-    public static final long SECOND_PER_ROUND = 180;
-    public static final long HINT_INPUT_WAIT_TIME = 20;
-    public static final long ANSWER_WAIT_TIME = 10;
-    public static final long PENALTY_TIME = 30;
+    public static final int SECOND_PER_ROUND = 181;
+    public static final int HINT_INPUT_WAIT_TIME = 20;
+    public static final int ANSWER_WAIT_TIME = 10;
+    public static final int PENALTY_TIME = 30;
     public static final String ROUND_ID = "Round";
     public static final String HINT_ID = "Hint";
     public static final String ANSWER_ID = "Answer";
@@ -42,12 +44,15 @@ public class OfflineMode extends AppCompatActivity{
     private Button player2_button;
     private TextView player1_score;
     private TextView player2_score;
+    private TextView player1_answerTime;
+    private TextView player2_answerTime;
     private TextView input1_view;
     private TextView input2_view;
+    private TextView timeout;
     private ImageView settings_button;
     private TextView[] hint_inputs = new TextView[12];
     private TextView[] hint_answer = new TextView[6];
-    private boolean answerActive = false;
+    private int answerActive = 0;
 
     private UnknownFunctionGenerator unknownFunction;
     private CountDownTimerSeconds[] countDown;
@@ -62,6 +67,7 @@ public class OfflineMode extends AppCompatActivity{
     private String gameType;
     private int RoundCounter;
     private int gameLimit;
+    private MediaPlayer musicPlayer;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState){
@@ -73,6 +79,8 @@ public class OfflineMode extends AppCompatActivity{
         if(actionBar != null){
             actionBar.hide();
         }
+
+        createPlayBGM();
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
@@ -87,6 +95,8 @@ public class OfflineMode extends AppCompatActivity{
         // Obtain two random inputs and display them
         input1 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
         input2 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
+
+        timeout = (TextView) findViewById(R.id.timeout);
 
         View questionContainer = findViewById(R.id.question);
         input1_view = (TextView) questionContainer.findViewById(R.id.input1);
@@ -124,6 +134,8 @@ public class OfflineMode extends AppCompatActivity{
         // Initialize player's score field
         player1_score = (TextView) findViewById(R.id.player1_score);
         player2_score = (TextView) findViewById(R.id.player2_score);
+        player1_answerTime = (TextView) findViewById(R.id.player1_answer_time);
+        player2_answerTime = (TextView) findViewById(R.id.player2_answer_time);
 
         // Initialize all hint input 'buttons'
         View hint1 = findViewById(R.id.hint_1);
@@ -162,10 +174,10 @@ public class OfflineMode extends AppCompatActivity{
 
         // Initializes four CountDownTimers
         countDown = new CountDownTimerSeconds[4];
-        countDown[0] = new CountDownTimerSeconds(SECOND_PER_ROUND, ROUND_ID, this);         // 0: Round Timer
-        countDown[1] = new CountDownTimerSeconds(HINT_INPUT_WAIT_TIME, HINT_ID);            // 1: HintChecker Timer
-        countDown[2] = new CountDownTimerSeconds(ANSWER_WAIT_TIME, ANSWER_ID);              // 2: Answer Timer
-        countDown[3] = new CountDownTimerSeconds(PENALTY_TIME, PENALTY_ID);                 // 3: Penalty Timer
+        countDown[0] = new CountDownTimerSeconds(SECOND_PER_ROUND, ROUND_ID, this);             // 0: Round Timer
+        countDown[1] = new CountDownTimerSeconds(HINT_INPUT_WAIT_TIME, HINT_ID, this);         // 1: HintChecker Timer
+        countDown[2] = new CountDownTimerSeconds(ANSWER_WAIT_TIME, ANSWER_ID, this);           // 2: Answer Timer
+        countDown[3] = new CountDownTimerSeconds(PENALTY_TIME, PENALTY_ID, this);              // 3: Penalty Timer
 
         // Start round timer and obtain first hint inputs
         hintIndex = 0;
@@ -178,13 +190,40 @@ public class OfflineMode extends AppCompatActivity{
         // Disable back button
     }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+        musicPlayer.pause();
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        musicPlayer.release();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        createPlayBGM();
+    }
+
+    private void createPlayBGM(){
+        if(musicPlayer != null) {
+            musicPlayer.reset();
+        }
+        musicPlayer = MediaPlayer.create(OfflineMode.this, R.raw.sample2);
+        musicPlayer.start();
+        musicPlayer.setLooping(true);
+    }
+
     // The onClickListener for the two answer buttons
     private View.OnClickListener answer_button = new View.OnClickListener() {
         @Override
         public void onClick(final View v) {
             // Ensure only one button can invoke the listener
-            if(!answerActive) {
-                answerActive = true;
+            if(answerActive == 0) {
+                answerActive = getPlayerIndex(v);
 
                 // Pause timers
                 countDown[0].pause();
@@ -212,6 +251,7 @@ public class OfflineMode extends AppCompatActivity{
                             Toast.makeText(OfflineMode.this, "Congratulation! Correct Answer!", Toast.LENGTH_LONG).show();
                         } else {
                             change = -1;
+                            setPenalty((Button)v);
                             Toast.makeText(OfflineMode.this, "Incorrect Answer", Toast.LENGTH_SHORT).show();
                         }
 
@@ -223,7 +263,7 @@ public class OfflineMode extends AppCompatActivity{
                         countDown[0].resume();
                         countDown[1].resume();
                         countDown[3].resume();
-                        answerActive = false;
+                        answerActive = 0;
                         if (change == 1) {
                             nextRound();
                         }
@@ -238,6 +278,20 @@ public class OfflineMode extends AppCompatActivity{
         }
     };
 
+    private void setPenalty(Button v){
+        Button otherPlayerButton = (v == player1_button)? player2_button: player1_button;
+        if(!otherPlayerButton.isEnabled()){
+            countDown[3].stop();
+            otherPlayerButton.setEnabled(true);
+            otherPlayerButton.setText("Answer");
+        }
+
+        countDown[3] = new CountDownTimerSeconds(PENALTY_TIME, PENALTY_ID, OfflineMode.this);
+        v.setEnabled(false);
+        v.setText(String.format(Locale.US, "Disabled\n00:%02d", PENALTY_TIME));
+        countDown[3].start();
+    }
+
     // Update the score on either player
     private void updateScore(int change, View view){
         TextView score = (view == player1_button)? player1_score: player2_score;
@@ -248,6 +302,11 @@ public class OfflineMode extends AppCompatActivity{
     // Obtain the name of either player
     private String getPlayerName(View view){
         return (view == player1_button)? "Player 1": "Player 2";
+    }
+
+    // Obtain the player #
+    private int getPlayerIndex(View view){
+        return (view == player1_button)? 1: 2;
     }
 
     // The onClickListener for the settings (pause) buttons
@@ -344,10 +403,53 @@ public class OfflineMode extends AppCompatActivity{
             RoundCounter++;
             countDown[0] = new CountDownTimerSeconds(SECOND_PER_ROUND, ROUND_ID, this);
             hintIndex = 0;
+            timeout.setText(String.format(Locale.US, "Round_%s - %d Seconds (%d)", RoundCounter, SECOND_PER_ROUND, HINT_INPUT_WAIT_TIME));
             countDown[0].start();
         } else {
             endGameDialog();
         }
+    }
+
+    protected void updateGameTime(long millisUntilFinished){
+        int second = (int)(millisUntilFinished / 1000);
+        timeout.setText(String.format(Locale.US, "Round_%s - %d Seconds (%d)", RoundCounter, second, HINT_INPUT_WAIT_TIME));
+        player1_answerTime.setText(String.format(Locale.US, "00:%02d", ANSWER_WAIT_TIME));
+        player2_answerTime.setText(String.format(Locale.US, "00:%02d", ANSWER_WAIT_TIME));
+    }
+
+    protected void updateHintTime(long millisUntilFinished){
+        int second = (int)(millisUntilFinished / 1000);
+        String temp = timeout.getText().toString();
+        temp = temp.substring(0, temp.indexOf('('));
+        timeout.setText(String.format(Locale.US, "%s(%d)", temp, second));
+    }
+
+    protected void updateAnswerTime(long millisUntilFinished){
+        int second = (int)(millisUntilFinished / 1000);
+        switch (answerActive){
+            case 1:
+                player1_answerTime.setText(String.format(Locale.US, "00:%02d", second));
+                break;
+            case 2:
+                player2_answerTime.setText(String.format(Locale.US, "00:%02d", second));
+                break;
+        }
+    }
+
+    protected void updatePenaltyTime(long millisUntilFinished){
+        int second = (int)(millisUntilFinished / 1000);
+        if(!player1_button.isEnabled()){
+            player1_button.setText(String.format(Locale.US, "Disabled\n00:%02d", second));
+        } else if(!player2_button.isEnabled()){
+            player2_button.setText(String.format(Locale.US, "Disabled\n00:%02d", second));
+        }
+    }
+
+    protected void unlockAnswerButton(){
+        player1_button.setText("Answer");
+        player2_button.setText("Answer");
+        player1_button.setEnabled(true);
+        player2_button.setEnabled(true);
     }
 
     // Check if the game should be ended
@@ -439,8 +541,9 @@ public class OfflineMode extends AppCompatActivity{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Validate the input
-                if(input.getText().toString().length() > 4 || input.getText().toString().equals("")){
-                    Toast.makeText(OfflineMode.this, "Invalid value", Toast.LENGTH_SHORT).show();
+                String inputVal = input.getText().toString();
+                if(inputVal.length() > 4 || inputVal.equals("") || isEqualQuestion(Integer.valueOf(inputVal))){
+                    Toast.makeText(OfflineMode.this, "Invalid Value", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -453,6 +556,11 @@ public class OfflineMode extends AppCompatActivity{
         // Display dialog
         dialog = builder.create();
         dialog.show();
+    }
+
+    // Check if the hint input equals either of the question numbers
+    private boolean isEqualQuestion(int num){
+        return num == input1 || num == input2;
     }
 
     // Repeatedly call ObtainHintsForRound every 0.45 second
@@ -481,7 +589,7 @@ public class OfflineMode extends AppCompatActivity{
 
         private HintChecker(int index){
             this.index = index;
-            countDown[1] = new CountDownTimerSeconds(HINT_INPUT_WAIT_TIME, HINT_ID);
+            countDown[1] = new CountDownTimerSeconds(HINT_INPUT_WAIT_TIME, HINT_ID, OfflineMode.this);
             left = hint_inputs[index * 2];
             right = hint_inputs[index * 2 + 1];
         }
@@ -566,7 +674,7 @@ public class OfflineMode extends AppCompatActivity{
         @Override
         protected  void onPreExecute(){
             // Reset and start Answer Timer
-            countDown[2] = new CountDownTimerSeconds(ANSWER_WAIT_TIME, ANSWER_ID);
+            countDown[2] = new CountDownTimerSeconds(ANSWER_WAIT_TIME, ANSWER_ID, OfflineMode.this);
             countDown[2].start();
         }
 
@@ -585,8 +693,9 @@ public class OfflineMode extends AppCompatActivity{
             // Remove dialog, deduce score and resume timers if the dialog is displayed
             if(dialog != null && dialog.isShowing()){
                 dialog.dismiss();
-                answerActive = false;
+                answerActive = 0;
                 updateScore(-1, view);
+                setPenalty((Button)view);
                 countDown[0].resume();
                 countDown[1].resume();
                 countDown[3].resume();

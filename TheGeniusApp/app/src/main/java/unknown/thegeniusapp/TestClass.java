@@ -1,10 +1,7 @@
 package unknown.thegeniusapp;
 
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -19,7 +16,7 @@ public class TestClass extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.countdowntest);
-        counter = new CountDownTimerSeconds(time_seconds, "TestClass");
+        counter = new CountDownTimerSeconds(time_seconds, null, null);
 
         final Button starting = (Button) findViewById(R.id.start_button);
         final Button stoping = (Button) findViewById(R.id.stop_button);

@@ -1,3 +1,7 @@
+ZH: 8/14
+Incorporated swipe into button selection; Added sample BGMs to main and play screen (BGMs need to be changed); Added timers and round# display to play screen;
+Added penalty for incorrect answer; Validated hint inputs
+
 WL: 8/10
 Disabled play button, using "joystick/logo" as the new play button, new plans for the layout to be discussed in the future
 

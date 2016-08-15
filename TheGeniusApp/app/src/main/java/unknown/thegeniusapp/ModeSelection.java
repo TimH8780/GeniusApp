@@ -7,11 +7,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -20,14 +18,14 @@ import android.widget.TextView;
  */
 public class ModeSelection extends AppCompatActivity {
 
-    public static final String score = "SCORE_MODE";
-    public static final String round = "ROUND_MODE";
+    public static final String score = "SCORE MODE";
+    public static final String round = "ROUND MODE";
 
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mode_selector_new);
+        setContentView(R.layout.activity_mode_selector);
 
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
@@ -54,7 +52,7 @@ public class ModeSelection extends AppCompatActivity {
             }
         });
 
-        assert joystick !=null;
+        assert joystick != null;
         joystick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,13 +63,13 @@ public class ModeSelection extends AppCompatActivity {
 
     private void showPicker(final String type){
         AlertDialog.Builder builder = new AlertDialog.Builder(ModeSelection.this);
-        builder.setTitle("Limit Setup");
+        builder.setTitle(type);
         final LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.selector_popup, null);
         final NumberPicker picker = (NumberPicker) view.findViewById(R.id.picker);
         if (type.equals(round)) {
             TextView message = (TextView) view.findViewById(R.id.message);
-            message.setText("The game ends when it reaches the limited round");
+            message.setText("The game ends when it reaches the target round");
         }
         picker.setMaxValue(20);
         picker.setMinValue(1);
@@ -93,8 +91,6 @@ public class ModeSelection extends AppCompatActivity {
         });
         builder.create().show();
     }
-
-
 
     @Override
     public void onBackPressed(){

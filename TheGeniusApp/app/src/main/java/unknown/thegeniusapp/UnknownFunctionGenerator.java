@@ -126,16 +126,14 @@ public class UnknownFunctionGenerator {
     private long binarySumUnder10(int a, int b){
         a %= 10;
         b %= 10;
-        long result = Long.valueOf(Integer.toBinaryString(a + b));
-        return result;
+        return Long.valueOf(Integer.toBinaryString(a + b));
     }
 
     private long binaryMinusUnder10(int a, int b){
         a %= 10;
         b %= 10;
         long temp = Math.abs(a - b);
-        long result = Long.valueOf(Long.toBinaryString(temp));
-        return result;
+        return Long.valueOf(Long.toBinaryString(temp));
     }
 
     //TODO - check
