@@ -145,7 +145,11 @@ public class MainMenu extends AppCompatActivity {
 
     private void createPlayBGM(){
         if(musicPlayer != null) {
-            musicPlayer.reset();
+            try {
+                musicPlayer.reset();
+            } catch(IllegalStateException e){
+                musicPlayer = null;
+            }
         }
         musicPlayer = MediaPlayer.create(MainMenu.this, R.raw.sample);
         musicPlayer.start();

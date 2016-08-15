@@ -210,7 +210,11 @@ public class OfflineMode extends AppCompatActivity{
 
     private void createPlayBGM(){
         if(musicPlayer != null) {
-            musicPlayer.reset();
+            try {
+                musicPlayer.reset();
+            } catch(IllegalStateException e){
+                musicPlayer = null;
+            }
         }
         musicPlayer = MediaPlayer.create(OfflineMode.this, R.raw.sample2);
         musicPlayer.start();
