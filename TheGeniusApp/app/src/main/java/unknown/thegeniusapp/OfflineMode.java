@@ -30,7 +30,7 @@ public class OfflineMode extends AppCompatActivity{
 
     public static final int NUMBER_OF_HINTS = 6;
     public static final int ROUND_MAX_VALUE = 50;
-    public static final int HINT_MAX_VALUE = 99;
+    public static final int HINT_MAX_VALUE = 100;
     public static final int SECOND_PER_ROUND = 181;
     public static final int HINT_INPUT_WAIT_TIME = 20;
     public static final int ANSWER_WAIT_TIME = 10;
@@ -647,10 +647,18 @@ public class OfflineMode extends AppCompatActivity{
 
             // Randomly generate the hint if it is not entered by player
             if(!hintTable.get(left)){
-                left.setText(String.valueOf(RandomNumberGenerators.randomNumber(HINT_MAX_VALUE)));
+                long temp = -1;
+                do {
+                    temp = RandomNumberGenerators.randomNumber(HINT_MAX_VALUE);
+                } while (isEqualQuestion((int)temp));
+                left.setText(String.valueOf(temp));
             }
             if(!hintTable.get(right)){
-                right.setText(String.valueOf(RandomNumberGenerators.randomNumber(HINT_MAX_VALUE)));
+                long temp = -1;
+                do {
+                    temp = RandomNumberGenerators.randomNumber(HINT_MAX_VALUE);
+                } while (isEqualQuestion((int)temp));
+                right.setText(String.valueOf(temp));
             }
 
             // Calculate the hint answer

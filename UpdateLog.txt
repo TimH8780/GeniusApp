@@ -1,3 +1,6 @@
+ZH: 8/20
+More unknown functions
+
 ZH: 8/14
 Incorporated swipe into button selection; Added sample BGMs to main and play screen (BGMs need to be changed); Added timers and round# display to play screen;
 Added penalty for incorrect answer; Validated hint inputs
