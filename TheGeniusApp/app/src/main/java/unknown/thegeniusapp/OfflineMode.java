@@ -61,6 +61,7 @@ public class OfflineMode extends AppCompatActivity{
     private long final_answer;
     private int input1;
     private int input2;
+    private int randomNumber;
     private int hintIndex;
     private HashMap<TextView, Boolean> hintTable;
     private AlertDialog dialog;
@@ -95,6 +96,7 @@ public class OfflineMode extends AppCompatActivity{
         // Obtain two random inputs and display them
         input1 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
         input2 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
+        randomNumber = RandomNumberGenerators.randomNumber(10);
 
         timeout = (TextView) findViewById(R.id.timeout);
 
@@ -170,7 +172,7 @@ public class OfflineMode extends AppCompatActivity{
 
         // Initializes the function generator and generates the answer, can be used to compare with players' answers
         unknownFunction = new UnknownFunctionGenerator();
-        final_answer = unknownFunction.getResult(input1, input2);
+        final_answer = unknownFunction.getResult(input1, input2, randomNumber);
 
         // Initializes four CountDownTimers
         countDown = new CountDownTimerSeconds[4];
@@ -383,10 +385,11 @@ public class OfflineMode extends AppCompatActivity{
         // Regenerate two numbers, unknown function and answer
         input1 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
         input2 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
+        randomNumber = RandomNumberGenerators.randomNumber(10);
         input1_view.setText(String.valueOf(input1));
         input2_view.setText(String.valueOf(input2));
         unknownFunction = new UnknownFunctionGenerator();
-        final_answer = unknownFunction.getResult(input1, input2);
+        final_answer = unknownFunction.getResult(input1, input2, randomNumber);
 
         // Clear all fields
         for(TextView view: hint_inputs){
@@ -647,24 +650,24 @@ public class OfflineMode extends AppCompatActivity{
 
             // Randomly generate the hint if it is not entered by player
             if(!hintTable.get(left)){
-                long temp = -1;
+                int temp = -1;
                 do {
                     temp = RandomNumberGenerators.randomNumber(HINT_MAX_VALUE);
-                } while (isEqualQuestion((int)temp));
+                } while (isEqualQuestion(temp));
                 left.setText(String.valueOf(temp));
             }
             if(!hintTable.get(right)){
-                long temp = -1;
+                int temp = -1;
                 do {
                     temp = RandomNumberGenerators.randomNumber(HINT_MAX_VALUE);
-                } while (isEqualQuestion((int)temp));
+                } while (isEqualQuestion(temp));
                 right.setText(String.valueOf(temp));
             }
 
             // Calculate the hint answer
             int inp1 = Integer.valueOf(left.getText().toString());
             int inp2 = Integer.valueOf(right.getText().toString());
-            hint_answer[index].setText(String.valueOf(unknownFunction.getResult(inp1, inp2)));
+            hint_answer[index].setText(String.valueOf(unknownFunction.getResult(inp1, inp2, randomNumber)));
 
             // Resume timers
             countDown[0].resume();

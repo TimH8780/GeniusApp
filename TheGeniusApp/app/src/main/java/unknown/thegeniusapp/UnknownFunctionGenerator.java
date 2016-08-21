@@ -8,7 +8,7 @@ public class UnknownFunctionGenerator {
     public static final int MAX_FUNCTIONS = 22;
 
     private UnknownFunction random_function;
-    private interface UnknownFunction{ long calculate(int a, int b); }
+    private interface UnknownFunction{ long calculate(int a, int b, int random); }
 
     public UnknownFunctionGenerator(){ random_function = unknownFunctionGenerator(); }
 
@@ -17,36 +17,36 @@ public class UnknownFunctionGenerator {
         return functionArray[function_number];
     }
 
-    public long getResult(int a, int b){
-        return random_function.calculate(a, b);
+    public long getResult(int a, int b, int random){
+        return random_function.calculate(a, b, random);
     }
 
     private UnknownFunction[] functionArray = new UnknownFunction[]{
             /* ------------------ Easy ------------------ */
-            new UnknownFunction() { public long calculate(int a, int b) { return addition(a, b); }},                      // functionArray[0]
-            new UnknownFunction() { public long calculate(int a, int b) { return subtraction(a, b); }},                   // functionArray[1]
-            new UnknownFunction() { public long calculate(int a, int b) { return multiplication(a, b); }},                // functionArray[2]
-            new UnknownFunction() { public long calculate(int a, int b) { return numberOfClosedArea(a, b); }},            // functionArray[3]
-            new UnknownFunction() { public long calculate(int a, int b) { return reverseLarger(a, b); }},                 // functionArray[4]
-            new UnknownFunction() { public long calculate(int a, int b) { return reverseSmaller(a, b); }},                // functionArray[5]
-            new UnknownFunction() { public long calculate(int a, int b) { return xCounter(a, b); }},                      // functionArray[6]
-            new UnknownFunction() { public long calculate(int a, int b) { return isContain(a, b); }},                     // functionArray[7]
-            new UnknownFunction() { public long calculate(int a, int b) { return isBothContain(a, b); }},                 // functionArray[8]
-            new UnknownFunction() { public long calculate(int a, int b) { return greatestCommonFactor(a, b); }},          // functionArray[9]
-            new UnknownFunction() { public long calculate(int a, int b) { return leastCommonMultiple(a, b); }},           // functionArray[10]
-            new UnknownFunction() { public long calculate(int a, int b) { return totalDigitCount(a, b); }},               // functionArray[11]
-            new UnknownFunction() { public long calculate(int a, int b) { return digitDifference(a, b); }},               // functionArray[12]
-            new UnknownFunction() { public long calculate(int a, int b) { return printSumOfDigit(a, b); }},               // functionArray[13]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return addition(a, b); }},                      // functionArray[0]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return subtraction(a, b); }},                   // functionArray[1]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return multiplication(a, b); }},                // functionArray[2]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return numberOfClosedArea(a, b); }},            // functionArray[3]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return reverseLarger(a, b); }},                 // functionArray[4]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return reverseSmaller(a, b); }},                // functionArray[5]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return xCounter(a, b, random); }},              // functionArray[6]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return isContain(a, b, random); }},             // functionArray[7]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return isBothContain(a, b, random); }},         // functionArray[8]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return greatestCommonFactor(a, b); }},          // functionArray[9]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return leastCommonMultiple(a, b); }},           // functionArray[10]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return totalDigitCount(a, b); }},               // functionArray[11]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return digitDifference(a, b); }},               // functionArray[12]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return printSumOfDigit(a, b); }},               // functionArray[13]
 
             /* ------------------ Hard ------------------ */
-            new UnknownFunction() { public long calculate(int a, int b) { return numberOfBinaryOne(a, b); }},             // functionArray[+ 1]
-            new UnknownFunction() { public long calculate(int a, int b) { return binarySumUnder10(a, b); }},              // functionArray[+ 2]
-            new UnknownFunction() { public long calculate(int a, int b) { return binaryMinusUnder10(a, b); }},            // functionArray[+ 3]
-            new UnknownFunction() { public long calculate(int a, int b) { return reverseSum(a, b); }},                    // functionArray[+ 4]
-            new UnknownFunction() { public long calculate(int a, int b) { return reverseSub(a, b); }},                    // functionArray[+ 5]
-            new UnknownFunction() { public long calculate(int a, int b) { return integerCounter(a, b); }},                // functionArray[+ 6]
-            new UnknownFunction() { public long calculate(int a, int b) { return digitSum(a, b); }},                      // functionArray[+ 7]
-            new UnknownFunction() { public long calculate(int a, int b) { return digitSub(a, b); }},                      // functionArray[+ 8]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return numberOfBinaryOne(a, b); }},             // functionArray[+ 1]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return binarySumUnder10(a, b); }},              // functionArray[+ 2]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return binaryMinusUnder10(a, b); }},            // functionArray[+ 3]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return reverseSum(a, b); }},                    // functionArray[+ 4]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return reverseSub(a, b); }},                    // functionArray[+ 5]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return integerCounter(a, b); }},                // functionArray[+ 6]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return digitSum(a, b); }},                      // functionArray[+ 7]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return digitSub(a, b); }},                      // functionArray[+ 8]
     };
 
     /* ------------------------------------- Functions (Easy)------------------------------------- */
@@ -74,19 +74,16 @@ public class UnknownFunctionGenerator {
         return reverseNumber(Math.min(a, b));
     }
 
-    private long xCounter(int a, int b){
-        int x = RandomNumberGenerators.randomNumber(10);
-        return xCountIn(a, x) + xCountIn(b, x);
+    private long xCounter(int a, int b, int random){
+        return xCountIn(a, random) + xCountIn(b, random);
     }
 
-    private long isContain(int a, int b){
-        int target = RandomNumberGenerators.randomNumber(10);
-        return contain(a, target) || contain(b, target)? 1: 0;
+    private long isContain(int a, int b, int random){
+        return contain(a, random) || contain(b, random)? 1: 0;
     }
 
-    private long isBothContain(int a, int b){
-        int target = RandomNumberGenerators.randomNumber(10);
-        return contain(a, target) && contain(b, target)? 1: 0;
+    private long isBothContain(int a, int b, int random){
+        return contain(a, random) && contain(b, random)? 1: 0;
     }
 
     private long greatestCommonFactor(int a, int b){
