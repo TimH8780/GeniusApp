@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LogicA</string>
+    <string name="settings">設定</string>
+    <string name="apply">適用します</string>
+    <string name="language_label">言語: </string>
+    <string name="music_label"> 音楽</string>
+</resources>

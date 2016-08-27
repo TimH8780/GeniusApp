@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/settings_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings"
+        android:text="@string/settings"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
         android:textSize="35sp"/>
@@ -20,15 +23,18 @@
 
 
         <TextView
+            android:id="@+id/language_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Language:"
+            android:text="@string/language_label"
             android:textSize="25sp"/>
 
         <Spinner
+            android:id="@+id/language_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp">
+            android:layout_marginLeft="20dp"
+            android:entries="@array/language_array">
 
         </Spinner>
 
@@ -42,9 +48,10 @@
         android:layout_marginLeft="20dp">
 
         <TextView
+            android:id="@+id/music_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enable Music"
+            android:text="@string/music_label"
             android:textSize="25sp"/>
 
         <CheckBox
@@ -55,10 +62,11 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/apply_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="Save and Quit"
+        android:text="@string/apply"
         android:layout_gravity="center"
         android:onClick="saveAndQuit"/>
 
