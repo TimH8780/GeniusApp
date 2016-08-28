@@ -151,7 +151,7 @@ public class MainMenu extends AppCompatActivity {
                 musicPlayer = null;
             }
         }
-        musicPlayer = MediaPlayer.create(MainMenu.this, R.raw.sample);
+        musicPlayer = MediaPlayer.create(MainMenu.this, R.raw.bgm_main);
         musicPlayer.start();
         musicPlayer.setLooping(true);
     }

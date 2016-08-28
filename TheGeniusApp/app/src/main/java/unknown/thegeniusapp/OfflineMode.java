@@ -56,7 +56,7 @@ public class OfflineMode extends AppCompatActivity{
 
     private UnknownFunctionGenerator unknownFunction;
     private CountDownTimerSeconds[] countDown;
-    private ObtainHintsForRound hintTimer;
+    private HintChecker hintChecker;
     private Timer timer;
     private long final_answer;
     private int input1;
@@ -218,7 +218,7 @@ public class OfflineMode extends AppCompatActivity{
                 musicPlayer = null;
             }
         }
-        musicPlayer = MediaPlayer.create(OfflineMode.this, R.raw.sample2);
+        musicPlayer = MediaPlayer.create(OfflineMode.this, R.raw.bgm_game);
         musicPlayer.start();
         musicPlayer.setLooping(true);
     }
@@ -367,6 +367,7 @@ public class OfflineMode extends AppCompatActivity{
                         timer.stop();
                     }
                     alertDialog.dismiss();
+                    hintChecker.cancel(true);
                     timer.cancel();
                     finish();
                 }
@@ -379,9 +380,6 @@ public class OfflineMode extends AppCompatActivity{
 
     // Clear all fields and timers for next round
     protected void nextRound(){
-        // Stop timer for getting hints
-        hintTimer.cancel(true);
-
         // Regenerate two numbers, unknown function and answer
         input1 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
         input2 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
@@ -515,7 +513,8 @@ public class OfflineMode extends AppCompatActivity{
         if(index > 5){
             return;
         }
-        new HintChecker(index).execute();
+        hintChecker = new HintChecker(index);
+        hintChecker.execute();
     }
 
     // Change the appearance of hint field before and after obtaining hint input from players
@@ -579,8 +578,7 @@ public class OfflineMode extends AppCompatActivity{
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        hintTimer = new ObtainHintsForRound();
-                        hintTimer.execute();
+                        new ObtainHintsForRound().execute();
                     }
                 });
             }
@@ -618,7 +616,6 @@ public class OfflineMode extends AppCompatActivity{
             changeAppearance(right, true);
             player1_button.setClickable(false);
             player2_button.setClickable(false);
-            settings_button.setClickable(false);
 
             // Start HintChecker timer
             countDown[1].start();
@@ -627,7 +624,7 @@ public class OfflineMode extends AppCompatActivity{
         @Override
         protected Void doInBackground(Void... params) {
             // Loop until the HintChecker timer is done or both hint fields is entered by players
-            while(!countDown[1].isFinished() && !(hintTable.get(left) && hintTable.get(right)));
+            while(!countDown[1].isFinished() && !(hintTable.get(left) && hintTable.get(right)) && !isCancelled());
             return null;
         }
 
@@ -650,14 +647,14 @@ public class OfflineMode extends AppCompatActivity{
 
             // Randomly generate the hint if it is not entered by player
             if(!hintTable.get(left)){
-                int temp = -1;
+                int temp;
                 do {
                     temp = RandomNumberGenerators.randomNumber(HINT_MAX_VALUE);
                 } while (isEqualQuestion(temp));
                 left.setText(String.valueOf(temp));
             }
             if(!hintTable.get(right)){
-                int temp = -1;
+                int temp;
                 do {
                     temp = RandomNumberGenerators.randomNumber(HINT_MAX_VALUE);
                 } while (isEqualQuestion(temp));
@@ -696,7 +693,7 @@ public class OfflineMode extends AppCompatActivity{
         @Override
         protected Void doInBackground(Void... params) {
             // Loop until the Answer timer is done
-            while(!countDown[2].isFinished());
+            while(!countDown[2].isFinished() && !isCancelled());
             return null;
         }
 
