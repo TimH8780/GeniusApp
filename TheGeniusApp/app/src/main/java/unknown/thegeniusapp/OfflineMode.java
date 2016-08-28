@@ -410,7 +410,7 @@ public class OfflineMode extends AppCompatActivity{
             RoundCounter++;
             countDown[0] = new CountDownTimerSeconds(SECOND_PER_ROUND, ROUND_ID, this);
             hintIndex = 0;
-            timeout.setText(String.format(Locale.US, "Round_%s - %d Seconds (%d)", RoundCounter, SECOND_PER_ROUND, HINT_INPUT_WAIT_TIME));
+            timeout.setText(String.format(Locale.US, "Round_%d - %d Seconds (%d)", RoundCounter, SECOND_PER_ROUND, HINT_INPUT_WAIT_TIME));
             countDown[0].start();
         } else {
             endGameDialog();
@@ -419,7 +419,7 @@ public class OfflineMode extends AppCompatActivity{
 
     protected void updateGameTime(long millisUntilFinished){
         int second = (int)(millisUntilFinished / 1000);
-        timeout.setText(String.format(Locale.US, "Round_%s - %d Seconds (%d)", RoundCounter, second, HINT_INPUT_WAIT_TIME));
+        timeout.setText(String.format(Locale.US, "Round_%d - %d Seconds (%d)", RoundCounter, second, HINT_INPUT_WAIT_TIME));
         player1_answerTime.setText(String.format(Locale.US, "00:%02d", ANSWER_WAIT_TIME));
         player2_answerTime.setText(String.format(Locale.US, "00:%02d", ANSWER_WAIT_TIME));
     }
@@ -536,7 +536,7 @@ public class OfflineMode extends AppCompatActivity{
     public void hintInput(final View view) {
         // Build dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(OfflineMode.this);
-        builder.setTitle("Enter your Input for HintChecker:");
+        builder.setTitle("Enter your Input for Hint:");
         LayoutInflater inflater = getLayoutInflater();
         View popupView = inflater.inflate(R.layout.answer_popup, null);
         final EditText input = (EditText) popupView.findViewById(R.id.answer);

@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -20,12 +21,16 @@ public class Settings extends AppCompatActivity {
     private static TextView title, language_label, music_label;
     private static Button apply_button;
 
-    private static Locale myLocale;
+    //private static Locale newLocale;
 
-    private static final String Locale_Preference = "Locale Preference";
-    private static final String Locale_KeyValue = "Saved Locale";
+    private static final String Saved_Values = "Saved Values";
+    private static final String Locale_Value = "Saved Locale";
+    private static final String Language_Value = "Saved Language";
     private static SharedPreferences sharedPreferences;
     private static SharedPreferences.Editor editor;
+    private static Spinner Language_Spinner;
+    private String lang, selected_language;
+    private int lang_pos;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState){
@@ -49,10 +54,11 @@ public class Settings extends AppCompatActivity {
 
     public void saveAndQuit(View view){
         // TODO: Save Part
-        Spinner mySpinner = (Spinner) findViewById(R.id.language_spinner);
-        String selected_language = mySpinner.getSelectedItem().toString();
 
-        String lang = "en";//Default Language
+        selected_language = Language_Spinner.getSelectedItem().toString();
+        lang_pos = Language_Spinner.getSelectedItemPosition();
+        Log.d("saveAndQuit: ", Integer.toString(lang_pos));
+
         switch (selected_language){
             case "English":
                 lang = "en";
@@ -64,39 +70,50 @@ public class Settings extends AppCompatActivity {
                 lang = "ja";
                 break;
         }
-        changeLocale(lang);
+        changeLocale();
         finish();
     }
 
     private void initViews() {
-        sharedPreferences = getSharedPreferences(Locale_Preference, Activity.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(Saved_Values, Activity.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
         title = (TextView) findViewById(R.id.settings_title);
         language_label = (TextView) findViewById(R.id.language_label);
         music_label = (TextView) findViewById(R.id.music_label);
         apply_button = (Button) findViewById(R.id.apply_button);
-    }
+        Language_Spinner = (Spinner) findViewById(R.id.language_spinner);
 
-    public void changeLocale(String lang) {
-        if (lang.equalsIgnoreCase(""))
-            return;
-        Locale myLocale = new Locale(lang);//Set Selected Locale
-        Locale.setDefault(myLocale);//set new locale as default
-        Configuration config = new Configuration();//get Configuration
-        config.locale = myLocale;//set config locale as selected locale
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());//Update the config
-    }
+        selected_language = Language_Spinner.getSelectedItem().toString();
 
-    public void saveLocale(String lang) {
-        editor.putString(Locale_KeyValue, lang);
-        editor.commit();
     }
 
     //Get locale method in preferences
     public void loadLocale() {
-        String language = sharedPreferences.getString(Locale_KeyValue, "");
-        changeLocale(language);
+        lang = sharedPreferences.getString(Locale_Value, "");
+        lang_pos = sharedPreferences.getInt(Language_Value, 0);
+        Language_Spinner.setSelection(lang_pos);
+        changeLocale();
+    }
+
+    //Change Locale
+    public void changeLocale() {
+        if (lang.equalsIgnoreCase(""))
+            return;
+        Locale newLocale = new Locale(lang);//Set Selected Locale
+        saveValues();//Save the selected locale
+        Locale.setDefault(newLocale);//set new locale as default
+        Configuration config = new Configuration();//get Configuration
+        config.locale = newLocale;//set config locale as selected locale
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());//Update the config
+        updateTexts();//Update texts according to locale
+    }
+
+    public void saveValues() {
+        editor.putString(Locale_Value, lang);
+        editor.putInt(Language_Value, lang_pos);
+        editor.commit();
+        Log.d("Saved Language", selected_language);
     }
 
     private void updateTexts() {
@@ -104,5 +121,6 @@ public class Settings extends AppCompatActivity {
         language_label.setText(R.string.language_label);
         music_label.setText(R.string.music_label);
         apply_button.setText(R.string.apply);
+        Language_Spinner.setSelection(lang_pos);
     }
 }

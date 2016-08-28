@@ -1,3 +1,8 @@
+WL: 8/27
+Implemented language selection for Settings
+Added Excel file for UnknownFunctions, Music+Sound Effect folder (main directory)
+Changes from 8/27 discussion
+
 ZH: 8/20
 More unknown functions
 
