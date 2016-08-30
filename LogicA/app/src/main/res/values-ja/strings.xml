@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LogicA</string>
+    <string name="settings">設定</string>
+    <string name="apply">適用します</string>
+    <string name="language_label">言語: </string>
+    <string name="music_label"> 音楽</string>
+    <string name="round_mode">回戦</string>
+    <string name="score_mode">スコアの試合</string>
+    <string name="answer_label">回答</string>
+    <string name="player1">選手 1</string>
+    <string name="player2">選手 2</string>
+    <string name="resume_game">ゲームを続行</string>
+    <string name="score_label">スコア</string>
+    <string name="answer_dialog_title">*******%1$s </string>
+    <string name="submit_label">提出します</string>
+    <string name="correct_answer_label">祝い! 正解!</string>
+    <string name="incorrect_answer_label">不正解</string>
+    <string name="game_pause_label">一時停止</string>
+    <string name="disabled_time_label">使用禁止\n00:%1$02d</string>
+    <string name="game_over_label">ゲームオーバー</string>
+    <string name="quit_game_label">ゲームをやめる</string>
+    <string name="quit_label">やめます</string>
+    <string name="click_label">クリック</string>
+    <string name="hint_input_title">...japanese</string>
+    <string name="hint_input_message">0から9999までの整数の範囲</string>
+    <string name="invalid_value_label">無効値</string>
+    <string name="winner_message_label">祝い! %1$s が勝者であります</string>
+    <string name="next_game_label" translatable="false">再び</string>
+    <string name="round_time_label">第%1$dラウンド - %2$d 秒 (%3$d)</string>
+    <string name="round_time_initial_label">第1ラウンド - 180 秒 (20)</string>
+    <string name="time_up_label">時間切れ!</string>
+</resources>

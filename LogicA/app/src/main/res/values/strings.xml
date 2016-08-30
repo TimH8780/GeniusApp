@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LogicA</string>
+    <string name="language_label">Language: </string>
+    <string name="music_label">Enable Music</string>
+    <string name="apply">Apply</string>
+    <string name="settings">SETTINGS</string>
+
+    <string-array name="language_array">
+        <item>English</item>
+        <item>中文</item>
+        <item>日本語</item>
+    </string-array>
+    <string name="score_mode">SCORE MATCH</string>
+    <string name="round_mode">ROUND MATCH</string>
+    <string name="resume_game">RESUME GAME</string>
+    <string name="quit_game_label">QUIT GAME</string>
+    <string name="player1">Player 1</string>
+    <string name="player2">Player 2</string>
+    <string name="score_label">Score: </string>
+    <string name="answer_label">Answer</string>
+    <string name="score_mode_description" translatable="false">The game ends whenever a player reaches +/- of target score</string>
+    <string name="answer_dialog_title">Enter your (" %1$s ") answer:</string>
+    <string name="submit_label">Submit</string>
+    <string name="correct_answer_label">Congratulation! Correct Answer!</string>
+    <string name="incorrect_answer_label">Incorrect Answer</string>
+    <string name="round_time_label">Round %1$d - %2$d Seconds (%3$d)</string>
+    <string name="game_pause_label">Game Paused</string>
+    <string name="disabled_time_label">Disabled\n00:%1$02d</string>
+    <string name="game_over_label">Game Over</string>
+    <string name="next_game_label">Next Game</string>
+    <string name="quit_label">Quit</string>
+    <string name="click_label">Click</string>
+    <string name="hint_input_title">Enter your Input for Hint:</string>
+    <string name="hint_input_message">Integer range from 0 to 9999</string>
+    <string name="invalid_value_label">Invalid Value</string>
+    <string name="winner_message_label">Congratulations! %1$s wins the game!!</string>
+    <string name="round_time_initial_label">Round_1 - 180 Seconds (20)</string>
+    <string name="time_up_label">Time Up for this Round!</string>
+
+</resources>

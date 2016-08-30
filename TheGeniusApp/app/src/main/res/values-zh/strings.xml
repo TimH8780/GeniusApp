@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="app_name">LogicA</string>
-    <string name="apply">应用</string>
-    <string name="language_label">语言:</string>
-    <string name="music_label">启用音乐</string>
-    <string name="settings">设置</string>
-</resources>

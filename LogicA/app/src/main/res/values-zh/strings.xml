@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">LogicA</string>
+    <string name="apply">应用</string>
+    <string name="language_label">语言:</string>
+    <string name="music_label">启用音乐</string>
+    <string name="settings">设置</string>
+    <string name="round_mode">回合赛 </string>
+    <string name="score_mode">比分赛</string>
+    <string name="answer_label">回答</string>
+    <string name="player1">玩家 1</string>
+    <string name="player2">玩家 2</string>
+    <string name="resume_game">继续游戏</string>
+    <string name="score_label">得分 </string>
+    <string name="answer_dialog_title">输入您( %1$s )的答案</string>
+    <string name="submit_label">提交</string>
+    <string name="correct_answer_label">恭喜!</string>
+    <string name="incorrect_answer_label">不正确的答案</string>
+    <string name="game_pause_label">游戏暂停</string>
+    <string name="disabled_time_label">禁用\n00:%1$02d</string>
+    <string name="game_over_label">游戏结束</string>
+    <string name="next_game_label">重来</string>
+    <string name="quit_game_label">退出游戏</string>
+    <string name="quit_label">退出</string>
+    <string name="click_label">点击</string>
+    <string name="hint_input_title">输入您想要提示：</string>
+    <string name="hint_input_message">整数的范围从0到9999</string>
+    <string name="invalid_value_label">无效值</string>
+    <string name="winner_message_label">恭喜! %1$s 是胜利者!!</string>
+    <string name="round_time_label">第%1$d回合 - %2$d  秒 (%3$d)</string>
+    <string name="round_time_initial_label">第1回合 - 180  秒 (20)</string>
+    <string name="time_up_label">时间到了!</string>
+</resources>
