@@ -26,8 +26,8 @@
     <string name="hint_input_message">0から9999までの整数の範囲</string>
     <string name="invalid_value_label">無効値</string>
     <string name="winner_message_label">祝い! %1$s が勝者であります</string>
-    <string name="next_game_label" translatable="false">再び</string>
     <string name="round_time_label">第%1$dラウンド - %2$d 秒 (%3$d)</string>
     <string name="round_time_initial_label">第1ラウンド - 180 秒 (20)</string>
     <string name="time_up_label">時間切れ!</string>
+    <string name="next_game_label">次のゲーム</string>
 </resources>

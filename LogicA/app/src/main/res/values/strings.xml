@@ -28,7 +28,6 @@
     <string name="game_pause_label">Game Paused</string>
     <string name="disabled_time_label">Disabled\n00:%1$02d</string>
     <string name="game_over_label">Game Over</string>
-    <string name="next_game_label">Next Game</string>
     <string name="quit_label">Quit</string>
     <string name="click_label">Click</string>
     <string name="hint_input_title">Enter your Input for Hint:</string>
@@ -37,5 +36,6 @@
     <string name="winner_message_label">Congratulations! %1$s wins the game!!</string>
     <string name="round_time_initial_label">Round_1 - 180 Seconds (20)</string>
     <string name="time_up_label">Time Up for this Round!</string>
+    <string name="next_game_label">Next Game</string>
 
 </resources>

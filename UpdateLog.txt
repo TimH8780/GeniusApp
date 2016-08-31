@@ -1,9 +1,10 @@
 WL: 8/30
 Updated the project name
-Most of the strings in Offline Mode are translated based on locale
+Implemented Music Enable/Disable in Main Menu and Offline Mode
+Most of the strings in Offline Mode are translated based on locale (All changes for the translation have "//Changed" tag, delete after review)
 	Exceptions: "The game ends whenever a player reaches +/- of target score" - too hard to translate
 		    Some other japanese strings (can be seen in string.xml or the editor of string.xml) - too hard to translate
-		    "Time Up for this Round!" - this string is from a different class (CountDownTimerSeconds.java), having trouble accessing resource file string.xml
+	Issue: Changing the language during the game does not update the strings completely
 		    
 WL: 8/27
 Implemented language selection for Settings

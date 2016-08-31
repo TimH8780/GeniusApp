@@ -1,12 +1,15 @@
 package unknown.logica;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -22,11 +25,17 @@ public class MainMenu extends AppCompatActivity {
     private Context context;
     private MediaPlayer musicPlayer;
 
+    private static final String Saved_Values = "Saved Values";
+    private static final String Music_Enable_Value = "Saved Music Enable";
+    private static SharedPreferences sharedPreferences;
+    private boolean music_enable;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         context = this;
+
         createPlayBGM();
 
         ActionBar actionBar = getSupportActionBar();
@@ -144,6 +153,9 @@ public class MainMenu extends AppCompatActivity {
     }
 
     private void createPlayBGM(){
+        sharedPreferences = getSharedPreferences(Saved_Values, Activity.MODE_PRIVATE);
+        music_enable = sharedPreferences.getBoolean(Music_Enable_Value, false);
+        Log.d("Enable Music", Boolean.toString(music_enable));
         if(musicPlayer != null) {
             try {
                 musicPlayer.reset();
@@ -151,9 +163,13 @@ public class MainMenu extends AppCompatActivity {
                 musicPlayer = null;
             }
         }
-        musicPlayer = MediaPlayer.create(MainMenu.this, R.raw.bgm_main);
-        musicPlayer.start();
-        musicPlayer.setLooping(true);
+        if (music_enable == true) {
+            musicPlayer = MediaPlayer.create(MainMenu.this, R.raw.bgm_main);
+            musicPlayer.start();
+            musicPlayer.setLooping(true);
+        }
+        else
+            musicPlayer = MediaPlayer.create(MainMenu.this, R.raw.bgm_main); //Without this the game crashes when Settings is pressed
     }
 
     private OnSwipeTouchListener swipeListener = new OnSwipeTouchListener(context){

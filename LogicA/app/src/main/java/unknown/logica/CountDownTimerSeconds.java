@@ -1,21 +1,11 @@
 package unknown.logica;
 
-import android.content.Context;
-import android.content.RestrictionEntry;
-import android.content.res.Resources;
-import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import static unknown.logica.OfflineMode.*;
 
-//public class CountDownTimerSeconds { //Changed
-public class CountDownTimerSeconds extends AppCompatActivity {
-
-    private static String time_up_string; //Time Up for this Round!
+public class CountDownTimerSeconds {
 
     public static final long SECOND_TO_MILLISECOND = 1000;
     public static final long FREQUENCY = 200;
@@ -26,16 +16,6 @@ public class CountDownTimerSeconds extends AppCompatActivity {
     private boolean ongoing;
     private String id;
     private OfflineMode game;
-
-    //Added for testing
-    @Override
-    protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        Resources res = getResources();
-        time_up_string = res.getString(R.string.time_up_label);
-        Log.d("onCreate", time_up_string);
-    }
 
     private class Timer extends CountDownTimer{
 
@@ -74,8 +54,8 @@ public class CountDownTimerSeconds extends AppCompatActivity {
             if(isGameTimer()){
                 //Toast.makeText(game.getApplicationContext(), "Time Up for this Round!", Toast.LENGTH_LONG).show(); //Changed
                 //Toast.makeText(game.getApplicationContext(), res.getString(R.string.time_up_label), Toast.LENGTH_LONG).show();
-                //game.nextRound();
-                Log.d("onFinish", time_up_string);
+                game.timeUpMessage(); //Created new method for toast because getResources() was difficult without Context
+                game.nextRound();
             } else if(isPenaltyTimer()){
                 game.unlockAnswerButton();
             }

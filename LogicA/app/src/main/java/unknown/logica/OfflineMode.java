@@ -1,7 +1,9 @@
 package unknown.logica;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
@@ -30,7 +32,12 @@ import static unknown.logica.ModeSelection.*;
 
 public class OfflineMode extends AppCompatActivity{
 
-    public Resources res;
+    private Resources res;
+
+    private static final String Saved_Values = "Saved Values";
+    private static final String Music_Enable_Value = "Saved Music Enable";
+    private static SharedPreferences sharedPreferences;
+    private boolean music_enable;
 
     private static String player1_string; //Player 1
     private static String player2_string; //Player 2
@@ -50,8 +57,8 @@ public class OfflineMode extends AppCompatActivity{
     public static final int NUMBER_OF_HINTS = 6;
     public static final int ROUND_MAX_VALUE = 50;
     public static final int HINT_MAX_VALUE = 100;
-    public static final int SECOND_PER_ROUND = 181; //181
-    public static final int HINT_INPUT_WAIT_TIME = 20; //20
+    public static final int SECOND_PER_ROUND = 20; //181
+    public static final int HINT_INPUT_WAIT_TIME = 5; //20
     public static final int ANSWER_WAIT_TIME = 10;
     public static final int PENALTY_TIME = 30;
     public static final String ROUND_ID = "Round";
@@ -94,14 +101,13 @@ public class OfflineMode extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.offline_mode_window);
 
-        initializeStrings();
-
         // Remove action bar
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
             actionBar.hide();
         }
 
+        initializeStrings();
         createPlayBGM();
 
         Bundle bundle = getIntent().getExtras();
@@ -232,6 +238,9 @@ public class OfflineMode extends AppCompatActivity{
     }
 
     private void createPlayBGM(){
+        sharedPreferences = getSharedPreferences(Saved_Values, Activity.MODE_PRIVATE);
+        music_enable = sharedPreferences.getBoolean(Music_Enable_Value, false);
+        Log.d("Enable Music", Boolean.toString(music_enable));
         if(musicPlayer != null) {
             try {
                 musicPlayer.reset();
@@ -239,9 +248,13 @@ public class OfflineMode extends AppCompatActivity{
                 musicPlayer = null;
             }
         }
-        musicPlayer = MediaPlayer.create(OfflineMode.this, R.raw.bgm_game);
-        musicPlayer.start();
-        musicPlayer.setLooping(true);
+        if (music_enable == true) {
+            musicPlayer = MediaPlayer.create(OfflineMode.this, R.raw.bgm_game);
+            musicPlayer.start();
+            musicPlayer.setLooping(true);
+        }
+        else
+            musicPlayer = MediaPlayer.create(OfflineMode.this, R.raw.bgm_game); //Without this the game crashes when quitting the game
     }
 
     // The onClickListener for the two answer buttons
@@ -810,6 +823,11 @@ public class OfflineMode extends AppCompatActivity{
         hint_input_title_string = res.getString(R.string.hint_input_title);
         hint_input_message_string = res.getString(R.string.hint_input_message);
         invalid_value_string = res.getString(R.string.invalid_value_label);
+    }
+
+    //Method used by CountDownTimerSeconds.java to print the toast
+    public void timeUpMessage(){
+        Toast.makeText(this.getApplicationContext(), res.getString(R.string.time_up_label), Toast.LENGTH_LONG).show();
     }
 
 }

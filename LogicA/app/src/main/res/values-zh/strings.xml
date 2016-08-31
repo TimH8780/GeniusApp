@@ -20,7 +20,6 @@
     <string name="game_pause_label">游戏暂停</string>
     <string name="disabled_time_label">禁用\n00:%1$02d</string>
     <string name="game_over_label">游戏结束</string>
-    <string name="next_game_label">重来</string>
     <string name="quit_game_label">退出游戏</string>
     <string name="quit_label">退出</string>
     <string name="click_label">点击</string>
@@ -31,4 +30,5 @@
     <string name="round_time_label">第%1$d回合 - %2$d  秒 (%3$d)</string>
     <string name="round_time_initial_label">第1回合 - 180  秒 (20)</string>
     <string name="time_up_label">时间到了!</string>
+    <string name="next_game_label">下一回合</string>
 </resources>
