@@ -15,26 +15,31 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import static unknown.logica.Settings.*;
 
 public class MainMenu extends AppCompatActivity {
 
     private Rect rect;
-    private int min_distance = 100;
-    private float downX, downY, upX, upY;
     private ImageView main_menu_buttons;
     private Context context;
     private MediaPlayer musicPlayer;
-
-    private static final String Saved_Values = "Saved Values";
-    private static final String Music_Enable_Value = "Saved Music Enable";
-    private static SharedPreferences sharedPreferences;
-    private boolean music_enable;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         context = this;
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SAVED_VALUES, Activity.MODE_PRIVATE);
+        if(sharedPreferences.getBoolean(FIRST_TIMER_UESER, true)){
+            // First time user
+            Toast.makeText(getApplicationContext(), "First Timer User", Toast.LENGTH_LONG).show();
+        }
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(FIRST_TIMER_UESER, false);
+        editor.apply();
 
         createPlayBGM();
 
@@ -43,13 +48,13 @@ public class MainMenu extends AppCompatActivity {
             actionBar.hide();
         }
 
-        final Button offline_mode_button = (Button) findViewById(R.id.offline_mode_button);
-        final Button settings_button = (Button) findViewById(R.id.settings_button);
-        final Button tutorial_button = (Button) findViewById(R.id.tutorial_button);
-        final Button quit_button = (Button) findViewById(R.id.quit_button);
+        Button data_button = (Button) findViewById(R.id.data_button);
+        Button settings_button = (Button) findViewById(R.id.settings_button);
+        Button tutorial_button = (Button) findViewById(R.id.tutorial_button);
+        Button quit_button = (Button) findViewById(R.id.quit_button);
+        ImageView main_menu_background = (ImageView) findViewById(R.id.main_menu_background);
+        ImageButton gameplay = (ImageButton) findViewById(R.id.gameplay);
         main_menu_buttons = (ImageView) findViewById(R.id.main_menu_buttons);
-        final ImageView main_menu_background = (ImageView) findViewById(R.id.main_menu_background);
-        final ImageButton joystick = (ImageButton) findViewById(R.id.joystick);
 
         //Swipe Listener, Covers only the background, not inside main_menu_button
         assert main_menu_background != null;
@@ -59,16 +64,14 @@ public class MainMenu extends AppCompatActivity {
         assert main_menu_buttons != null;
         main_menu_buttons.setOnTouchListener(swipeListener);
 
-        assert offline_mode_button != null;
-        offline_mode_button.setOnClickListener(new View.OnClickListener() {
+        assert data_button != null;
+        data_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//              Intent offline_mode_activity = new Intent(MainMenu.this, ModeSelection.class);
-//              offline_mode_activity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//              startActivity(offline_mode_activity);
+                startActivity(Data.class);
             }
         });
-        offline_mode_button.setOnTouchListener(new CustomOnTouchListener(R.drawable.offline_mode_pressed));
+        data_button.setOnTouchListener(new CustomOnTouchListener(R.drawable.offline_mode_pressed));
 
         assert settings_button != null;
         settings_button.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +86,7 @@ public class MainMenu extends AppCompatActivity {
         tutorial_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(TestClass.class);
+                startActivity(Tutorial.class);
             }
         });
         tutorial_button.setOnTouchListener(new CustomOnTouchListener(R.drawable.tutorial_mode_pressed));
@@ -97,21 +100,12 @@ public class MainMenu extends AppCompatActivity {
         });
         quit_button.setOnTouchListener(new CustomOnTouchListener(R.drawable.quit_pressed));
 
-        // Enter game directly - Dubug
-        assert joystick != null;
-        joystick.setOnTouchListener(new View.OnTouchListener() {
+        assert gameplay != null;
+        gameplay.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        Intent intent = new Intent(MainMenu.this, OfflineMode.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("Limit", 10);
-                        bundle.putString("Type", "SCORE MODE");
-                        intent.putExtras(bundle);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(intent);
-                        break;
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    startActivity(ModeSelection.class);
                 }
                 return false;
             }
@@ -142,9 +136,9 @@ public class MainMenu extends AppCompatActivity {
     }
 
     private void startActivity(Class<?> cls){
-        Intent settings_activity = new Intent(context, cls);
-        settings_activity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        startActivity(settings_activity);
+        Intent activity = new Intent(context, cls);
+        activity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(activity);
     }
 
     private void quitGame(){
@@ -153,30 +147,35 @@ public class MainMenu extends AppCompatActivity {
     }
 
     private void createPlayBGM(){
-        sharedPreferences = getSharedPreferences(Saved_Values, Activity.MODE_PRIVATE);
-        music_enable = sharedPreferences.getBoolean(Music_Enable_Value, false);
+        SharedPreferences sharedPreferences = getSharedPreferences(SAVED_VALUES, Activity.MODE_PRIVATE);
+        boolean music_enable = sharedPreferences.getBoolean(MUSIC_ENABLE_VALUE, true);
         Log.d("Enable Music", Boolean.toString(music_enable));
-        if(musicPlayer != null) {
-            try {
-                musicPlayer.reset();
-            } catch(IllegalStateException e){
-                musicPlayer = null;
-            }
+
+        if(musicPlayer != null) try{
+            musicPlayer.reset();
+        } catch (IllegalStateException e){
+            musicPlayer = null;
         }
-        if (music_enable == true) {
+
+        if (music_enable) {
             musicPlayer = MediaPlayer.create(MainMenu.this, R.raw.bgm_main);
             musicPlayer.start();
             musicPlayer.setLooping(true);
         }
-        else
-            musicPlayer = MediaPlayer.create(MainMenu.this, R.raw.bgm_main); //Without this the game crashes when Settings is pressed
+        else musicPlayer = MediaPlayer.create(MainMenu.this, R.raw.bgm_main); //Without this the game crashes when Settings is pressed
     }
 
-    private OnSwipeTouchListener swipeListener = new OnSwipeTouchListener(context){
+    private OnSwipeTouchListener swipeListener = new OnSwipeTouchListener(context, false){
         @Override
         public void onSwipeTopHold() {
             super.onSwipeTopHold();
             main_menu_buttons.setImageResource(R.drawable.offline_mode_pressed);
+        }
+
+        @Override
+        public void onSwipeBottomHold() {
+            super.onSwipeBottomHold();
+            main_menu_buttons.setImageResource(R.drawable.settings_pressed);
         }
 
         @Override
@@ -192,12 +191,6 @@ public class MainMenu extends AppCompatActivity {
         }
 
         @Override
-        public void onSwipeBottomHold() {
-            super.onSwipeBottomHold();
-            main_menu_buttons.setImageResource(R.drawable.settings_pressed);
-        }
-
-        @Override
         public void onSwipeRightUp() {
             quitGame();
         }
@@ -205,13 +198,13 @@ public class MainMenu extends AppCompatActivity {
         @Override
         public void onSwipeLeftUp() {
             main_menu_buttons.setImageResource(R.drawable.main_menu_buttons);
-            startActivity(TestClass.class);
+            startActivity(Tutorial.class);
         }
 
         @Override
         public void onSwipeTopUp() {
             main_menu_buttons.setImageResource(R.drawable.main_menu_buttons);
-            startActivity(ModeSelection.class);
+            startActivity(Data.class);
         }
 
         @Override
@@ -231,7 +224,7 @@ public class MainMenu extends AppCompatActivity {
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()){
                 case MotionEvent.ACTION_DOWN:
-                    rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom()); //Button bounds
+                    rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());   // Button bounds
                     main_menu_buttons.setImageResource(drawablePressed);
                     break;
 

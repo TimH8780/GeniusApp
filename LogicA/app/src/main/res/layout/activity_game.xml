@@ -102,7 +102,7 @@
 
         <include
             android:id="@+id/question"
-            layout="@layout/question_layout"
+            layout="@layout/layout_question"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"/>
@@ -119,27 +119,27 @@
                 android:background="@color/silver">
 
                 <include
-                    layout="@layout/hint_layout"
+                    layout="@layout/layout_hint"
                     android:id="@+id/hint_1" />
 
                 <include
-                    layout="@layout/hint_layout"
+                    layout="@layout/layout_hint"
                     android:id="@+id/hint_2" />
 
                 <include
-                    layout="@layout/hint_layout"
+                    layout="@layout/layout_hint"
                     android:id="@+id/hint_3" />
 
                 <include
-                    layout="@layout/hint_layout"
+                    layout="@layout/layout_hint"
                     android:id="@+id/hint_4" />
 
                 <include
-                    layout="@layout/hint_layout"
+                    layout="@layout/layout_hint"
                     android:id="@+id/hint_5" />
 
                 <include
-                    layout="@layout/hint_layout"
+                    layout="@layout/layout_hint"
                     android:id="@+id/hint_6" />
 
             </LinearLayout>

@@ -1,3 +1,6 @@
+ZH: 9/03
+Added swipe detection in ModeSelection activity; Added Data activity (Function lists); Added detectionn for first time users
+
 WL: 8/30
 Updated the project name
 Implemented Music Enable/Disable in Main Menu and Offline Mode

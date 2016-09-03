@@ -1,34 +1,33 @@
 package unknown.logica;
 
 import android.os.CountDownTimer;
-import android.widget.Toast;
 
-import static unknown.logica.OfflineMode.*;
+import static unknown.logica.Game.*;
 
 public class CountDownTimerSeconds {
 
     public static final long SECOND_TO_MILLISECOND = 1000;
     public static final long FREQUENCY = 200;
 
-    private long time_left;
+    private long timeLeft;
     private Timer counter;
-    private boolean pause;
-    private boolean ongoing;
+    private boolean isPaused;
+    private boolean isCountingDown;
     private String id;
-    private OfflineMode game;
+    private Game game;
 
     private class Timer extends CountDownTimer{
 
         private Timer(long millisInFuture) {
             super(millisInFuture, FREQUENCY);
-            time_left = millisInFuture;
-            pause = false;
-            ongoing = false;
+            timeLeft = millisInFuture;
+            isPaused = false;
+            isCountingDown = false;
         }
 
         @Override
         public void onTick(long millisUntilFinished) {
-            if((time_left / 1000) != (millisUntilFinished / 1000)){
+            if(timeLeft != millisUntilFinished){
                 switch (id){
                     case ROUND_ID:
                         game.updateGameTime(millisUntilFinished);
@@ -44,17 +43,15 @@ public class CountDownTimerSeconds {
                         break;
                 }
             }
-            time_left = millisUntilFinished;
+            timeLeft = millisUntilFinished;
         }
 
         @Override
         public void onFinish() {
-            time_left = 0;
-            ongoing = false;
+            timeLeft = 0;
+            isCountingDown = false;
             if(isGameTimer()){
-                //Toast.makeText(game.getApplicationContext(), "Time Up for this Round!", Toast.LENGTH_LONG).show(); //Changed
-                //Toast.makeText(game.getApplicationContext(), res.getString(R.string.time_up_label), Toast.LENGTH_LONG).show();
-                game.timeUpMessage(); //Created new method for toast because getResources() was difficult without Context
+                game.timeUpMessage();   //Created new method for toast because getResources() was difficult without Context
                 game.nextRound();
             } else if(isPenaltyTimer()){
                 game.unlockAnswerButton();
@@ -70,49 +67,49 @@ public class CountDownTimerSeconds {
         return id.equals(PENALTY_ID);
     }
 
-    public CountDownTimerSeconds(long total_second, String id, OfflineMode game){
+    public CountDownTimerSeconds(long total_second, String id, Game game){
         counter = new Timer(total_second * SECOND_TO_MILLISECOND);
         this.id = id;
         this.game = game;
     }
 
     public void start(){
-        if(!ongoing) {
+        if(!isCountingDown) {
             counter.start();
-            pause = false;
-            ongoing = true;
+            isPaused = false;
+            isCountingDown = true;
         }
     }
 
     public void stop(){
-        if(ongoing) {
+        if(isCountingDown) {
             counter.cancel();
-            pause = false;
-            time_left = 0;
-            ongoing = false;
+            isPaused = false;
+            timeLeft = 0;
+            isCountingDown = false;
         }
     }
 
     public void pause(){
-        if(ongoing) {
+        if(isCountingDown) {
             counter.cancel();
-            pause = true;
-            ongoing = false;
+            isPaused = true;
+            isCountingDown = false;
         }
     }
 
     public void resume(){
-        if(pause && !ongoing) {
-            counter = new Timer(time_left);
+        if(isPaused && !isCountingDown) {
+            counter = new Timer(timeLeft);
             counter.start();
-            pause = false;
-            ongoing = true;
+            isPaused = false;
+            isCountingDown = true;
         }
     }
 
-    public boolean isPaused(){ return  pause; }
+    public boolean isPaused(){ return  isPaused; }
     public boolean isFinished(){
-        return time_left == 0;
+        return timeLeft == 0;
     }
-    public long getTimerTime(){ return time_left; }
+    public long getTimerTime(){ return timeLeft; }
 }

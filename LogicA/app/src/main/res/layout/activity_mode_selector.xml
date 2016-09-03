@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:id="@+id/main_screen"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#44FF0000">
+    android:background="@color/lightPink">
 
     <ImageButton
         android:layout_width="60dp"
@@ -21,7 +23,7 @@
         android:textStyle="bold"
         android:textSize="25sp"
         android:text="@string/score_mode"
-        android:background="#44FF0000"/>
+        android:background="@color/deepPink"/>
 
     <Button
         android:id="@+id/round_mode"
@@ -32,7 +34,7 @@
         android:text="@string/round_mode"
         android:textStyle="bold"
         android:textSize="25sp"
-        android:background="#44FF0000"/>
+        android:background="@color/deepPink"/>
 
     <TextView
         android:id="@+id/Text_E"

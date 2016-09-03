@@ -6,11 +6,17 @@ public class UnknownFunctionGenerator {
 
     //Referenced http://stackoverflow.com/questions/4280727/java-creating-an-array-of-methods
     public static final int MAX_FUNCTIONS = 22;
+    public static final int MIN_RANDOM_INDEX = 6;
+    public static final int MAX_RANDOM_INDEX = 8;
 
     private UnknownFunction random_function;
     private interface UnknownFunction{ long calculate(int a, int b, int random); }
 
     public UnknownFunctionGenerator(){ random_function = unknownFunctionGenerator(); }
+
+    public UnknownFunctionGenerator(int index){
+        random_function = functionArray[index];
+    }
 
     private UnknownFunction unknownFunctionGenerator(){
         int function_number = RandomNumberGenerators.randomNumber(MAX_FUNCTIONS);
@@ -117,7 +123,7 @@ public class UnknownFunctionGenerator {
 
     /* ------------------------------------- Functions (Hard)------------------------------------- */
     private long numberOfBinaryOne(int a, int b){
-        return binaryOne(a) + binaryOne(b);
+        return Integer.bitCount(a) + Integer.bitCount(a);
     }
 
     private long binarySumUnder10(int a, int b){

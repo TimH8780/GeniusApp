@@ -29,36 +29,18 @@ import java.util.TimerTask;
 
 import static unknown.logica.CountDownTimerSeconds.*;
 import static unknown.logica.ModeSelection.*;
+import static unknown.logica.Settings.*;
+import static unknown.logica.StringContainer.*;
 
-public class OfflineMode extends AppCompatActivity{
+public class Game extends AppCompatActivity{
 
     private Resources res;
-
-    private static final String Saved_Values = "Saved Values";
-    private static final String Music_Enable_Value = "Saved Music Enable";
-    private static SharedPreferences sharedPreferences;
-    private boolean music_enable;
-
-    private static String player1_string; //Player 1
-    private static String player2_string; //Player 2
-    private static String submit_string; //Submit
-    private static String correct_answer_string; //Congratulation! Correct Answer!
-    private static String incorrect_answer_string; //Incorrect Answer
-    private static String answer_string; //Answer
-    private static String game_pause_string; //Game Paused
-    private static String game_over_string; //Game Over
-    private static String next_game_string; //Next Game
-    private static String quit_string; //Quit
-    private static String click_string; //Click
-    private static String hint_input_title_string; //Enter your Input for Hint:
-    private static String hint_input_message_string; //Integer range from 0 to 9999
-    private static String invalid_value_string; //Invalid Value
 
     public static final int NUMBER_OF_HINTS = 6;
     public static final int ROUND_MAX_VALUE = 50;
     public static final int HINT_MAX_VALUE = 100;
-    public static final int SECOND_PER_ROUND = 20; //181
-    public static final int HINT_INPUT_WAIT_TIME = 5; //20
+    public static final int SECOND_PER_ROUND = 20;       // 181
+    public static final int HINT_INPUT_WAIT_TIME = 5;   // 20
     public static final int ANSWER_WAIT_TIME = 10;
     public static final int PENALTY_TIME = 30;
     public static final String ROUND_ID = "Round";
@@ -99,7 +81,10 @@ public class OfflineMode extends AppCompatActivity{
     @Override
     protected void onCreate(final Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.offline_mode_window);
+        setContentView(R.layout.activity_game);
+        res = getResources();
+        initializeStrings(res);
+        createPlayBGM();
 
         // Remove action bar
         ActionBar actionBar = getSupportActionBar();
@@ -107,16 +92,10 @@ public class OfflineMode extends AppCompatActivity{
             actionBar.hide();
         }
 
-        initializeStrings();
-        createPlayBGM();
-
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             gameType = bundle.getString("Type");
             gameLimit = bundle.getInt("Limit");
-        } else {
-            // For debug purpose
-            throw new Error("No Extra Bundle");
         }
         RoundCounter = 1;
 
@@ -238,23 +217,22 @@ public class OfflineMode extends AppCompatActivity{
     }
 
     private void createPlayBGM(){
-        sharedPreferences = getSharedPreferences(Saved_Values, Activity.MODE_PRIVATE);
-        music_enable = sharedPreferences.getBoolean(Music_Enable_Value, false);
+        SharedPreferences sharedPreferences = getSharedPreferences(SAVED_VALUES, Activity.MODE_PRIVATE);
+        boolean music_enable = sharedPreferences.getBoolean(MUSIC_ENABLE_VALUE, false);
         Log.d("Enable Music", Boolean.toString(music_enable));
-        if(musicPlayer != null) {
-            try {
-                musicPlayer.reset();
-            } catch(IllegalStateException e){
-                musicPlayer = null;
-            }
+
+        if(musicPlayer != null) try{
+            musicPlayer.reset();
+        } catch(IllegalStateException e){
+            musicPlayer = null;
         }
-        if (music_enable == true) {
-            musicPlayer = MediaPlayer.create(OfflineMode.this, R.raw.bgm_game);
+
+        if (music_enable) {
+            musicPlayer = MediaPlayer.create(Game.this, R.raw.bgm_game);
             musicPlayer.start();
             musicPlayer.setLooping(true);
         }
-        else
-            musicPlayer = MediaPlayer.create(OfflineMode.this, R.raw.bgm_game); //Without this the game crashes when quitting the game
+        else musicPlayer = MediaPlayer.create(Game.this, R.raw.bgm_game);    //Without this the game crashes when quitting the game
     }
 
     // The onClickListener for the two answer buttons
@@ -271,21 +249,16 @@ public class OfflineMode extends AppCompatActivity{
                 countDown[3].pause();
 
                 // Build the answer dialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(OfflineMode.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
                 String name = getPlayerName(v);
-                //builder.setTitle("Enter your (" + name + ") answer:"); //Changed
-                //Resources res = getResources();
-                //String text = String.format(res.getString(R.string.answer_dialog_title), name); //Changed
-                //builder.setTitle(text);
                 builder.setTitle(String.format(res.getString(R.string.answer_dialog_title), name));
                 builder.setCancelable(false);
                 LayoutInflater inflater = getLayoutInflater();
-                View popupView = inflater.inflate(R.layout.answer_popup, null);
+                View popupView = inflater.inflate(R.layout.popup_answer, null);
                 final EditText answer = (EditText) popupView.findViewById(R.id.answer);
                 builder.setView(popupView);
 
-                // Submit event
-                //builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() { //Changed
+                // Submit Event
                 builder.setPositiveButton(submit_string, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -293,11 +266,11 @@ public class OfflineMode extends AppCompatActivity{
                         int change;
                         if (answer.getText().length() > 0 && Long.valueOf(answer.getText().toString()) == final_answer) {
                             change = 1;
-                            Toast.makeText(OfflineMode.this, correct_answer_string, Toast.LENGTH_LONG).show(); //Changed
+                            Toast.makeText(Game.this, correct_answer_string, Toast.LENGTH_LONG).show();
                         } else {
                             change = -1;
                             setPenalty((Button)v);
-                            Toast.makeText(OfflineMode.this, incorrect_answer_string, Toast.LENGTH_SHORT).show(); //Changed
+                            Toast.makeText(Game.this, incorrect_answer_string, Toast.LENGTH_SHORT).show();
                         }
 
                         // Update score
@@ -328,16 +301,11 @@ public class OfflineMode extends AppCompatActivity{
         if(!otherPlayerButton.isEnabled()){
             countDown[3].stop();
             otherPlayerButton.setEnabled(true);
-            //otherPlayerButton.setText("Answer"); //Changed
             otherPlayerButton.setText(answer_string);
         }
 
-        countDown[3] = new CountDownTimerSeconds(PENALTY_TIME, PENALTY_ID, OfflineMode.this);
+        countDown[3] = new CountDownTimerSeconds(PENALTY_TIME, PENALTY_ID, Game.this);
         v.setEnabled(false);
-        //Resources res = getResources();
-        //String text = String.format(res.getString(R.string.disabled_time_label), PENALTY_TIME);
-        //v.setText(text);
-        //v.setText(String.format(Locale.US, "Disabled\n00:%02d", PENALTY_TIME)); //Changed
         v.setText(String.format(res.getString(R.string.disabled_time_label), PENALTY_TIME));
         countDown[3].start();
     }
@@ -351,7 +319,6 @@ public class OfflineMode extends AppCompatActivity{
 
     // Obtain the name of either player
     private String getPlayerName(View view){
-        //return (view == player1_button)? "Player 1": "Player 2"; //Changed
         return (view == player1_button)? player1_string: player2_string;
     }
 
@@ -370,12 +337,11 @@ public class OfflineMode extends AppCompatActivity{
             }
 
             // Build the settings dialog
-            AlertDialog.Builder builder = new AlertDialog.Builder(OfflineMode.this);
-            //builder.setTitle("Game Paused"); //Changed
+            AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
             builder.setTitle(game_pause_string);
             builder.setCancelable(false);
             LayoutInflater inflater = getLayoutInflater();
-            View popupView = inflater.inflate(R.layout.game_pause_popup, null);
+            View popupView = inflater.inflate(R.layout.popup_pause, null);
             builder.setView(popupView);
             final AlertDialog alertDialog = builder.create();
 
@@ -397,7 +363,7 @@ public class OfflineMode extends AppCompatActivity{
             settings.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(OfflineMode.this, Settings.class);
+                    Intent intent = new Intent(Game.this, Settings.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
                 }
@@ -495,18 +461,14 @@ public class OfflineMode extends AppCompatActivity{
     protected void updatePenaltyTime(long millisUntilFinished){
         int second = (int)(millisUntilFinished / 1000);
         if(!player1_button.isEnabled()){
-            //player1_button.setText(String.format(Locale.US, "Disabled\n00:%02d", second)); //Changed
             player1_button.setText(String.format(res.getString(R.string.disabled_time_label), second));
         } else if(!player2_button.isEnabled()){
-            //player2_button.setText(String.format(Locale.US, "Disabled\n00:%02d", second)); //Changed
             player2_button.setText(String.format(res.getString(R.string.disabled_time_label), second));
         }
     }
 
     protected void unlockAnswerButton(){
-//        player1_button.setText("Answer"); //Changed
         player1_button.setText(answer_string);
-//        player2_button.setText("Answer"); //Changed
         player2_button.setText(answer_string);
         player1_button.setEnabled(true);
         player2_button.setEnabled(true);
@@ -533,32 +495,27 @@ public class OfflineMode extends AppCompatActivity{
     private String getWinner(){
         int p1_score = Integer.valueOf(player1_score.getText().toString());
         int p2_score = Integer.valueOf(player2_score.getText().toString());
-        //return (p1_score > p2_score)? "Player 1": "Player 2"; //Changed
         return (p1_score > p2_score)? player1_string: player2_string;
     }
 
     // Build the end game dialog
     private void endGameDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(OfflineMode.this);
-        //builder.setTitle("Game Over"); //Changed
+        AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
         builder.setTitle(game_over_string);
-        //builder.setMessage("Congratulations! " + getWinner() + " wins the game!!"); //Changed
         builder.setMessage(String.format(res.getString(R.string.winner_message_label), getWinner()));
         builder.setCancelable(false);
 
-        //builder.setPositiveButton("Next Game", new DialogInterface.OnClickListener() { //Changed
         builder.setPositiveButton(next_game_string, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 timer.cancel();
                 dialog.dismiss();
-                Intent intent = new Intent(OfflineMode.this, ModeSelection.class);
+                Intent intent = new Intent(Game.this, ModeSelection.class);
                 finish();
                 startActivity(intent);
             }
         });
 
-        //builder.setNegativeButton("Quit", new DialogInterface.OnClickListener() { //Changed
         builder.setNegativeButton(quit_string, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -583,7 +540,6 @@ public class OfflineMode extends AppCompatActivity{
     private void changeAppearance(TextView view, boolean before){
         if(before){
             // Change text to "Click", color to RED, and clickable
-            //view.setText("Click"); //Changed
             view.setText(click_string);
             view.setTextColor(0xFFFF0000);
             view.setClickable(true);
@@ -597,26 +553,22 @@ public class OfflineMode extends AppCompatActivity{
     // The onClickListener for all hint fields
     public void hintInput(final View view) {
         // Build dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(OfflineMode.this);
-        //builder.setTitle("Enter your Input for Hint:"); //Changed
+        AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
         builder.setTitle(hint_input_title_string);
         LayoutInflater inflater = getLayoutInflater();
-        View popupView = inflater.inflate(R.layout.answer_popup, null);
+        View popupView = inflater.inflate(R.layout.popup_answer, null);
         final EditText input = (EditText) popupView.findViewById(R.id.answer);
-        //input.setHint("Integer range from 0 to 9999"); //Changed
         input.setHint(hint_input_message_string);
         builder.setView(popupView);
 
         // Submit event
-        //builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() { //Changed
         builder.setPositiveButton(submit_string, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Validate the input
                 String inputVal = input.getText().toString();
                 if(inputVal.length() > 4 || inputVal.equals("") || isEqualQuestion(Integer.valueOf(inputVal))){
-                    //Toast.makeText(OfflineMode.this, "Invalid Value", Toast.LENGTH_SHORT).show(); //Changed
-                    Toast.makeText(OfflineMode.this, invalid_value_string, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Game.this, invalid_value_string, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -650,7 +602,7 @@ public class OfflineMode extends AppCompatActivity{
                 });
             }
         };
-        timer.schedule(task, 0, 450);     // Execute in every 0.45 second
+        timer.schedule(task, 0, 450);
     }
 
     // AsyncTask #1
@@ -661,7 +613,7 @@ public class OfflineMode extends AppCompatActivity{
 
         private HintChecker(int index){
             this.index = index;
-            countDown[1] = new CountDownTimerSeconds(HINT_INPUT_WAIT_TIME, HINT_ID, OfflineMode.this);
+            countDown[1] = new CountDownTimerSeconds(HINT_INPUT_WAIT_TIME, HINT_ID, Game.this);
             left = hint_inputs[index * 2];
             right = hint_inputs[index * 2 + 1];
         }
@@ -753,7 +705,7 @@ public class OfflineMode extends AppCompatActivity{
         @Override
         protected  void onPreExecute(){
             // Reset and start Answer Timer
-            countDown[2] = new CountDownTimerSeconds(ANSWER_WAIT_TIME, ANSWER_ID, OfflineMode.this);
+            countDown[2] = new CountDownTimerSeconds(ANSWER_WAIT_TIME, ANSWER_ID, Game.this);
             countDown[2].start();
         }
 
@@ -801,28 +753,8 @@ public class OfflineMode extends AppCompatActivity{
         @Override
         protected void onPostExecute(Boolean result) {
             // Get hint inputs if result is true
-            if(result){
-                getHintInput(hintIndex++);
-            }
+            if(result) getHintInput(hintIndex++);
         }
-    }
-
-    private void initializeStrings(){
-        res = getResources();
-        player1_string = res.getString(R.string.player1);
-        player2_string = res.getString(R.string.player2);
-        submit_string = res.getString(R.string.submit_label);
-        correct_answer_string = res.getString(R.string.correct_answer_label);
-        incorrect_answer_string = res.getString(R.string.incorrect_answer_label);
-        answer_string = res.getString(R.string.answer_label);
-        game_pause_string = res.getString(R.string.game_pause_label);
-        game_over_string = res.getString(R.string.game_over_label);
-        next_game_string = res.getString(R.string.next_game_label);
-        quit_string = res.getString(R.string.quit_label);
-        click_string = res.getString(R.string.click_label);
-        hint_input_title_string = res.getString(R.string.hint_input_title);
-        hint_input_message_string = res.getString(R.string.hint_input_message);
-        invalid_value_string = res.getString(R.string.invalid_value_label);
     }
 
     //Method used by CountDownTimerSeconds.java to print the toast

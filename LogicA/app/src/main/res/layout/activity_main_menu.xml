@@ -19,7 +19,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_centerInParent="true"
-        android:id="@+id/joystick"
+        android:id="@+id/gameplay"
         android:src="@drawable/boy_icon_1"
         android:background="@null" />
 
@@ -28,16 +28,16 @@
         android:layout_height="120dp"
         android:layout_marginBottom="30dp"
         android:layout_centerInParent="true"
-        android:layout_above="@id/joystick"
+        android:layout_above="@id/gameplay"
         android:background="@null"
-        android:id="@+id/offline_mode_button"/>
+        android:id="@+id/data_button"/>
 
     <Button
 
         android:layout_width="120dp"
         android:layout_height="200dp"
         android:layout_centerInParent="true"
-        android:layout_toLeftOf="@id/joystick"
+        android:layout_toLeftOf="@id/gameplay"
         android:layout_marginRight="30dp"
         android:background="@null"
         android:id="@+id/tutorial_button"/>
@@ -46,7 +46,7 @@
         android:layout_width="200dp"
         android:layout_height="120dp"
         android:layout_centerInParent="true"
-        android:layout_below="@id/joystick"
+        android:layout_below="@id/gameplay"
         android:layout_marginTop="30dp"
         android:background="@null"
         android:id="@+id/settings_button"/>
@@ -55,7 +55,7 @@
         android:layout_width="120dp"
         android:layout_height="200dp"
         android:layout_centerInParent="true"
-        android:layout_toRightOf="@id/joystick"
+        android:layout_toRightOf="@id/gameplay"
         android:layout_marginLeft="30dp"
         android:background="@null"
         android:id="@+id/quit_button"/>

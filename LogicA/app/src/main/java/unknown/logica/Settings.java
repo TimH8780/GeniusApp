@@ -19,17 +19,19 @@ import java.util.Locale;
 
 public class Settings extends AppCompatActivity {
 
-    private static TextView title, language_label, music_label;
-    private static Button apply_button;
+    public static final String SAVED_VALUES = "Saved Values";
+    public static final String LOCALE_VALUE = "Saved Locale";
+    public static final String LANGUAGE_VALUE = "Saved Language";
+    public static final String MUSIC_ENABLE_VALUE = "Saved Music Enable";
+    public static final String FIRST_TIMER_UESER = "First Time";
 
-    private static final String Saved_Values = "Saved Values";
-    private static final String Locale_Value = "Saved Locale";
-    private static final String Language_Value = "Saved Language";
-    private static final String Music_Enable_Value = "Saved Music Enable";
-    private static SharedPreferences sharedPreferences;
-    private static SharedPreferences.Editor editor;
-    private static Spinner Language_Spinner;
-    private static CheckBox Music_Check_Box;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private Spinner Language_Spinner;
+    private CheckBox Music_Check_Box;
+    private TextView title, language_label, music_label;
+    private Button apply_button;
+
     private String lang, selected_language;
     private int lang_pos;
     public boolean music_enable;
@@ -48,6 +50,7 @@ public class Settings extends AppCompatActivity {
         loadLocale();
         updateTexts();
 
+        Music_Check_Box.setChecked(music_enable);
         Music_Check_Box.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,8 +66,6 @@ public class Settings extends AppCompatActivity {
     }
 
     public void saveAndQuit(View view){
-        // TODO: Save Part
-
         selected_language = Language_Spinner.getSelectedItem().toString();
         lang_pos = Language_Spinner.getSelectedItemPosition();
 
@@ -84,7 +85,7 @@ public class Settings extends AppCompatActivity {
     }
 
     private void initViews() {
-        sharedPreferences = getSharedPreferences(Saved_Values, Activity.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(SAVED_VALUES, Activity.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
         title = (TextView) findViewById(R.id.settings_title);
@@ -99,9 +100,9 @@ public class Settings extends AppCompatActivity {
 
     //Get locale method in preferences
     public void loadLocale() {
-        lang = sharedPreferences.getString(Locale_Value, "");
-        lang_pos = sharedPreferences.getInt(Language_Value, 0);
-        music_enable = sharedPreferences.getBoolean(Music_Enable_Value, false);
+        lang = sharedPreferences.getString(LOCALE_VALUE, "");
+        lang_pos = sharedPreferences.getInt(LANGUAGE_VALUE, 0);
+        music_enable = sharedPreferences.getBoolean(MUSIC_ENABLE_VALUE, true);
         Log.d("loadLocale: ", Boolean.toString(music_enable));
         Language_Spinner.setSelection(lang_pos);
         changeLocale();
@@ -109,21 +110,22 @@ public class Settings extends AppCompatActivity {
 
     //Change Locale
     public void changeLocale() {
-        if (lang.equalsIgnoreCase(""))
-            return;
-        Locale newLocale = new Locale(lang);//Set Selected Locale
-        saveValues();//Save the selected locale
-        Locale.setDefault(newLocale);//set new locale as default
-        Configuration config = new Configuration();//get Configuration
-        config.locale = newLocale;//set config locale as selected locale
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());//Update the config
-        updateTexts();//Update texts according to locale
+        if(lang.equalsIgnoreCase("")) return;
+
+        Locale newLocale = new Locale(lang);                        // Set Selected Locale
+        saveValues();                                                // Save the selected locale
+        Locale.setDefault(newLocale);                                // Set new locale as default
+        Configuration config = new Configuration();                 // Get Configuration
+        config.locale = newLocale;                                  // Set config locale as selected locale
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());       // Update the config
+        updateTexts();                                              // Update texts according to locale
+        StringContainer.initializeStrings(getResources());          // Update texts in other activities
     }
 
     public void saveValues() {
-        editor.putString(Locale_Value, lang);
-        editor.putInt(Language_Value, lang_pos);
-        editor.putBoolean(Music_Enable_Value, music_enable);
+        editor.putString(LOCALE_VALUE, lang);
+        editor.putInt(LANGUAGE_VALUE, lang_pos);
+        editor.putBoolean(MUSIC_ENABLE_VALUE, music_enable);
         editor.commit();
         Log.d("Saved Language", selected_language);
     }

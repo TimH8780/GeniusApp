@@ -9,4 +9,7 @@
     <color name="LightBlue">#A00000FF</color>
     <color name="blue">#FF0000FF</color>
     <color name="silver">#C0C0C0</color>
+    <color name="lightYellow">#44FFFF00</color>
+    <color name="lightPink">#44FF0000</color>
+    <color name="deepPink">#44FF0000</color>
 </resources>

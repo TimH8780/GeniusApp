@@ -13,9 +13,11 @@ public abstract class OnSwipeTouchListener implements View.OnTouchListener {
         EMPTY, UP, RIGHT, DOWN, LEFT
     }
     private Position position = Position.EMPTY;
+    private boolean isLeftRightOnly;
 
-    public OnSwipeTouchListener (Context ctx){
+    public OnSwipeTouchListener (Context ctx, boolean isLeftRightOnly){
         gestureDetector = new GestureDetector(ctx, new GestureListener());
+        this.isLeftRightOnly = isLeftRightOnly;
     }
 
     @Override
@@ -63,7 +65,7 @@ public abstract class OnSwipeTouchListener implements View.OnTouchListener {
             try {
                 float diffY = e2.getY() - e1.getY();
                 float diffX = e2.getX() - e1.getX();
-                if (Math.abs(diffX) > Math.abs(diffY)) {
+                if (Math.abs(diffX) > Math.abs(diffY) || isLeftRightOnly) {
                     if (Math.abs(diffX) > SWIPE_THRESHOLD) {
                         if (diffX > 0) {
                             onSwipeRightHold();

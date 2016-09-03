@@ -27,15 +27,6 @@ public class HelperFunction {
         return result;
     }
 
-    public static long binaryOne(int num){
-        int result = 0;
-        while(num > 0){
-            result += (num & 1);
-            num >>>= 1;
-        }
-        return result;
-    }
-
     public static void intCount(int num, int[] table){
         do{
             table[num % 10] += 1;
