@@ -84,5 +84,9 @@
     <string name="description_20">Display the frequency of each digit in A and B in descending order</string>
     <string name="description_21">Sum of individual digit in A + sum of individual digit in B</string>
     <string name="description_22">Absolute value of Sum of individual digit in A - sum of individual digit in A</string>
+    <string name="start_game_label">Start Game</string>
+    <string name="round_mode_description">The game ends when it reaches the target round</string>
+    <string name="round_mode_title">Round Mode</string>
+    <string name="score_mode_title">Score Mode</string>
 
 </resources>

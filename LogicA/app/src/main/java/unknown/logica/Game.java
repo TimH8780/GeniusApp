@@ -39,8 +39,8 @@ public class Game extends AppCompatActivity{
     public static final int NUMBER_OF_HINTS = 6;
     public static final int ROUND_MAX_VALUE = 50;
     public static final int HINT_MAX_VALUE = 100;
-    public static final int SECOND_PER_ROUND = 20;       // 181
-    public static final int HINT_INPUT_WAIT_TIME = 5;   // 20
+    public static final int SECOND_PER_ROUND = 181;       // 181
+    public static final int HINT_INPUT_WAIT_TIME = 20;   // 20
     public static final int ANSWER_WAIT_TIME = 10;
     public static final int PENALTY_TIME = 30;
     public static final String ROUND_ID = "Round";

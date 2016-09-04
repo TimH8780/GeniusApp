@@ -17,6 +17,8 @@ import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import static unknown.logica.StringContainer.*;
+
 /**
  *Created by Tim on 08/07/16.
  */
@@ -72,20 +74,22 @@ public class ModeSelection extends AppCompatActivity {
 
     private void showPicker(final String type){
         AlertDialog.Builder builder = new AlertDialog.Builder(ModeSelection.this);
-        builder.setTitle(type);
         final LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.popup_selector, null);
         final NumberPicker picker = (NumberPicker) view.findViewById(R.id.picker);
+        String title = score_mode_string;
         if (type.equals(round)) {
             TextView message = (TextView) view.findViewById(R.id.message);
-            message.setText("The game ends when it reaches the target round");
+            message.setText(round_mode_description_string);
+            title = round_mode_string;
         }
         picker.setMaxValue(20);
         picker.setMinValue(1);
         picker.setValue(5);
         picker.setWrapSelectorWheel(true);
+        builder.setTitle(title);
         builder.setView(view);
-        builder.setPositiveButton("Start Game", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(game_start_string, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(ModeSelection.this, Game.class);

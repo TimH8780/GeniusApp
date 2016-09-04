@@ -12,15 +12,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@drawable/main_menu_buttons"
+        android:src="@drawable/main_menu_buttons_new"
         android:id="@+id/main_menu_buttons"/>
 
     <ImageButton
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerInParent="true"
         android:id="@+id/gameplay"
-        android:src="@drawable/boy_icon_1"
         android:background="@null" />
 
     <Button

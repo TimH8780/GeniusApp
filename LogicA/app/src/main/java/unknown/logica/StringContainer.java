@@ -21,6 +21,10 @@ public class StringContainer {
     public static String hint_input_title_string;      //Enter your Input for Hint:
     public static String hint_input_message_string;    //Integer range from 0 to 9999
     public static String invalid_value_string;         //Invalid Value
+    public static String game_start_string;            //Game Start
+    public static String round_mode_description_string;//The game ends when it reaches the target round
+    public static String score_mode_string;            //Score Mode
+    public static String round_mode_string;            //Round Mode
 
     public static void initializeStrings(Resources res){
         player1_string = res.getString(R.string.player1);
@@ -37,5 +41,9 @@ public class StringContainer {
         hint_input_title_string = res.getString(R.string.hint_input_title);
         hint_input_message_string = res.getString(R.string.hint_input_message);
         invalid_value_string = res.getString(R.string.invalid_value_label);
+        game_start_string = res.getString(R.string.start_game_label);
+        round_mode_description_string = res.getString(R.string.round_mode_description);
+        score_mode_string = res.getString(R.string.score_mode_title);
+        round_mode_string = res.getString(R.string.round_mode_title);
     }
 }

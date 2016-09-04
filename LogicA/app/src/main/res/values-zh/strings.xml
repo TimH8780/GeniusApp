@@ -31,7 +31,7 @@
     <string name="round_time_initial_label">第1回合 - 180  秒 (20)</string>
     <string name="time_up_label">时间到了!</string>
     <string name="next_game_label">下一回合</string>
-    <string name="score_mode_description">*******</string>
+    <string name="score_mode_description">游戏将在任何玩家到达指定分数的正负值时结束</string>
     <string name="title_21">*******</string>
     <string name="title_22">*******</string>
     <string name="title_20">*******</string>
@@ -76,4 +76,8 @@
     <string name="description_03">*******</string>
     <string name="description_01">*******</string>
     <string name="description_02">*******</string>
+    <string name="start_game_label">开始游戏</string>
+    <string name="round_mode_description">游戏将在到达指定回合时结束</string>
+    <string name="round_mode_title">回合模式</string>
+    <string name="score_mode_title">得分模式</string>
 </resources>

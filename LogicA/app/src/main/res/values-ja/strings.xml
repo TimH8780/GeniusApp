@@ -75,4 +75,8 @@
     <string name="description_20">*******</string>
     <string name="description_21">*******</string>
     <string name="description_22">*******</string>
+    <string name="start_game_label">ゲームをスタート</string>
+    <string name="round_mode_description">*******</string>
+    <string name="round_mode_title">ラウンドモード</string>
+    <string name="score_mode_title">スコアモード</string>
 </resources>
