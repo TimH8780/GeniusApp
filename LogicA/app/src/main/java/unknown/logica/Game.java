@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -105,6 +107,11 @@ public class Game extends AppCompatActivity{
         randomNumber = RandomNumberGenerators.randomNumber(10);
 
         timeout = (TextView) findViewById(R.id.timeout);
+
+        //Change font and color
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Shojumaru-Regular.ttf");
+        timeout.setTypeface(font);
+        timeout.setTextColor(Color.RED);
 
         View questionContainer = findViewById(R.id.question);
         input1_view = (TextView) questionContainer.findViewById(R.id.input1);
@@ -433,7 +440,6 @@ public class Game extends AppCompatActivity{
 
     protected void updateGameTime(long millisUntilFinished){
         int second = (int)(millisUntilFinished / 1000);
-        //timeout.setText(String.format(Locale.US, "Round_%d - %d Seconds (%d)", RoundCounter, second, HINT_INPUT_WAIT_TIME)); //Changed
         timeout.setText(String.format(res.getString(R.string.round_time_label), RoundCounter, second, HINT_INPUT_WAIT_TIME));
         player1_answerTime.setText(String.format(Locale.US, "00:%02d", ANSWER_WAIT_TIME));
         player2_answerTime.setText(String.format(Locale.US, "00:%02d", ANSWER_WAIT_TIME));

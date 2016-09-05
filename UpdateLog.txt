@@ -1,3 +1,12 @@
+WL: 9/04
+Changes from 9/04 discussion
+Launcher Icon (ic_launcher) has correct sizing
+Main Menu buttons and language selections are much more responsive
+Updated the following PNGs, now their sizes are alot smaller, smoother edges, and more visible
+	-ic_launcher
+	-main_menu_buttons
+	-language selections images
+
 ZH: 9/03
 Added swipe detection in ModeSelection activity; Added Data activity (Function lists); Added detectionn for first time users
 
