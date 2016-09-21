@@ -79,4 +79,9 @@
     <string name="round_mode_description">*******</string>
     <string name="round_mode_title">ラウンドモード</string>
     <string name="score_mode_title">スコアモード</string>
+    <string name="warning_label">警告</string>
+    <string name="warning_description">***************</string>
+    <string name="faq_label">よくある質問</string>
+    <string name="confirm_label">確認します</string>
+    <string name="cancel_label">****</string>
 </resources>

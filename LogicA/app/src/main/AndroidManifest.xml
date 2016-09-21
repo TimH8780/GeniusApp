@@ -43,6 +43,12 @@
             android:screenOrientation="landscape">
         </activity>
 
+        <activity
+            android:name=".TutorialWindow"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.TutorialTheme">
+        </activity>
+
     </application>
 
 </manifest>

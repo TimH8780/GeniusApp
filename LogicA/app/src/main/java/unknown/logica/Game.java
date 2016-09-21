@@ -38,6 +38,7 @@ public class Game extends AppCompatActivity{
 
     private Resources res;
 
+    public static final int request_Code = 1;
     public static final int NUMBER_OF_HINTS = 6;
     public static final int ROUND_MAX_VALUE = 50;
     public static final int HINT_MAX_VALUE = 100;
@@ -109,9 +110,9 @@ public class Game extends AppCompatActivity{
         timeout = (TextView) findViewById(R.id.timeout);
 
         //Change font and color
-        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Shojumaru-Regular.ttf");
-        timeout.setTypeface(font);
-        timeout.setTextColor(Color.RED);
+//        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/HYYouRanTiJ.ttf");
+//        timeout.setTypeface(font);
+//        timeout.setTextColor(Color.RED);
 
         View questionContainer = findViewById(R.id.question);
         input1_view = (TextView) questionContainer.findViewById(R.id.input1);
@@ -371,8 +372,10 @@ public class Game extends AppCompatActivity{
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(Game.this, Settings.class);
+                    intent.putExtra("location", "Game");
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(intent);
+                    startActivityForResult(intent, request_Code);
+
                 }
             });
 
@@ -382,13 +385,7 @@ public class Game extends AppCompatActivity{
                 @Override
                 public void onClick(View v) {
                     // Stop all timers, quit game, and return to main page
-                    for(CountDownTimerSeconds timer: countDown) {
-                        timer.stop();
-                    }
-                    alertDialog.dismiss();
-                    hintChecker.cancel(true);
-                    timer.cancel();
-                    finish();
+                    quitGame(alertDialog);
                 }
             });
 
@@ -396,6 +393,40 @@ public class Game extends AppCompatActivity{
             alertDialog.show();
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("onAc0", "OK");
+        if (requestCode == request_Code) {
+            Log.d("onAc1", String.valueOf(resultCode));
+            if(data == null){
+                Log.d("onAc1-1", "OK");
+            }
+            if (resultCode == RESULT_OK) {
+                Log.d("onAc2", "OK");
+                String bool = data.getData().toString();
+                if (bool.equals("true")){
+                    for(CountDownTimerSeconds timer: countDown) {
+                        timer.stop();
+                    }
+                    hintChecker.cancel(true);
+                    timer.cancel();
+                    finish();
+                }
+
+            }
+        }
+    }
+
+    private void quitGame(AlertDialog alertDialog){
+        for(CountDownTimerSeconds timer: countDown) {
+            timer.stop();
+        }
+        alertDialog.dismiss();
+        hintChecker.cancel(true);
+        timer.cancel();
+        finish();
+    }
 
     // Clear all fields and timers for next round
     protected void nextRound(){
@@ -427,6 +458,10 @@ public class Game extends AppCompatActivity{
             RoundCounter++;
             countDown[0] = new CountDownTimerSeconds(SECOND_PER_ROUND, ROUND_ID, this);
             hintIndex = 0;
+            player1_button.setEnabled(true);
+            player1_button.setText(answer_string);
+            player2_button.setEnabled(true);
+            player2_button.setText(answer_string);
             //Resources res = getResources();
             //String text = String.format(res.getString(R.string.round_time_label), RoundCounter, SECOND_PER_ROUND, HINT_INPUT_WAIT_TIME);
             //timeout.setText(text);

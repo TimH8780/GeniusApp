@@ -1,3 +1,8 @@
+WL: 9/ 18
+Changes from 9/17 discusson
+New images in drawables (dialogues, arrows)
+Template for tutorial
+
 WL: 9/04
 Changes from 9/04 discussion
 Launcher Icon (ic_launcher) has correct sizing

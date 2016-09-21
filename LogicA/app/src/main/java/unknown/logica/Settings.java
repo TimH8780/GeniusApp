@@ -1,17 +1,21 @@
 package unknown.logica;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -25,17 +29,18 @@ public class Settings extends AppCompatActivity {
     public static final String LANGUAGE_VALUE = "Saved Language";
     public static final String MUSIC_ENABLE_VALUE = "Saved Music Enable";
     public static final String FIRST_TIMER_USER = "First Time";
+    public static boolean languageChanged = false;
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    //private Spinner Language_Spinner;
     private CheckBox Music_Check_Box;
     private TextView title, language_label, music_label;
     private Button apply_button;
 
-    private String lang, selected_language;
+    private String lang;
     private int lang_pos;
     public boolean music_enable;
+    public Activity context;
 
     private ImageView select_english;
     private ImageView select_chinese;
@@ -51,9 +56,11 @@ public class Settings extends AppCompatActivity {
             actionBar.hide();
         }
 
+        context = this;
         initViews();
         loadLocale();
         updateTexts();
+        languageChanged = false;
 
         Music_Check_Box.setChecked(music_enable);
         Music_Check_Box.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +103,55 @@ public class Settings extends AppCompatActivity {
                 lang_pos = 2;
             }
         });
+
+        apply_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                String fromLocation = intent.getStringExtra("location");
+                if (fromLocation.equals("Main Menu"))
+                    saveAndQuit();
+                else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
+                    builder.setCancelable(false);
+                    LayoutInflater inflater = getLayoutInflater();
+                    View popupView = inflater.inflate(R.layout.popup_restart, null);
+                    builder.setView(popupView);
+                    final AlertDialog alertDialog = builder.create();
+
+                    alertDialog.show();
+
+                    Button cancel = (Button) popupView.findViewById(R.id.restart_cancel);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                            finish();
+                        }
+                    });
+
+                    Button confirm = (Button) popupView.findViewById(R.id.restart_confirm);
+                    confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                            saveAndQuit();
+
+                            Intent data = new Intent();
+                            //data.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+                            //data.setData(Uri.parse("true"));
+                            if(getParent() == null){
+                                context.setResult(Activity.RESULT_OK, data);
+                            } else {
+                                context.getParent().setResult(Activity.RESULT_OK, data);
+                            }
+                            finish();
+                        }
+                    });
+                }
+                //saveAndQuit();
+            }
+        });
     }
 
     @Override
@@ -103,21 +159,7 @@ public class Settings extends AppCompatActivity {
         finish();
     }
 
-    public void saveAndQuit(View view){
-//        selected_language = Language_Spinner.getSelectedItem().toString();
-//        lang_pos = Language_Spinner.getSelectedItemPosition();
-//
-//        switch (selected_language){
-//            case "English":
-//                lang = "en";
-//                break;
-//            case "中文":
-//                lang = "zh";
-//                break;
-//            case "日本語":
-//                lang = "ja";
-//                break;
-//        }
+    public void saveAndQuit(){
         switch (lang_pos){
             case 0:
                 lang = "en";
@@ -145,10 +187,7 @@ public class Settings extends AppCompatActivity {
         language_label = (TextView) findViewById(R.id.language_label);
         music_label = (TextView) findViewById(R.id.music_label);
         apply_button = (Button) findViewById(R.id.apply_button);
-        //Language_Spinner = (Spinner) findViewById(R.id.language_spinner);
         Music_Check_Box = (CheckBox) findViewById(R.id.music_check_box);
-
-        //selected_language = Language_Spinner.getSelectedItem().toString();
     }
 
     //Get locale method in preferences
@@ -157,7 +196,6 @@ public class Settings extends AppCompatActivity {
         lang_pos = sharedPreferences.getInt(LANGUAGE_VALUE, 0);
         music_enable = sharedPreferences.getBoolean(MUSIC_ENABLE_VALUE, true);
         Log.d("loadLocale: ", Boolean.toString(music_enable));
-        //Language_Spinner.setSelection(lang_pos);
         changeLocale();
     }
 
@@ -180,7 +218,6 @@ public class Settings extends AppCompatActivity {
         editor.putInt(LANGUAGE_VALUE, lang_pos);
         editor.putBoolean(MUSIC_ENABLE_VALUE, music_enable);
         editor.commit();
-        //Log.d("Saved Language", selected_language);
     }
 
     private void updateTexts() {
@@ -188,7 +225,6 @@ public class Settings extends AppCompatActivity {
         language_label.setText(R.string.language_label);
         music_label.setText(R.string.music_label);
         apply_button.setText(R.string.apply);
-        //Language_Spinner.setSelection(lang_pos);
         Music_Check_Box.setChecked(music_enable);
         Log.d("updateTexts : ", Boolean.toString(music_enable));
         if (lang_pos == 0) {

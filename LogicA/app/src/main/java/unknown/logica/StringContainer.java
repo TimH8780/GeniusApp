@@ -25,6 +25,7 @@ public class StringContainer {
     public static String round_mode_description_string;//The game ends when it reaches the target round
     public static String score_mode_string;            //Score Mode
     public static String round_mode_string;            //Round Mode
+    public static String faq_string;                   //FAQ
 
     public static void initializeStrings(Resources res){
         player1_string = res.getString(R.string.player1);
@@ -45,5 +46,6 @@ public class StringContainer {
         round_mode_description_string = res.getString(R.string.round_mode_description);
         score_mode_string = res.getString(R.string.score_mode_title);
         round_mode_string = res.getString(R.string.round_mode_title);
+        faq_string = res.getString(R.string.faq_label);
     }
 }

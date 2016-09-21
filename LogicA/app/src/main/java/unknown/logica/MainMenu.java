@@ -75,7 +75,7 @@ public class MainMenu extends AppCompatActivity {
         Button tutorial_button = (Button) findViewById(R.id.tutorial_button);
         Button quit_button = (Button) findViewById(R.id.quit_button);
         ImageView main_menu_background = (ImageView) findViewById(R.id.main_menu_background);
-        ImageButton gameplay = (ImageButton) findViewById(R.id.gameplay);
+        ImageView gameplay = (ImageView) findViewById(R.id.gameplay);
         main_menu_buttons = (ImageView) findViewById(R.id.main_menu_buttons);
 
         //Swipe Listener, Covers only the background, not inside main_menu_button
@@ -100,7 +100,9 @@ public class MainMenu extends AppCompatActivity {
         settings_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(Settings.class);
+                Intent intent = new Intent(MainMenu.this, Settings.class);
+                intent.putExtra("location", "Main Menu");
+                startActivity(intent);
             }
         });
         settings_button.setOnTouchListener(new CustomOnTouchListener(R.drawable.settings_pressed_new));
