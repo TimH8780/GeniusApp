@@ -1,7 +1,7 @@
 package unknown.logica;
 
-import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -15,14 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import static unknown.logica.UnknownFunctionGenerator.*;
-
 
 /**
  *Created by Tim on 09/02/16.
@@ -31,6 +27,7 @@ public class Data extends AppCompatActivity {
 
     private ArrayList<Pair<String, String>> data;
     private ExpandableListView listView;
+    private Resources res;
 
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +39,8 @@ public class Data extends AppCompatActivity {
             actionBar.hide();
         }
 
-        data = new ArrayList<>();;
+        res = getResources();
+        data = new ArrayList<>();
         generateListData();
 
         listView = (ExpandableListView) findViewById(R.id.list);
@@ -96,7 +94,7 @@ public class Data extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder = new AlertDialog.Builder(Data.this);
-            builder.setTitle("Example");
+            builder.setTitle(res.getString(R.string.example));
             LayoutInflater inflater = getLayoutInflater();
             final View popupView = inflater.inflate(R.layout.popup_example, null);
             final EditText in1 = (EditText) popupView.findViewById(R.id.input1);
@@ -105,9 +103,9 @@ public class Data extends AppCompatActivity {
             final TextView resultView = (TextView) popupView.findViewById(R.id.result);
 
             builder.setView(popupView);
-            builder.setNegativeButton("Reset", null);
-            builder.setNeutralButton("Close", null);
-            builder.setPositiveButton("Calculate", null);
+            builder.setNegativeButton(res.getString(R.string.reset_label), null);
+            builder.setNeutralButton(res.getString(R.string.close_label), null);
+            builder.setPositiveButton(res.getString(R.string.calculate_label), null);
             final AlertDialog alertDialog = builder.create();
 
             alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -123,8 +121,10 @@ public class Data extends AppCompatActivity {
                             int input2 = Integer.valueOf(in2.getText().toString());
                             int randomX = RandomNumberGenerators.randomNumber(10);
                             long result = function.getResult(input1, input2, randomX);
-                            if(position >= MIN_RANDOM_INDEX && position <= MAX_RANDOM_INDEX) randomView.setText("Random X: " + String.valueOf(randomX));
-                            resultView.setText("Result: " + String.valueOf(result));
+                            if(position >= MIN_RANDOM_INDEX && position <= MAX_RANDOM_INDEX) {
+                                randomView.setText(String.format(res.getString(R.string.random_text), randomX));
+                            }
+                            resultView.setText(String.format(res.getString(R.string.result_text), result));
 
                             in1.setEnabled(false);
                             in2.setEnabled(false);
@@ -139,8 +139,8 @@ public class Data extends AppCompatActivity {
                             in2.setText("");
                             in1.setEnabled(true);
                             in2.setEnabled(true);
-                            randomView.setText("Random X: N/A");
-                            resultView.setText("Result: N/A");
+                            randomView.setText(getResources().getString(R.string.random_na_text));
+                            resultView.setText(getResources().getString(R.string.result_na_text));
                         }
                     });
                 }

@@ -1,5 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/LightBlue">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2">
+
+        <Button
+            android:id="@+id/tut_main_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_above="@+id/dummy_1"
+            android:onClick="switchMainMenu"
+            android:text="Main Menu"/>
+
+        <TextView
+            android:id="@+id/dummy_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+        <Button
+            android:id="@+id/tut_gameplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignLeft="@+id/tut_main_menu"
+            android:layout_alignStart="@+id/tut_main_menu"
+            android:layout_alignRight="@+id/tut_main_menu"
+            android:layout_alignEnd="@+id/tut_main_menu"
+            android:layout_below="@+id/dummy_1"
+            android:onClick="switchGameplay"
+            android:text="Gameplay"/>
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="8"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"/>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2">
+
+        <Button
+            android:id="@+id/tut_functions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_above="@+id/dummy_2"
+            android:onClick="switchFunction"
+            android:text="Functions"/>
+
+        <TextView
+            android:id="@+id/dummy_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+        <Button
+            android:id="@+id/tut_faq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignLeft="@+id/tut_functions"
+            android:layout_alignStart="@+id/tut_functions"
+            android:layout_alignRight="@+id/tut_functions"
+            android:layout_alignEnd="@+id/tut_functions"
+            android:layout_below="@+id/dummy_2"
+            android:onClick="switchFAQ"
+            android:text="FAQ"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
+
+
+<!--
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -47,3 +138,5 @@
 
     </LinearLayout>
 </LinearLayout>
+
+-->

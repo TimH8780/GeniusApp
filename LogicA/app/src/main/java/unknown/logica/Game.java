@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,7 +12,6 @@ import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,14 +35,18 @@ public class Game extends AppCompatActivity{
 
     private Resources res;
 
-    public static final int request_Code = 1;
+    public static final int REQUEST_CODE = 1;
+    public static final int PLAYER_1 = 1;
+    public static final int PLAYER_2 = 2;
     public static final int NUMBER_OF_HINTS = 6;
     public static final int ROUND_MAX_VALUE = 50;
     public static final int HINT_MAX_VALUE = 100;
-    public static final int SECOND_PER_ROUND = 181;       // 181
-    public static final int HINT_INPUT_WAIT_TIME = 20;   // 20
+    public static final int SECOND_PER_ROUND = 181;
+    public static final int HINT_INPUT_WAIT_TIME = 20;
     public static final int ANSWER_WAIT_TIME = 10;
     public static final int PENALTY_TIME = 30;
+    public static final int HINT_CHECK_INTERVAL = 400;
+    public static final int HINT_CHECK_VALID_RANGE = 1000;
     public static final String ROUND_ID = "Round";
     public static final String HINT_ID = "Hint";
     public static final String ANSWER_ID = "Answer";
@@ -60,7 +61,6 @@ public class Game extends AppCompatActivity{
     private TextView input1_view;
     private TextView input2_view;
     private TextView timeout;
-    private ImageView settings_button;
     private TextView[] hint_inputs = new TextView[12];
     private TextView[] hint_answer = new TextView[6];
     private int answerActive = 0;
@@ -75,7 +75,8 @@ public class Game extends AppCompatActivity{
     private int randomNumber;
     private int hintIndex;
     private HashMap<TextView, Boolean> hintTable;
-    private AlertDialog dialog;
+    private AlertDialog hintDialog;
+    private AlertDialog settingsDialog;
     private String gameType;
     private int RoundCounter;
     private int gameLimit;
@@ -107,21 +108,20 @@ public class Game extends AppCompatActivity{
         input2 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
         randomNumber = RandomNumberGenerators.randomNumber(10);
 
-        timeout = (TextView) findViewById(R.id.timeout);
-
         //Change font and color
 //        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/HYYouRanTiJ.ttf");
 //        timeout.setTypeface(font);
 //        timeout.setTextColor(Color.RED);
 
         View questionContainer = findViewById(R.id.question);
+        timeout = (TextView) findViewById(R.id.timeout);
         input1_view = (TextView) questionContainer.findViewById(R.id.input1);
         input2_view = (TextView) questionContainer.findViewById(R.id.input2);
         input1_view.setText(String.valueOf(input1));
         input2_view.setText(String.valueOf(input2));
 
         // Add Click event and touch effect to the settings button (image)
-        settings_button = (ImageView) questionContainer.findViewById(R.id.settings_button);
+        ImageView settings_button = (ImageView) questionContainer.findViewById(R.id.settings_button);
         settings_button.setOnClickListener(pause_button);
         settings_button.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -226,8 +226,6 @@ public class Game extends AppCompatActivity{
 
     private void createPlayBGM(){
         SharedPreferences sharedPreferences = getSharedPreferences(SAVED_VALUES, Activity.MODE_PRIVATE);
-        boolean music_enable = sharedPreferences.getBoolean(MUSIC_ENABLE_VALUE, false);
-        Log.d("Enable Music", Boolean.toString(music_enable));
 
         if(musicPlayer != null) try{
             musicPlayer.reset();
@@ -235,21 +233,24 @@ public class Game extends AppCompatActivity{
             musicPlayer = null;
         }
 
-        if (music_enable) {
+        if (sharedPreferences.getBoolean(MUSIC_ENABLE_VALUE, true)) {
             musicPlayer = MediaPlayer.create(Game.this, R.raw.bgm_game);
             musicPlayer.start();
             musicPlayer.setLooping(true);
         }
-        else musicPlayer = MediaPlayer.create(Game.this, R.raw.bgm_game);    //Without this the game crashes when quitting the game
+        else {
+            musicPlayer = MediaPlayer.create(Game.this, R.raw.bgm_game);        // Without this the game crashes when quitting the game
+        }
     }
 
     // The onClickListener for the two answer buttons
     private View.OnClickListener answer_button = new View.OnClickListener() {
         @Override
-        public void onClick(final View v) {
+        public void onClick(View v) {
             // Ensure only one button can invoke the listener
             if(answerActive == 0) {
-                answerActive = getPlayerIndex(v);
+                final Button button = (Button) v;
+                answerActive = getPlayerIndex(button);
 
                 // Pause timers
                 countDown[0].pause();
@@ -258,9 +259,10 @@ public class Game extends AppCompatActivity{
 
                 // Build the answer dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
-                String name = getPlayerName(v);
+                String name = getPlayerName(button);
                 builder.setTitle(String.format(res.getString(R.string.answer_dialog_title), name));
                 builder.setCancelable(false);
+
                 LayoutInflater inflater = getLayoutInflater();
                 View popupView = inflater.inflate(R.layout.popup_answer, null);
                 final EditText answer = (EditText) popupView.findViewById(R.id.answer);
@@ -277,12 +279,12 @@ public class Game extends AppCompatActivity{
                             Toast.makeText(Game.this, correct_answer_string, Toast.LENGTH_LONG).show();
                         } else {
                             change = -1;
-                            setPenalty((Button)v);
+                            setPenalty(button);
                             Toast.makeText(Game.this, incorrect_answer_string, Toast.LENGTH_SHORT).show();
                         }
 
                         // Update score
-                        updateScore(change, v);
+                        updateScore(change, button);
                         countDown[2].stop();
 
                         // Resume all paused timers
@@ -298,60 +300,66 @@ public class Game extends AppCompatActivity{
 
                 // Display dialog and execute AnswerChecker
                 AlertDialog alertDialog = builder.create();
-                new AnswerChecker(v, alertDialog).execute();
+                new AnswerChecker(button, alertDialog).execute();
                 alertDialog.show();
             }
         }
     };
 
-    private void setPenalty(Button v){
-        Button otherPlayerButton = (v == player1_button)? player2_button: player1_button;
+    // Set the 30 seconds penalty if answer incorrectly
+    private void setPenalty(Button button){
+        Button otherPlayerButton = (button == player1_button)? player2_button: player1_button;
         if(!otherPlayerButton.isEnabled()){
             countDown[3].stop();
             otherPlayerButton.setEnabled(true);
             otherPlayerButton.setText(answer_string);
         }
 
-        countDown[3] = new CountDownTimerSeconds(PENALTY_TIME, PENALTY_ID, Game.this);
-        v.setEnabled(false);
-        v.setText(String.format(res.getString(R.string.disabled_time_label), PENALTY_TIME));
+        countDown[3] = new CountDownTimerSeconds(PENALTY_TIME, PENALTY_ID, this);
+        button.setEnabled(false);
+        button.setText(String.format(res.getString(R.string.disabled_time_label), PENALTY_TIME));
         countDown[3].start();
     }
 
     // Update the score on either player
-    private void updateScore(int change, View view){
-        TextView score = (view == player1_button)? player1_score: player2_score;
+    private void updateScore(int change, Button button){
+        TextView score = (button == player1_button)? player1_score: player2_score;
         int currentScore = Integer.valueOf(score.getText().toString());
         score.setText(String.valueOf(currentScore + change));
     }
 
     // Obtain the name of either player
-    private String getPlayerName(View view){
-        return (view == player1_button)? player1_string: player2_string;
+    private String getPlayerName(Button button){
+        return (button == player1_button)? player1_string: player2_string;
     }
 
     // Obtain the player #
-    private int getPlayerIndex(View view){
-        return (view == player1_button)? 1: 2;
+    private int getPlayerIndex(Button button){
+        return (button == player1_button)? PLAYER_1: PLAYER_2;
     }
 
     // The onClickListener for the settings (pause) buttons
     private View.OnClickListener pause_button = new View.OnClickListener() {
         @Override
         public void onClick(final View v) {
-            // Pause all timers
-            for(CountDownTimerSeconds timer: countDown) {
-                timer.pause();
+            // Pause all running timers
+            final boolean[] runningTimer = new boolean[countDown.length];
+            for(int i = 0; i < countDown.length; i++) {
+                if(countDown[i].isRunning()){
+                    runningTimer[i] = true;
+                    countDown[i].pause();
+                }
             }
 
             // Build the settings dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
             builder.setTitle(game_pause_string);
             builder.setCancelable(false);
+
             LayoutInflater inflater = getLayoutInflater();
             View popupView = inflater.inflate(R.layout.popup_pause, null);
             builder.setView(popupView);
-            final AlertDialog alertDialog = builder.create();
+            settingsDialog = builder.create();
 
             // Function of resume button
             Button resume = (Button) popupView.findViewById(R.id.resume_button);
@@ -359,10 +367,12 @@ public class Game extends AppCompatActivity{
                 @Override
                 public void onClick(View v) {
                     // Resume all paused timers and close dialog
-                    for(CountDownTimerSeconds timer: countDown) {
-                        timer.resume();
+                    for(int i = 0; i < runningTimer.length; i++) {
+                        if(runningTimer[i]){
+                            countDown[i].resume();
+                        }
                     }
-                    alertDialog.dismiss();
+                    settingsDialog.dismiss();
                 }
             });
 
@@ -374,8 +384,7 @@ public class Game extends AppCompatActivity{
                     Intent intent = new Intent(Game.this, Settings.class);
                     intent.putExtra("location", "Game");
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivityForResult(intent, request_Code);
-
+                    startActivityForResult(intent, REQUEST_CODE);
                 }
             });
 
@@ -385,44 +394,33 @@ public class Game extends AppCompatActivity{
                 @Override
                 public void onClick(View v) {
                     // Stop all timers, quit game, and return to main page
-                    quitGame(alertDialog);
+                    quitGame();
                 }
             });
 
             // Display dialog
-            alertDialog.show();
+            settingsDialog.show();
         }
     };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("onAc0", "OK");
-        if (requestCode == request_Code) {
-            Log.d("onAc1", String.valueOf(resultCode));
-            if(data == null){
-                Log.d("onAc1-1", "OK");
-            }
-            if (resultCode == RESULT_OK) {
-                Log.d("onAc2", "OK");
-                String bool = data.getData().toString();
-                if (bool.equals("true")){
-                    for(CountDownTimerSeconds timer: countDown) {
-                        timer.stop();
-                    }
-                    hintChecker.cancel(true);
-                    timer.cancel();
-                    finish();
-                }
-
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data.getBooleanExtra("Result", false)){
+                Intent intent = getIntent();
+                quitGame();
+                startActivity(intent);
             }
         }
     }
 
-    private void quitGame(AlertDialog alertDialog){
+    private void quitGame(){
         for(CountDownTimerSeconds timer: countDown) {
             timer.stop();
         }
-        alertDialog.dismiss();
+        if(settingsDialog != null && settingsDialog.isShowing()) {
+            settingsDialog.dismiss();
+        }
         hintChecker.cancel(true);
         timer.cancel();
         finish();
@@ -458,14 +456,7 @@ public class Game extends AppCompatActivity{
             RoundCounter++;
             countDown[0] = new CountDownTimerSeconds(SECOND_PER_ROUND, ROUND_ID, this);
             hintIndex = 0;
-            player1_button.setEnabled(true);
-            player1_button.setText(answer_string);
-            player2_button.setEnabled(true);
-            player2_button.setText(answer_string);
-            //Resources res = getResources();
-            //String text = String.format(res.getString(R.string.round_time_label), RoundCounter, SECOND_PER_ROUND, HINT_INPUT_WAIT_TIME);
-            //timeout.setText(text);
-            //timeout.setText(String.format(Locale.US, "Round_%d - %d Seconds (%d)", RoundCounter, SECOND_PER_ROUND, HINT_INPUT_WAIT_TIME)); //Changed
+            unlockAnswerButton();
             timeout.setText(String.format(res.getString(R.string.round_time_label), RoundCounter, SECOND_PER_ROUND, HINT_INPUT_WAIT_TIME));
             countDown[0].start();
         } else {
@@ -474,36 +465,37 @@ public class Game extends AppCompatActivity{
     }
 
     protected void updateGameTime(long millisUntilFinished){
-        int second = (int)(millisUntilFinished / 1000);
+        int second = (int)(millisUntilFinished / SECOND_TO_MILLISECOND);
         timeout.setText(String.format(res.getString(R.string.round_time_label), RoundCounter, second, HINT_INPUT_WAIT_TIME));
         player1_answerTime.setText(String.format(Locale.US, "00:%02d", ANSWER_WAIT_TIME));
         player2_answerTime.setText(String.format(Locale.US, "00:%02d", ANSWER_WAIT_TIME));
     }
 
     protected void updateHintTime(long millisUntilFinished){
-        int second = (int)(millisUntilFinished / 1000);
+        int second = (int)(millisUntilFinished / SECOND_TO_MILLISECOND);
         String temp = timeout.getText().toString();
         temp = temp.substring(0, temp.indexOf('('));
         timeout.setText(String.format(Locale.US, "%s(%d)", temp, second));
     }
 
     protected void updateAnswerTime(long millisUntilFinished){
-        int second = (int)(millisUntilFinished / 1000);
+        int second = (int)(millisUntilFinished / SECOND_TO_MILLISECOND);
         switch (answerActive){
-            case 1:
+            case PLAYER_1:
                 player1_answerTime.setText(String.format(Locale.US, "00:%02d", second));
                 break;
-            case 2:
+            case PLAYER_2:
                 player2_answerTime.setText(String.format(Locale.US, "00:%02d", second));
                 break;
         }
     }
 
     protected void updatePenaltyTime(long millisUntilFinished){
-        int second = (int)(millisUntilFinished / 1000);
+        int second = (int)(millisUntilFinished / SECOND_TO_MILLISECOND);
         if(!player1_button.isEnabled()){
             player1_button.setText(String.format(res.getString(R.string.disabled_time_label), second));
-        } else if(!player2_button.isEnabled()){
+        }
+        if(!player2_button.isEnabled()){
             player2_button.setText(String.format(res.getString(R.string.disabled_time_label), second));
         }
     }
@@ -515,12 +507,17 @@ public class Game extends AppCompatActivity{
         player2_button.setEnabled(true);
     }
 
+    // Method used by CountDownTimerSeconds.java to print the toast
+    protected void timeUpMessage(){
+        Toast.makeText(this.getApplicationContext(), res.getString(R.string.time_up_label), Toast.LENGTH_LONG).show();
+    }
+
     // Check if the game should be ended
     private boolean endGame(){
         int p1_score = Integer.valueOf(player1_score.getText().toString());
         int p2_score = Integer.valueOf(player2_score.getText().toString());
         if(p1_score == p2_score){
-            // Over Time if both players have same score
+            // Overtime if both players have same score
             return false;
         }
 
@@ -596,6 +593,7 @@ public class Game extends AppCompatActivity{
         // Build dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
         builder.setTitle(hint_input_title_string);
+
         LayoutInflater inflater = getLayoutInflater();
         View popupView = inflater.inflate(R.layout.popup_answer, null);
         final EditText input = (EditText) popupView.findViewById(R.id.answer);
@@ -620,8 +618,8 @@ public class Game extends AppCompatActivity{
         });
 
         // Display dialog
-        dialog = builder.create();
-        dialog.show();
+        hintDialog = builder.create();
+        hintDialog.show();
     }
 
     // Check if the hint input equals either of the question numbers
@@ -643,7 +641,16 @@ public class Game extends AppCompatActivity{
                 });
             }
         };
-        timer.schedule(task, 0, 450);
+        timer.schedule(task, 0, HINT_CHECK_INTERVAL);
+    }
+
+    private void setRandomNumber(TextView view){
+        int random;
+        do {
+            random = RandomNumberGenerators.randomNumber(HINT_MAX_VALUE);
+        } while (isEqualQuestion(random));
+
+        view.setText(String.valueOf(random));
     }
 
     // AsyncTask #1
@@ -696,30 +703,17 @@ public class Game extends AppCompatActivity{
             // Enable answer buttons and change back the appearance of the hint fields
             player1_button.setClickable(true);
             player2_button.setClickable(true);
-            settings_button.setClickable(true);
             changeAppearance(left, false);
             changeAppearance(right, false);
 
             // Remove the dialog if it is displayed
-            if(dialog != null && dialog.isShowing()){
-                dialog.dismiss();
+            if(hintDialog != null && hintDialog.isShowing()){
+                hintDialog.dismiss();
             }
 
             // Randomly generate the hint if it is not entered by player
-            if(!hintTable.get(left)){
-                int temp;
-                do {
-                    temp = RandomNumberGenerators.randomNumber(HINT_MAX_VALUE);
-                } while (isEqualQuestion(temp));
-                left.setText(String.valueOf(temp));
-            }
-            if(!hintTable.get(right)){
-                int temp;
-                do {
-                    temp = RandomNumberGenerators.randomNumber(HINT_MAX_VALUE);
-                } while (isEqualQuestion(temp));
-                right.setText(String.valueOf(temp));
-            }
+            if(!hintTable.get(left)) setRandomNumber(left);
+            if(!hintTable.get(right)) setRandomNumber(right);
 
             // Calculate the hint answer
             int inp1 = Integer.valueOf(left.getText().toString());
@@ -735,11 +729,11 @@ public class Game extends AppCompatActivity{
 
     // AsyncTask #2
     private class AnswerChecker extends AsyncTask<Void, Void, Void>{
-        private View view;
+        private Button button;
         private AlertDialog dialog;
 
-        private AnswerChecker(View view, AlertDialog dialog){
-            this.view = view;
+        private AnswerChecker(Button view, AlertDialog dialog){
+            button = view;
             this.dialog = dialog;
         }
 
@@ -766,8 +760,8 @@ public class Game extends AppCompatActivity{
             if(dialog != null && dialog.isShowing()){
                 dialog.dismiss();
                 answerActive = 0;
-                updateScore(-1, view);
-                setPenalty((Button)view);
+                updateScore(-1, button);
+                setPenalty(button);
                 countDown[0].resume();
                 countDown[1].resume();
                 countDown[3].resume();
@@ -788,7 +782,7 @@ public class Game extends AppCompatActivity{
         @Override
         protected Boolean doInBackground(Void... params) {
             // Return if timing is valid
-            return !(hintIndex > 5 || countDown[0].isPaused() || Math.abs(countDown[0].getTimerTime() - requireTime) > 1000);
+            return !(hintIndex + 1 > NUMBER_OF_HINTS || countDown[0].isPaused() || Math.abs(countDown[0].getTimerTime() - requireTime) > HINT_CHECK_VALID_RANGE);
         }
 
         @Override
@@ -796,11 +790,6 @@ public class Game extends AppCompatActivity{
             // Get hint inputs if result is true
             if(result) getHintInput(hintIndex++);
         }
-    }
-
-    //Method used by CountDownTimerSeconds.java to print the toast
-    public void timeUpMessage(){
-        Toast.makeText(this.getApplicationContext(), res.getString(R.string.time_up_label), Toast.LENGTH_LONG).show();
     }
 
 }

@@ -74,9 +74,9 @@ public class ModeSelection extends AppCompatActivity {
     }
 
     private void showPicker(final String type){
-        AlertDialog.Builder builder = new AlertDialog.Builder(ModeSelection.this);
-        final LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.popup_selector, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        View view = getLayoutInflater().inflate(R.layout.popup_selector, null);
         final NumberPicker picker = (NumberPicker) view.findViewById(R.id.picker);
         String title = score_mode_string;
         if (type.equals(round)) {
@@ -90,6 +90,7 @@ public class ModeSelection extends AppCompatActivity {
         picker.setWrapSelectorWheel(true);
         builder.setTitle(title);
         builder.setView(view);
+
         builder.setPositiveButton(game_start_string, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -103,6 +104,7 @@ public class ModeSelection extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         builder.create().show();
     }
 

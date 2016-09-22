@@ -1,4 +1,9 @@
-WL: 9/ 18
+ZH: 9/21
+Fixed the ActivityResult bug
+Added a check whether the language is changed
+Redesign tutorial in fragments form
+
+WL: 9/18
 Changes from 9/17 discusson
 New images in drawables (dialogues, arrows)
 Template for tutorial
@@ -13,7 +18,9 @@ Updated the following PNGs, now their sizes are alot smaller, smoother edges, an
 	-language selections images
 
 ZH: 9/03
-Added swipe detection in ModeSelection activity; Added Data activity (Function lists); Added detectionn for first time users
+Added swipe detection in ModeSelection activity
+Added Data activity (Function lists)
+Added detection for first time users
 
 WL: 8/30
 Updated the project name
@@ -32,8 +39,11 @@ ZH: 8/20
 More unknown functions
 
 ZH: 8/14
-Incorporated swipe into button selection; Added sample BGMs to main and play screen (BGMs need to be changed); Added timers and round# display to play screen;
-Added penalty for incorrect answer; Validated hint inputs
+Incorporated swipe into button selection
+Added sample BGMs to main and play screen (BGMs need to be changed)
+Added timers and round# display to play screen
+Added penalty for incorrect answer
+Validated hint inputs
 
 WL: 8/10
 Disabled play button, using "joystick/logo" as the new play button, new plans for the layout to be discussed in the future
@@ -46,22 +56,29 @@ Updated Main Menu, pressing button changes button color, moving/dragging out of 
 Changes from the discussion
 
 ZH: 8/07
-Changed the pause icon; Added the end game condition; Added two game modes; Added unknown functions
+Changed the pause icon
+Added the end game condition
+Added two game modes and unknown functions
 
 ZH: 7/29
-Completed the timeout result (move to next round); Changed hint answer and question answer to type long
+Completed the timeout result (move to next round)
+Changed hint answer and question answer to type long
 
 ZH: 7/26
-Incorporated timer into game play; Obtained hint from players; Setup time limit for answering, entering hints and game round;
-Added settings dialog; Added 4 additional functions
+Incorporated timer into game play
+Obtained hint from players
+Setup time limit for answering, entering hints and game round
+Added settings dialog and unknown functions
 
 WL: 7/17
 Removed the extra launchers created into the device, contains only one now.
 Created RandomNumberGenerator class which can accept the maximum range.
 
 ZH: 7/16
-Redesigned the Game UI; Put the random function generator into use; Implemented some buttons' function; Added score system; 
-Added codes to test the random function generator and Game UI;
+Redesigned the Game UI 
+Put the random function generator into use
+Implemented some buttons' functio
+Added score system, codes to test the random function generator and Game UI
 
 WL: 7/16
 Implemented random function generator by creating an array of methods and choosing a random method using a random number generator;
@@ -77,7 +94,8 @@ Modified Main Menu layout, the layout of the buttons will be changed to form the
 Created Settings Window, empty
 
 ZH: 7/13
-Finished Offline Mode layout (temparory), disabled back button in main menu
+Finished Offline Mode layout (temparory)
+Disabled back button in main menu
  
 WL: 7/12
 Created main menu layout and linked new activity for Offline Mode.

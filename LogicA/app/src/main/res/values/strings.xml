@@ -118,5 +118,13 @@
     <string name="warning_description">Applying the changes will require you to restart the game</string>
     <string name="cancel_label">Cancel</string>
     <string name="confirm_label">Confirm</string>
+    <string name="example" translatable="false">Example</string>
+    <string name="close_label" translatable="false">Close</string>
+    <string name="reset_label" translatable="false">Reset</string>
+    <string name="calculate_label" translatable="false">Calculate</string>
+    <string name="random_text" translatable="false">Random X: %1$d</string>
+    <string name="result_text" translatable="false">Result: %1$d</string>
+    <string name="random_na_text" translatable="false">Random X: N/A</string>
+    <string name="result_na_text" translatable="false">Result: N/A</string>
 
 </resources>

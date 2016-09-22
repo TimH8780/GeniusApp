@@ -1,20 +1,18 @@
 package unknown.logica;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,7 +27,9 @@ public class Settings extends AppCompatActivity {
     public static final String LANGUAGE_VALUE = "Saved Language";
     public static final String MUSIC_ENABLE_VALUE = "Saved Music Enable";
     public static final String FIRST_TIMER_USER = "First Time";
-    public static boolean languageChanged = false;
+    public static final int ENGLISH = 0;
+    public static final int CHINESE = 1;
+    public static final int JAPANESE = 2;
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -39,8 +39,9 @@ public class Settings extends AppCompatActivity {
 
     private String lang;
     private int lang_pos;
+    private boolean isLanguageChanged;
     public boolean music_enable;
-    public Activity context;
+
 
     private ImageView select_english;
     private ImageView select_chinese;
@@ -56,18 +57,16 @@ public class Settings extends AppCompatActivity {
             actionBar.hide();
         }
 
-        context = this;
         initViews();
         loadLocale();
         updateTexts();
-        languageChanged = false;
+        isLanguageChanged = false;
 
         Music_Check_Box.setChecked(music_enable);
         Music_Check_Box.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Music_Check_Box.isChecked()) music_enable = true;
-                else music_enable = false;
+                music_enable = Music_Check_Box.isChecked();
             }
         });
 
@@ -78,7 +77,8 @@ public class Settings extends AppCompatActivity {
                 select_english.setImageResource(R.drawable.english_selected);
                 select_chinese.setImageResource(R.drawable.chinese_not_selected);
                 select_japanese.setImageResource(R.drawable.japanese_not_selected);
-                lang_pos = 0;
+                lang_pos = ENGLISH;
+                isLanguageChanged = !(lang.equals("en"));
             }
         });
 
@@ -89,7 +89,8 @@ public class Settings extends AppCompatActivity {
                 select_chinese.setImageResource(R.drawable.chinese_selected);
                 select_english.setImageResource(R.drawable.english_not_selected);
                 select_japanese.setImageResource(R.drawable.japanese_not_selected);
-                lang_pos = 1;
+                lang_pos = CHINESE;
+                isLanguageChanged = !(lang.equals("zh"));
             }
         });
 
@@ -100,25 +101,26 @@ public class Settings extends AppCompatActivity {
                 select_japanese.setImageResource(R.drawable.japanese_selected);
                 select_english.setImageResource(R.drawable.english_not_selected);
                 select_chinese.setImageResource(R.drawable.chinese_not_selected);
-                lang_pos = 2;
+                lang_pos = JAPANESE;
+                isLanguageChanged = !(lang.equals("ja"));
             }
         });
 
         apply_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = getIntent();
-                String fromLocation = intent.getStringExtra("location");
-                if (fromLocation.equals("Main Menu"))
+                String fromLocation = getIntent().getStringExtra("location");
+                if (fromLocation.equals("Main Menu") || !isLanguageChanged) {
                     saveAndQuit();
+                    finish();
+                }
                 else{
                     AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
                     builder.setCancelable(false);
-                    LayoutInflater inflater = getLayoutInflater();
-                    View popupView = inflater.inflate(R.layout.popup_restart, null);
+
+                    View popupView = getLayoutInflater().inflate(R.layout.popup_restart, null);
                     builder.setView(popupView);
                     final AlertDialog alertDialog = builder.create();
-
                     alertDialog.show();
 
                     Button cancel = (Button) popupView.findViewById(R.id.restart_cancel);
@@ -138,18 +140,12 @@ public class Settings extends AppCompatActivity {
                             saveAndQuit();
 
                             Intent data = new Intent();
-                            //data.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
-                            //data.setData(Uri.parse("true"));
-                            if(getParent() == null){
-                                context.setResult(Activity.RESULT_OK, data);
-                            } else {
-                                context.getParent().setResult(Activity.RESULT_OK, data);
-                            }
+                            data.putExtra("Result", true);
+                            setResult(Activity.RESULT_OK, data);
                             finish();
                         }
                     });
                 }
-                //saveAndQuit();
             }
         });
     }
@@ -161,18 +157,17 @@ public class Settings extends AppCompatActivity {
 
     public void saveAndQuit(){
         switch (lang_pos){
-            case 0:
+            case ENGLISH:
                 lang = "en";
                 break;
-            case 1:
+            case CHINESE:
                 lang = "zh";
                 break;
-            case 2:
+            case JAPANESE:
                 lang = "ja";
                 break;
         }
         changeLocale();
-        finish();
     }
 
     private void initViews() {
@@ -190,16 +185,16 @@ public class Settings extends AppCompatActivity {
         Music_Check_Box = (CheckBox) findViewById(R.id.music_check_box);
     }
 
-    //Get locale method in preferences
+    // Get locale method in preferences
     public void loadLocale() {
         lang = sharedPreferences.getString(LOCALE_VALUE, "");
         lang_pos = sharedPreferences.getInt(LANGUAGE_VALUE, 0);
         music_enable = sharedPreferences.getBoolean(MUSIC_ENABLE_VALUE, true);
-        Log.d("loadLocale: ", Boolean.toString(music_enable));
+
         changeLocale();
     }
 
-    //Change Locale
+    // Change Locale
     public void changeLocale() {
         if(lang.equalsIgnoreCase("")) return;
 
@@ -226,18 +221,18 @@ public class Settings extends AppCompatActivity {
         music_label.setText(R.string.music_label);
         apply_button.setText(R.string.apply);
         Music_Check_Box.setChecked(music_enable);
-        Log.d("updateTexts : ", Boolean.toString(music_enable));
-        if (lang_pos == 0) {
+
+        if (lang_pos == ENGLISH) {
             select_english.setImageResource(R.drawable.english_selected);
             select_chinese.setImageResource(R.drawable.chinese_not_selected);
             select_japanese.setImageResource(R.drawable.japanese_not_selected);
         }
-        else if (lang_pos == 1){
+        else if (lang_pos == CHINESE){
             select_chinese.setImageResource(R.drawable.chinese_selected);
             select_english.setImageResource(R.drawable.english_not_selected);
             select_japanese.setImageResource(R.drawable.japanese_not_selected);
         }
-        else if (lang_pos == 2){
+        else if (lang_pos == JAPANESE){
             select_japanese.setImageResource(R.drawable.japanese_selected);
             select_english.setImageResource(R.drawable.english_not_selected);
             select_chinese.setImageResource(R.drawable.chinese_not_selected);

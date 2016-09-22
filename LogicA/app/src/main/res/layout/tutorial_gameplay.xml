@@ -1,153 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="none"
-    android:overScrollMode="never">
+    android:background="@color/white">
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_margin="10dp"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:text="TUTORIAL - GAMEPLAY"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="100"
-                android:layout_height="match_parent"
-                android:background="@color/red"/>
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@color/blue"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="200"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/tut_game_1"/>
-        </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:overScrollMode="never">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="end"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="200"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/tut_game_2"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@color/LightRed"/>
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="100"
+                    android:layout_height="match_parent"
+                    android:background="@color/red"/>
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="100"
-                android:layout_height="match_parent"
-                android:background="@color/red"/>
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/blue"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="200"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/tut_game_1"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="200"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/tut_game_2"/>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/LightRed"/>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="100"
+                    android:layout_height="match_parent"
+                    android:background="@color/red"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="100"
+                    android:layout_height="match_parent"
+                    android:background="@color/red"/>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/green"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="200"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/tut_game_3"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="200"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/tut_game_4"/>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/LightBlue"/>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="100"
+                    android:layout_height="match_parent"
+                    android:background="@color/red"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="100"
+                    android:layout_height="match_parent"
+                    android:background="@color/red"/>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/lightPink"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="200"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/tut_game_5"/>
+            </LinearLayout>
+
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+    </ScrollView>
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="100"
-                android:layout_height="match_parent"
-                android:background="@color/red"/>
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@color/green"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="200"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/tut_game_3"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="end"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="200"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/tut_game_4"/>
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@color/LightBlue"/>
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="100"
-                android:layout_height="match_parent"
-                android:background="@color/red"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="100"
-                android:layout_height="match_parent"
-                android:background="@color/red"/>
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@color/lightPink"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="200"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/tut_game_5"/>
-        </LinearLayout>
-
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>

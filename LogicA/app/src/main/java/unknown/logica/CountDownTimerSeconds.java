@@ -112,4 +112,5 @@ public class CountDownTimerSeconds {
         return timeLeft == 0;
     }
     public long getTimerTime(){ return timeLeft; }
+    public boolean isRunning(){ return  isCountingDown; }
 }

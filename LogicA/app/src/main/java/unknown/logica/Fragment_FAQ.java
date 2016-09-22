@@ -1,9 +1,7 @@
 package unknown.logica;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.support.v4.app.Fragment;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,63 +9,40 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
-import static unknown.logica.StringContainer.*;
+
 import java.util.ArrayList;
 
-public class TutorialWindow extends Activity {
+import static unknown.logica.StringContainer.faq_string;
+
+/**
+ *Created by Tim on 09/22/16.
+ */
+public class Fragment_FAQ extends Fragment {
 
     private ArrayList<Pair<String, String>> data;
     private ExpandableListView listView;
+    private LayoutInflater inflater;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View returnValue = inflater.inflate(R.layout.tutorial_faq, container, false);
+        this.inflater = inflater;
 
         data = new ArrayList<>();
         generateListData();
 
-        String mode = getIntent().getStringExtra("mode");
-        switch (mode){
-            case "tut_main_menu":
-                setContentView(R.layout.tutorial_main_menu);
-                break;
+        listView = (ExpandableListView) returnValue.findViewById(R.id.list);
+        listView.setAdapter(new Adapter());
+        listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                if(listView.isGroupExpanded(groupPosition)) listView.expandGroup(groupPosition, true);
+                else listView.collapseGroup(groupPosition);
+                return false;
+            }
+        });
 
-            case "tut_gameplay":
-                setContentView(R.layout.tutorial_gameplay);
-                break;
-
-            case "tut_functions":
-                setContentView(R.layout.tutorial_functions);
-                break;
-
-            case "tut_faq":
-                setContentView(R.layout.activity_data);
-                listView = (ExpandableListView) findViewById(R.id.list);
-                TextView text = (TextView) findViewById(R.id.list_textview);
-                text.setText(faq_string);
-
-                if(listView != null) {
-                    listView.setAdapter(new Adapter());
-                    listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-                        @Override
-                        public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                            if(listView.isGroupExpanded(groupPosition)) listView.expandGroup(groupPosition, true);
-                            else listView.collapseGroup(groupPosition);
-                            return false;
-                        }
-                    });
-                }
-                break;
-        }
-
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
-
-        getWindow().setLayout((int)(width*0.8), (int)(height*0.98));
+        return returnValue;
     }
 
     private void generateListData() {
@@ -119,7 +94,6 @@ public class TutorialWindow extends Activity {
             String childText = (String) getGroup(groupPosition);
 
             if (convertView == null) {
-                LayoutInflater inflater = getLayoutInflater();
                 convertView = inflater.inflate(R.layout.item_header, null);
             }
 
@@ -133,7 +107,6 @@ public class TutorialWindow extends Activity {
             String childText = (String) getChild(groupPosition, childPosition);
 
             if (convertView == null) {
-                LayoutInflater inflater = getLayoutInflater();
                 convertView = inflater.inflate(R.layout.item_sub1, null);
             }
 
@@ -149,4 +122,5 @@ public class TutorialWindow extends Activity {
         }
 
     }
+
 }

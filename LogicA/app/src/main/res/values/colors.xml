@@ -12,4 +12,6 @@
     <color name="lightYellow">#44FFFF00</color>
     <color name="lightPink">#44FF0000</color>
     <color name="deepPink">#44FF0000</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>
