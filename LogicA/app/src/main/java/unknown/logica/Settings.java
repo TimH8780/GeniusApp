@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -35,7 +36,7 @@ public class Settings extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private CheckBox Music_Check_Box;
     private TextView title, language_label, music_label;
-    private Button apply_button;
+    private Button apply_button, contact_button;
 
     private String lang;
     private int lang_pos;
@@ -148,6 +149,20 @@ public class Settings extends AppCompatActivity {
                 }
             }
         });
+
+        contact_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("message/rfc822");
+                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"ouremail@domain.com"});
+                try {
+                    startActivity(Intent.createChooser(i, "Send mail..."));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(Settings.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -182,6 +197,7 @@ public class Settings extends AppCompatActivity {
         language_label = (TextView) findViewById(R.id.language_label);
         music_label = (TextView) findViewById(R.id.music_label);
         apply_button = (Button) findViewById(R.id.apply_button);
+        contact_button = (Button) findViewById(R.id.contact_button);
         Music_Check_Box = (CheckBox) findViewById(R.id.music_check_box);
     }
 

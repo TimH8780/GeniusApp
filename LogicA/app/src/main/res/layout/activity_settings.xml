@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/wp1x">
 
     <TextView
         android:id="@+id/settings_title"
@@ -12,6 +13,8 @@
         android:text="@string/settings"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:textStyle="bold"
         android:textSize="35sp"/>
 
     <LinearLayout
@@ -27,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/language_label"
+            android:textColor="@color/white"
             android:textSize="25sp"/>
 
         <ImageView
@@ -50,17 +54,6 @@
             android:layout_marginLeft="30dp"
             android:background="@drawable/japanese_not_selected"/>
 
-        <!--
-        <Spinner
-            android:id="@+id/language_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:entries="@array/language_array">
-
-        </Spinner>
-        -->
-
     </LinearLayout>
 
     <LinearLayout
@@ -74,23 +67,49 @@
             android:id="@+id/music_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:text="@string/music_label"
+            android:textColor="@color/white"
             android:textSize="25sp"/>
 
         <CheckBox
             android:id="@+id/music_check_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="20dp"
+            android:theme="@style/CheckBox"
+            />
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/apply_button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="@string/apply"
-        android:layout_gravity="center"/>
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+            <Button
+                android:id="@+id/contact_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="Contact Us"
+                android:layout_gravity="center"/>
+
+            <Button
+                android:id="@+id/apply_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/apply"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

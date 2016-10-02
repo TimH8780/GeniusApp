@@ -1,3 +1,8 @@
+WL: 10/2
+Changes from 10/1 discusson
+Background images
+Contact Us functionality
+
 ZH: 9/21
 Fixed the ActivityResult bug
 Added a check whether the language is changed
