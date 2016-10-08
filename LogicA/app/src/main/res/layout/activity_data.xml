@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/wp1x">
 
     <TextView
         android:id="@+id/list_textview"
@@ -13,12 +14,13 @@
         android:padding="10dp"
         android:textStyle="bold"
         android:textColor="@color/red"
-        android:background="@color/silver"
-        android:text="Function List\n(Format: A � B with Random number X)"/>
+        android:background="@android:color/transparent"
+        android:text="@string/operator_prompt"/>
 
     <ExpandableListView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/white"/>
 
 </LinearLayout>

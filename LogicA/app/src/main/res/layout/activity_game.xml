@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@drawable/wp1x"
+    android:baselineAligned="false">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -11,77 +13,58 @@
         android:orientation="vertical"
         android:background="@color/LightBlue">
 
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3"/>
+            android:layout_weight="3">
+
+            <ImageView
+                android:id="@+id/mute_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/ic_speaker"
+                android:clickable="true"/>
+
+        </RelativeLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
-            android:gravity="center"
+            android:gravity="center_horizontal|bottom"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textSize="23sp"
             android:layout_marginBottom="5dp"
+            android:textColor="@color/LightRed"
+            android:shadowColor="@color/black"
+            android:shadowRadius="40.0"
             android:text="@string/player1"/>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="6"
-            android:src="@drawable/boy_icon_1"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical|end"
-                android:textSize="13sp"
-                android:text="@string/score_label"/>
-
-            <TextView
-                android:id="@+id/player1_score"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textSize="13sp"
-                android:text="0"/>
-
-        </LinearLayout>
+            android:src="@drawable/boy_icon_1"
+            android:layout_margin="10dp"/>
 
         <Button
             android:id="@+id/player1_button"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_margin="5dp"
-            android:layout_weight="3"
+            android:layout_weight="4"
+            android:layout_gravity="center_horizontal"
             android:textSize="12sp"
-            android:background="@color/black"
+            android:background="@drawable/circle_button"
             android:textColor="@android:color/white"
             android:text="@string/answer_label"/>
 
         <TextView
-            android:id="@+id/player1_answer_time"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/red"
-            android:textStyle="bold"
-            android:text="00:10"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"/>
+            android:layout_weight="2"/>
 
     </LinearLayout>
 
@@ -89,34 +72,151 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="4"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/LightBlue">
 
-        <TextView
-            android:id="@+id/timeout"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:background="@color/silver"
-            android:text="@string/round_time_initial_label"/>
+            android:layout_weight="7"
+            android:textStyle="bold">
+
+            <TextView
+                android:id="@+id/score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/initial_score"
+                android:textColor="@color/white"
+                android:textSize="35sp"
+                android:textStyle="bold"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:paddingTop="13dp"
+                android:paddingBottom="2dp"/>
+
+            <TextView
+                android:id="@+id/action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:textColor="@color/red"
+                android:layout_alignTop="@+id/bar3"
+                android:gravity="center"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/round"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/initial_round"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:layout_alignParentTop="true"
+                android:layout_alignLeft="@+id/score"
+                android:layout_alignRight="@+id/score"/>
+
+            <TextView
+                android:id="@+id/round_time_prompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/score"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/game_time_prompt"
+                android:textColor="@color/red"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/round_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:layout_alignRight="@id/round_time_prompt"
+                android:layout_alignLeft="@id/round_time_prompt"
+                android:layout_below="@id/round_time_prompt"
+                android:text="@string/initial_round_time"/>
+
+            <TextView
+                android:id="@+id/hint_time_prompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/score"
+                android:layout_toEndOf="@id/score"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/hint_time_prompt"
+                android:textColor="@color/red"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/hint_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:layout_alignRight="@id/hint_time_prompt"
+                android:layout_alignLeft="@id/hint_time_prompt"
+                android:layout_below="@id/hint_time_prompt"
+                android:text="@string/initial_hint_time"/>
+
+            <TextView
+                android:id="@+id/bar1"
+                android:layout_width="3dp"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/round_time_prompt"
+                android:layout_toStartOf="@+id/round_time_prompt"
+                android:layout_alignBottom="@+id/score"
+                android:layout_alignParentTop="true"
+                android:background="@color/black" />
+
+            <TextView
+                android:id="@+id/bar2"
+                android:layout_width="3dp"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/hint_time_prompt"
+                android:layout_toEndOf="@+id/hint_time_prompt"
+                android:layout_alignBottom="@+id/score"
+                android:layout_alignParentTop="true"
+                android:background="@color/black" />
+
+            <TextView
+                android:id="@+id/bar3"
+                android:layout_width="wrap_content"
+                android:layout_height="3dp"
+                android:layout_below="@+id/score"
+                android:layout_alignLeft="@+id/bar1"
+                android:layout_alignStart="@+id/bar1"
+                android:layout_alignRight="@+id/bar2"
+                android:layout_alignEnd="@+id/bar2"
+                android:background="@color/black" />
+
+        </RelativeLayout>
 
         <include
             android:id="@+id/question"
             layout="@layout/layout_question"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"/>
+            android:layout_weight="4" />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="8">
+            android:layout_weight="16">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@color/silver">
 
@@ -155,77 +255,61 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:background="@color/LightRed">
+        android:background="@color/LightBlue">
 
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3"/>
+            android:layout_weight="3">
+
+            <ImageView
+                android:id="@+id/settings_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_pause_black"
+                android:clickable="true"/>
+
+        </RelativeLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
             android:layout_marginBottom="5dp"
-            android:gravity="center"
+            android:textColor="@color/LightRed"
+            android:shadowColor="@color/black"
+            android:shadowRadius="40.0"
+            android:gravity="center_horizontal|bottom"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textSize="23sp"
             android:text="@string/player2"/>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="6"
+            android:layout_margin="10dp"
             android:src="@drawable/boy_icon_2"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical|end"
-                android:textSize="13sp"
-                android:text="@string/score_label"/>
-
-            <TextView
-                android:id="@+id/player2_score"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textSize="13sp"
-                android:text="0"/>
-
-        </LinearLayout>
 
         <Button
             android:id="@+id/player2_button"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_margin="5dp"
-            android:layout_weight="3"
+            android:layout_weight="4"
+            android:layout_gravity="center_horizontal"
             android:textSize="12sp"
+            android:background="@drawable/circle_button"
+            android:textColor="@android:color/white"
             android:text="@string/answer_label"/>
 
         <TextView
-            android:id="@+id/player2_answer_time"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/blue"
-            android:textStyle="bold"
-            android:text="00:10"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"/>
+            android:layout_weight="2"
+            android:id="@+id/textView" />
 
     </LinearLayout>
 

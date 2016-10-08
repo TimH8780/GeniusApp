@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -63,11 +62,6 @@ public class MainMenu extends AppCompatActivity {
         StringContainer.initializeStrings(getResources());
 
         createPlayBGM();
-
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null){
-            actionBar.hide();
-        }
 
         Button data_button = (Button) findViewById(R.id.data_button);
         Button settings_button = (Button) findViewById(R.id.settings_button);

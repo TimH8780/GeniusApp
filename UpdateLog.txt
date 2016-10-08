@@ -1,3 +1,8 @@
+ZH: 10/07
+Redesigned game layout
+Modified mode selection layout
+Added the sudden death mode
+
 WL: 10/2
 Changes from 10/1 discusson
 Background images

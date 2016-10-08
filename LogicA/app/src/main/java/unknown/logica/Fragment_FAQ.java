@@ -12,8 +12,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import static unknown.logica.StringContainer.faq_string;
-
 /**
  *Created by Tim on 09/22/16.
  */

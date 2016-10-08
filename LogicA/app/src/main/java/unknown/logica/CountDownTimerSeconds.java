@@ -21,7 +21,7 @@ public class CountDownTimerSeconds {
         private Timer(long millisInFuture) {
             super(millisInFuture, FREQUENCY);
             timeLeft = millisInFuture;
-            isPaused = false;
+            isPaused = true;
             isCountingDown = false;
         }
 
@@ -51,7 +51,6 @@ public class CountDownTimerSeconds {
             timeLeft = 0;
             isCountingDown = false;
             if(isGameTimer()){
-                game.timeUpMessage();   //Created new method for toast because getResources() was difficult without Context
                 game.nextRound();
             } else if(isPenaltyTimer()){
                 game.unlockAnswerButton();

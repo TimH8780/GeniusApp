@@ -10,6 +10,7 @@ public class UnknownFunctionGenerator {
     public static final int MAX_RANDOM_INDEX = 8;
 
     private UnknownFunction random_function;
+    private int functionIndex;
     private interface UnknownFunction{ long calculate(int a, int b, int random); }
 
     public UnknownFunctionGenerator(){ random_function = unknownFunctionGenerator(); }
@@ -19,12 +20,16 @@ public class UnknownFunctionGenerator {
     }
 
     private UnknownFunction unknownFunctionGenerator(){
-        int function_number = RandomNumberGenerators.randomNumber(MAX_FUNCTIONS);
-        return functionArray[function_number];
+        functionIndex = RandomNumberGenerators.randomNumber(MAX_FUNCTIONS);
+        return functionArray[functionIndex];
     }
 
     public long getResult(int a, int b, int random){
         return random_function.calculate(a, b, random);
+    }
+
+    public int getFunctionIndex(){
+        return functionIndex + 1;
     }
 
     private UnknownFunction[] functionArray = new UnknownFunction[]{
@@ -123,7 +128,7 @@ public class UnknownFunctionGenerator {
 
     /* ------------------------------------- Functions (Hard)------------------------------------- */
     private long numberOfBinaryOne(int a, int b){
-        return Integer.bitCount(a) + Integer.bitCount(a);
+        return Integer.bitCount(a) + Integer.bitCount(b);
     }
 
     private long binarySumUnder10(int a, int b){
