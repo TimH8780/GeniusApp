@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -26,10 +27,15 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static unknown.logica.CountDownTimerSeconds.*;
+import unknown.logica.Module.CountDownTimerSeconds;
+import unknown.logica.Module.FunctionList;
+import unknown.logica.Module.RandomNumberGenerators;
+import unknown.logica.Module.UnknownFunctionGenerator;
+
+import static unknown.logica.Module.CountDownTimerSeconds.*;
 import static unknown.logica.ModeSelection.*;
 import static unknown.logica.Settings.*;
-import static unknown.logica.StringContainer.*;
+import static unknown.logica.Module.StringContainer.*;
 
 public class Game extends AppCompatActivity{
 
@@ -73,6 +79,7 @@ public class Game extends AppCompatActivity{
     private int input2;
     private int randomNumber;
     private int hintIndex;
+    private int previousAnswerIndex;
     private HashMap<TextView, Boolean> hintTable;
     private AlertDialog hintDialog;
     private AlertDialog settingsDialog;
@@ -97,6 +104,7 @@ public class Game extends AppCompatActivity{
         }
         RoundCounter = 1;
         isInSuddenDeath = false;
+        previousAnswerIndex = -1;
 
         // Obtain two random inputs and display them
         input1 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
@@ -202,7 +210,7 @@ public class Game extends AppCompatActivity{
         hint_answer[5] = (TextView) hint6.findViewById(R.id.ans);
 
         // Initializes the function generator and generates the answer, can be used to compare with players' answers
-        unknownFunction = new UnknownFunctionGenerator();
+        unknownFunction = new UnknownFunctionGenerator(getSharedPreferences(SAVED_VALUES, Activity.MODE_PRIVATE));
         final_answer = unknownFunction.getResult(input1, input2, randomNumber);
 
         // Initializes four CountDownTimers
@@ -419,6 +427,22 @@ public class Game extends AppCompatActivity{
                 }
             });
 
+            // Show previous answer
+            final Button previous = (Button) popupView.findViewById(R.id.pre_answer);
+            if(previousAnswerIndex == -1) previous.setEnabled(false);
+            previous.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Pair<String, String> item = FunctionList.getInstance(res).getListItem(previousAnswerIndex - 1);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
+                    builder.setTitle(item.first);
+                    builder.setMessage(item.second);
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("Close", null);
+                    builder.create().show();
+                }
+            });
+
             // Function of quit button
             Button quit = (Button) popupView.findViewById(R.id.quit_button);
             quit.setOnClickListener(new View.OnClickListener() {
@@ -458,12 +482,13 @@ public class Game extends AppCompatActivity{
     }
 
     // Clear all fields and timers for next round
-    protected void nextRound(){
+    public void nextRound(){
         // Display operator index and answer
         Toast toast = Toast.makeText(this, String.format(Locale.US, getString(R.string.time_up_label), unknownFunction.getFunctionIndex(), final_answer), Toast.LENGTH_LONG);
         TextView message = (TextView) toast.getView().findViewById(android.R.id.message);
         if(message != null) message.setGravity(Gravity.CENTER);
         toast.show();
+        previousAnswerIndex = unknownFunction.getFunctionIndex();
 
         // Regenerate two numbers, unknown function and answer
         input1 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
@@ -471,7 +496,7 @@ public class Game extends AppCompatActivity{
         randomNumber = RandomNumberGenerators.randomNumber(10);
         input1_view.setText(String.valueOf(input1));
         input2_view.setText(String.valueOf(input2));
-        unknownFunction = new UnknownFunctionGenerator();
+        unknownFunction = new UnknownFunctionGenerator(getSharedPreferences(SAVED_VALUES, Activity.MODE_PRIVATE));
         final_answer = unknownFunction.getResult(input1, input2, randomNumber);
 
         // Clear all fields
@@ -515,17 +540,17 @@ public class Game extends AppCompatActivity{
         }
     }
 
-    protected void updateGameTime(long millisUntilFinished){
+    public void updateGameTime(long millisUntilFinished){
         int second = (int)(millisUntilFinished / SECOND_TO_MILLISECOND);
         gameTime.setText(String.valueOf(second));
     }
 
-    protected void updateHintTime(long millisUntilFinished){
+    public void updateHintTime(long millisUntilFinished){
         int second = (int)(millisUntilFinished / SECOND_TO_MILLISECOND);
         hintTime.setText(String.valueOf(second));
     }
 
-    protected void updateAnswerTime(long millisUntilFinished){
+    public void updateAnswerTime(long millisUntilFinished){
         int second = (int)(millisUntilFinished / SECOND_TO_MILLISECOND);
         switch (answerActive){
             case PLAYER_1:
@@ -537,7 +562,7 @@ public class Game extends AppCompatActivity{
         }
     }
 
-    protected void updatePenaltyTime(long millisUntilFinished){
+    public void updatePenaltyTime(long millisUntilFinished){
         int second = (int)(millisUntilFinished / SECOND_TO_MILLISECOND);
         if(!player1_button.isEnabled()){
             player1_button.setText(String.format(res.getString(R.string.disabled_time_label), second));
@@ -547,7 +572,7 @@ public class Game extends AppCompatActivity{
         }
     }
 
-    protected void unlockAnswerButton(){
+    public void unlockAnswerButton(){
         player1_button.setText(answer_string);
         player2_button.setText(answer_string);
         player1_button.setEnabled(true);
@@ -623,7 +648,7 @@ public class Game extends AppCompatActivity{
     // Build the sudden death notification dialog
     private void suddenDeathModeDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(Game.this);
-        builder.setTitle(getString(R.string.sudden_death_notification));
+        builder.setTitle(getString(R.string.suddenDeath));
         builder.setMessage(getString(R.string.sudden_death_dialog_message));
         builder.setCancelable(false);
 

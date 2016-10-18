@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20sp"
         android:text="@string/score_mode_description"
-        android:textSize="17dp"/>
+        android:textSize="17sp"/>
 
     <NumberPicker
         android:id="@+id/picker"

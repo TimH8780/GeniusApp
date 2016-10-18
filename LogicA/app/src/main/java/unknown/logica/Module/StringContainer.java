@@ -1,6 +1,8 @@
-package unknown.logica;
+package unknown.logica.Module;
 
 import android.content.res.Resources;
+
+import unknown.logica.R;
 
 /**
  *Created by Tim on 09/02/16.

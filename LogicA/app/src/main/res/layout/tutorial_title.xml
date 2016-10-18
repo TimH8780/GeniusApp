@@ -12,6 +12,6 @@
         android:textStyle="bold"
         android:textSize="40sp"
         android:textColor="@color/black"
-        android:text="Tutorial"/>
+        android:text="@string/tutorial"/>
 
 </LinearLayout>

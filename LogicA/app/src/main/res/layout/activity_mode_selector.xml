@@ -18,6 +18,7 @@
             android:textStyle="bold"
             android:textSize="25sp"
             android:text="@string/score_mode"
+            android:textColor="@color/white"
             android:background="@color/lightPink"/>
 
         <TextView
@@ -32,6 +33,7 @@
             android:layout_height="match_parent"
             android:layout_weight="50"
             android:text="@string/round_mode"
+            android:textColor="@color/white"
             android:textStyle="bold"
             android:textSize="25sp"
             android:background="@color/lightPink"/>
@@ -51,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/game_mode"
-        android:textColor="@color/blue"
+        android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="30sp"
         android:paddingRight="70dp"
@@ -59,7 +61,7 @@
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
         android:gravity="center"
-        android:background="@android:color/darker_gray"
+        android:background="@color/colorAccent"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 

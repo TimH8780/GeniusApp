@@ -13,7 +13,7 @@
         android:textStyle="bold"
         android:textSize="25sp"
         android:textColor="@color/black"
-        android:text="FAQ"/>
+        android:text="@string/tutorial_faq_title"/>
 
     <ExpandableListView
         android:id="@+id/list"

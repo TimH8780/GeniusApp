@@ -14,7 +14,7 @@ import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
-import static unknown.logica.StringContainer.*;
+import static unknown.logica.Module.StringContainer.*;
 
 /**
  *Created by Tim on 08/07/16.

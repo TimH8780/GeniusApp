@@ -1,6 +1,9 @@
-package unknown.logica;
+package unknown.logica.Module;
 
-import static unknown.logica.HelperFunction.*;
+import android.content.SharedPreferences;
+
+import static unknown.logica.Module.HelperFunction.*;
+import static unknown.logica.Settings.*;
 
 public class UnknownFunctionGenerator {
 
@@ -8,20 +11,30 @@ public class UnknownFunctionGenerator {
     public static final int MAX_FUNCTIONS = 22;
     public static final int MIN_RANDOM_INDEX = 6;
     public static final int MAX_RANDOM_INDEX = 8;
+    private static final int HARD_START_INDEX = 14;
 
     private UnknownFunction random_function;
     private int functionIndex;
     private interface UnknownFunction{ long calculate(int a, int b, int random); }
 
-    public UnknownFunctionGenerator(){ random_function = unknownFunctionGenerator(); }
+    public UnknownFunctionGenerator(SharedPreferences sp){ random_function = unknownFunctionGenerator(sp); }
 
     public UnknownFunctionGenerator(int index){
         random_function = functionArray[index];
     }
 
-    private UnknownFunction unknownFunctionGenerator(){
-        functionIndex = RandomNumberGenerators.randomNumber(MAX_FUNCTIONS);
+    private UnknownFunction unknownFunctionGenerator(SharedPreferences sp){
+        int difficulty = sp.getInt(DIFFICULTY_VALUE, MIXED);
+
+        do {
+            functionIndex = RandomNumberGenerators.randomNumber(MAX_FUNCTIONS);
+        } while(!isValid(difficulty, functionIndex));
+
         return functionArray[functionIndex];
+    }
+
+    private boolean isValid(int difficulty, int index){
+        return difficulty == MIXED || (difficulty == EASY && index < HARD_START_INDEX) || (difficulty == HARD && index >= HARD_START_INDEX);
     }
 
     public long getResult(int a, int b, int random){

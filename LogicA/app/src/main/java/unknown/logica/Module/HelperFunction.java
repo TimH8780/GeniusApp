@@ -1,4 +1,4 @@
-package unknown.logica;
+package unknown.logica.Module;
 
 /**
  *Created by Tim on 08/20/16.

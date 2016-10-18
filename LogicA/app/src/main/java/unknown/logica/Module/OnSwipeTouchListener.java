@@ -1,4 +1,4 @@
-package unknown.logica;
+package unknown.logica.Module;
 
 import android.content.Context;
 import android.view.GestureDetector;

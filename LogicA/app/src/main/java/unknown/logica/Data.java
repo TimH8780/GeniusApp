@@ -17,15 +17,19 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import static unknown.logica.UnknownFunctionGenerator.*;
+import unknown.logica.Module.FunctionList;
+import unknown.logica.Module.RandomNumberGenerators;
+import unknown.logica.Module.UnknownFunctionGenerator;
+
+import static unknown.logica.Module.UnknownFunctionGenerator.*;
 
 /**
  *Created by Tim on 09/02/16.
  */
 public class Data extends AppCompatActivity {
 
-    private ArrayList<Pair<String, String>> data;
     private ExpandableListView listView;
+    private ArrayList<Pair<String, String>> data;
     private Resources res;
 
     protected void onCreate(final Bundle savedInstanceState) {
@@ -33,8 +37,7 @@ public class Data extends AppCompatActivity {
         setContentView(R.layout.activity_data);
 
         res = getResources();
-        data = new ArrayList<>();
-        generateListData();
+        data = FunctionList.getInstance(res).getList();
 
         listView = (ExpandableListView) findViewById(R.id.list);
         if(listView != null) {
@@ -48,31 +51,6 @@ public class Data extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    private void generateListData(){
-        data.add(new Pair<>(getString(R.string.title_01), getString(R.string.description_01)));
-        data.add(new Pair<>(getString(R.string.title_02), getString(R.string.description_02)));
-        data.add(new Pair<>(getString(R.string.title_03), getString(R.string.description_03)));
-        data.add(new Pair<>(getString(R.string.title_04), getString(R.string.description_04)));
-        data.add(new Pair<>(getString(R.string.title_05), getString(R.string.description_05)));
-        data.add(new Pair<>(getString(R.string.title_06), getString(R.string.description_06)));
-        data.add(new Pair<>(getString(R.string.title_07), getString(R.string.description_07)));
-        data.add(new Pair<>(getString(R.string.title_08), getString(R.string.description_08)));
-        data.add(new Pair<>(getString(R.string.title_09), getString(R.string.description_09)));
-        data.add(new Pair<>(getString(R.string.title_10), getString(R.string.description_10)));
-        data.add(new Pair<>(getString(R.string.title_11), getString(R.string.description_11)));
-        data.add(new Pair<>(getString(R.string.title_12), getString(R.string.description_12)));
-        data.add(new Pair<>(getString(R.string.title_13), getString(R.string.description_13)));
-        data.add(new Pair<>(getString(R.string.title_14), getString(R.string.description_14)));
-        data.add(new Pair<>(getString(R.string.title_15), getString(R.string.description_15)));
-        data.add(new Pair<>(getString(R.string.title_16), getString(R.string.description_16)));
-        data.add(new Pair<>(getString(R.string.title_17), getString(R.string.description_17)));
-        data.add(new Pair<>(getString(R.string.title_18), getString(R.string.description_18)));
-        data.add(new Pair<>(getString(R.string.title_19), getString(R.string.description_19)));
-        data.add(new Pair<>(getString(R.string.title_20), getString(R.string.description_20)));
-        data.add(new Pair<>(getString(R.string.title_21), getString(R.string.description_21)));
-        data.add(new Pair<>(getString(R.string.title_22), getString(R.string.description_22)));
     }
 
     private class ExampleListener implements View.OnClickListener{

@@ -11,10 +11,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Locale;
+
+import unknown.logica.Module.StringContainer;
 
 //Reference: http://www.androhub.com/android-building-multi-language-supported-app/
 
@@ -24,22 +27,27 @@ public class Settings extends AppCompatActivity {
     public static final String LOCALE_VALUE = "Saved Locale";
     public static final String LANGUAGE_VALUE = "Saved Language";
     public static final String MUSIC_ENABLE_VALUE = "Saved Music Enable";
+    public static final String DIFFICULTY_VALUE = "Saved Difficulty";
     public static final String FIRST_TIMER_USER = "First Time";
     public static final int ENGLISH = 0;
     public static final int CHINESE = 1;
     public static final int JAPANESE = 2;
+    public static final int EASY = R.id.easy;
+    public static final int HARD = R.id.hard;
+    public static final int MIXED = R.id.mixed;
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private CheckBox Music_Check_Box;
     private TextView title, language_label, music_label;
     private Button apply_button, contact_button;
+    private RadioGroup radioGroup;
 
     private String lang;
     private int lang_pos;
     private boolean isLanguageChanged;
-    public boolean music_enable;
-
+    private boolean music_enable;
+    private int difficulty;
 
     private ImageView select_english;
     private ImageView select_chinese;
@@ -60,6 +68,13 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 music_enable = Music_Check_Box.isChecked();
+            }
+        });
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                radioGroup.check(checkedId);
             }
         });
 
@@ -103,7 +118,10 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String fromLocation = getIntent().getStringExtra("location");
-                if (fromLocation.equals("Main Menu") || !isLanguageChanged) {
+                boolean isDifficultyChanged = !(radioGroup.getCheckedRadioButtonId() == difficulty);
+                difficulty = radioGroup.getCheckedRadioButtonId();
+
+                if (fromLocation.equals("Main Menu") || (!isLanguageChanged && !isDifficultyChanged)) {
                     saveAndQuit();
                     finish();
                 }
@@ -185,6 +203,8 @@ public class Settings extends AppCompatActivity {
         select_chinese = (ImageView) findViewById(R.id.select_chinese_button);
         select_japanese = (ImageView) findViewById(R.id.select_japanese_button);
 
+        radioGroup = (RadioGroup) findViewById(R.id.radio_group);
+
         title = (TextView) findViewById(R.id.settings_title);
         language_label = (TextView) findViewById(R.id.language_label);
         music_label = (TextView) findViewById(R.id.music_label);
@@ -196,8 +216,9 @@ public class Settings extends AppCompatActivity {
     // Get locale method in preferences
     public void loadLocale() {
         lang = sharedPreferences.getString(LOCALE_VALUE, "");
-        lang_pos = sharedPreferences.getInt(LANGUAGE_VALUE, 0);
+        lang_pos = sharedPreferences.getInt(LANGUAGE_VALUE, ENGLISH);
         music_enable = sharedPreferences.getBoolean(MUSIC_ENABLE_VALUE, true);
+        difficulty = sharedPreferences.getInt(DIFFICULTY_VALUE, MIXED);
 
         changeLocale();
     }
@@ -220,6 +241,7 @@ public class Settings extends AppCompatActivity {
         editor.putString(LOCALE_VALUE, lang);
         editor.putInt(LANGUAGE_VALUE, lang_pos);
         editor.putBoolean(MUSIC_ENABLE_VALUE, music_enable);
+        editor.putInt(DIFFICULTY_VALUE, difficulty);
         editor.commit();
     }
 
@@ -245,5 +267,8 @@ public class Settings extends AppCompatActivity {
             select_english.setImageResource(R.drawable.english_not_selected);
             select_chinese.setImageResource(R.drawable.chinese_not_selected);
         }
+
+        radioGroup.check(difficulty);
     }
+
 }

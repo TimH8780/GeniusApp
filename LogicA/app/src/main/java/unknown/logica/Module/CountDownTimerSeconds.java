@@ -1,6 +1,8 @@
-package unknown.logica;
+package unknown.logica.Module;
 
 import android.os.CountDownTimer;
+
+import unknown.logica.Game;
 
 import static unknown.logica.Game.*;
 

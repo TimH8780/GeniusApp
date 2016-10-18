@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:imeOptions="flagNoExtractUi"
-            android:hint="Input_1"
+            android:hint="@string/example_input_1"
             android:inputType="number"
             android:maxLength="4"/>
 
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:imeOptions="flagNoExtractUi"
-            android:hint="Input_2"
+            android:hint="@string/example_input_2"
             android:inputType="number"
             android:maxLength="4"/>
 
@@ -43,7 +43,7 @@
         android:layout_marginBottom="5dp"
         android:gravity="center"
         android:textSize="20sp"
-        android:text="Random X: N/A"/>
+        android:text="@string/random_na_text"/>
 
     <TextView
         android:id="@+id/result"
@@ -54,6 +54,6 @@
         android:layout_marginBottom="15dp"
         android:gravity="center"
         android:textSize="20sp"
-        android:text="Result: N/A"/>
+        android:text="@string/result_na_text"/>
 
 </LinearLayout>

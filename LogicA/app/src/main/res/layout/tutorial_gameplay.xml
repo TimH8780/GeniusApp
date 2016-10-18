@@ -13,7 +13,7 @@
         android:textStyle="bold"
         android:textSize="25sp"
         android:textColor="@color/black"
-        android:text="TUTORIAL - GAMEPLAY"/>
+        android:text="@string/tutorial_gameplay_title"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -50,6 +50,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/tut_game_1"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -79,6 +80,7 @@
                     android:layout_weight="100"
                     android:layout_height="match_parent"
                     android:background="@color/red"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -106,6 +108,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/tut_game_3"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -135,6 +138,7 @@
                     android:layout_weight="100"
                     android:layout_height="match_parent"
                     android:background="@color/red"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -162,6 +166,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/tut_game_5"/>
+
             </LinearLayout>
 
         </LinearLayout>

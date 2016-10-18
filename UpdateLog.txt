@@ -1,3 +1,8 @@
+ZH: 10/18
+Added difficulty
+Added the 'previous round solution' button
+Translated partial strings
+
 ZH: 10/07
 Redesigned game layout
 Modified mode selection layout

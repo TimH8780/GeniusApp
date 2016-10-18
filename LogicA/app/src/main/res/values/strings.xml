@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LogicA</string>
+    <string name="app_name" translatable="false">LogicA</string>
     <string name="language_label">Language: </string>
-    <string name="music_label">Enable Music</string>
+    <string name="music_label">Music:</string>
+    <string name="difficulty_label">Difficulty: </string>
     <string name="apply">Apply</string>
-    <string name="settings">SETTINGS</string>
+    <string name="settings"><u>SETTINGS</u></string>
 
     <string-array name="language_array">
         <item>English</item>
@@ -37,7 +38,7 @@
     <string name="winner_message_label">Congratulations! %1$s wins the game!!</string>
     <string name="round_time_initial_label">Round_1 - 180 Seconds (20)</string>
     <string name="time_up_label">Time Up for this Round!\nOperator: #%1$d, Answer: %2$d</string>
-    <string name="next_game_label">Next Game</string>
+    <string name="next_game_label">Next Round</string>
 
     <string name="title_01" translatable="false">01. Addition (Easy)</string>
     <string name="title_02" translatable="false">02. Subtraction (Easy)</string>
@@ -118,27 +119,41 @@
     <string name="warning_description">Applying the changes will require you to restart the game</string>
     <string name="cancel_label">Cancel</string>
     <string name="confirm_label">Confirm</string>
-    <string name="example" translatable="false">Example</string>
-    <string name="close_label" translatable="false">Close</string>
-    <string name="reset_label" translatable="false">Reset</string>
-    <string name="calculate_label" translatable="false">Calculate</string>
-    <string name="random_text" translatable="false">Random X: %1$d</string>
-    <string name="result_text" translatable="false">Result: %1$d</string>
-    <string name="random_na_text" translatable="false">Random X: N/A</string>
-    <string name="result_na_text" translatable="false">Result: N/A</string>
-    <string name="game_mode" translatable="false">GAME MODE</string>
+    <string name="example">Example</string>
+    <string name="close_label">Close</string>
+    <string name="reset_label">Reset</string>
+    <string name="calculate_label">Calculate</string>
+    <string name="random_text">Random X: %1$d</string>
+    <string name="result_text">Result: %1$d</string>
+    <string name="random_na_text">Random X: N/A</string>
+    <string name="result_na_text">Result: N/A</string>
+    <string name="game_mode"><u>GAME MODE</u></string>
     <string name="initial_score" translatable="false">0 vs 0</string>
-    <string name="hint_time_prompt" translatable="false">Hint Time</string>
-    <string name="initial_round" translatable="false">Round 1</string>
+    <string name="hint_time_prompt">Hint Time</string>
+    <string name="initial_round">Round 1</string>
     <string name="initial_round_time" translatable="false">180</string>
-    <string name="game_time_prompt" translatable="false">Game Time</string>
+    <string name="game_time_prompt">Game Time</string>
     <string name="operator_prompt" translatable="false">Operator List\n(Format: A � B with Random number X)</string>
     <string name="initial_hint_time" translatable="false">20</string>
     <string name="action_waiting_hint" translatable="false">Players input into the hint section</string>
     <string name="action_thinking" translatable="false">Thinking/ Answer Time</string>
-    <string name="suddenDeath" translatable="false">Sudden Death Mode</string>
-    <string name="sudden_death_notification" translatable="false">Sudden Death Mode</string>
+    <string name="suddenDeath">Sudden Death Mode</string>
     <string name="ok" translatable="false">ok</string>
     <string name="sudden_death_dialog_message" translatable="false">The game is reached the pre-set score/ round, but since both players are having the same score. The game now goes into the Sudden Death Mode. This game will be ended when a player attempts to answer the question!</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="difficulty_mixed">Mixed</string>
+    <string name="difficulty_hard">Hard</string>
+    <string name="difficulty_easy">Easy</string>
+    <string name="tutorial_main_menu">Main Menu</string>
+    <string name="tutorial_gameplay">Gameplay</string>
+    <string name="tutorial_functions">Functions</string>
+    <string name="example_input_1">Input_1</string>
+    <string name="example_input_2">Input_2</string>
+    <string name="previous_round_solution">PREVIOUS ROUND SOLUTION</string>
+    <string name="tutorial_faq_title"><u>FAQ</u></string>
+    <string name="tutorial_function_title"><u>TUTORIAL - OPERATOR</u></string>
+    <string name="tutorial_gameplay_title"><u>TUTORIAL - GAMEPLAY</u></string>
+    <string name="tutorial_main_menu_title"><u>TUTORIAL - MAIN MENU</u></string>
+    <string name="tutorial">Tutorial</string>
 
 </resources>

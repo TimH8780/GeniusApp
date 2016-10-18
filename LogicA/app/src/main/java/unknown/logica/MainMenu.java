@@ -17,6 +17,9 @@ import android.widget.Toast;
 
 import java.util.Locale;
 
+import unknown.logica.Module.OnSwipeTouchListener;
+import unknown.logica.Module.StringContainer;
+
 import static unknown.logica.Settings.*;
 
 public class MainMenu extends AppCompatActivity {

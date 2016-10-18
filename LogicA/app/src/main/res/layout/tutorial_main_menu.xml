@@ -13,7 +13,7 @@
         android:textStyle="bold"
         android:textSize="25sp"
         android:textColor="@color/black"
-        android:text="TUTORIAL - MAIN MENU"/>
+        android:text="@string/tutorial_main_menu_title"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -22,7 +22,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
@@ -49,6 +49,7 @@
                     android:layout_weight="100"
                     android:gravity="center"
                     android:text="@string/tut_main_1"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -78,6 +79,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="50"
                     android:src="@drawable/t2"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -104,6 +106,7 @@
                     android:layout_weight="100"
                     android:gravity="center"
                     android:text="@string/tut_main_3"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -133,6 +136,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="50"
                     android:src="@drawable/t4"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -159,6 +163,7 @@
                     android:layout_weight="100"
                     android:gravity="center"
                     android:text="@string/tut_main_5"/>
+
             </LinearLayout>
 
             <TextView

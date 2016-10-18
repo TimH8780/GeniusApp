@@ -1,4 +1,4 @@
-package unknown.logica;
+package unknown.logica.Module;
 
 public class RandomNumberGenerators {
 
