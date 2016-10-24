@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Rect;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ public class MainMenu extends AppCompatActivity {
     private ImageView main_menu_buttons;
     private Context context;
     private MediaPlayer musicPlayer;
+    private int guideNum;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -35,15 +37,145 @@ public class MainMenu extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         context = this;
 
+        final Button data_button = (Button) findViewById(R.id.data_button);
+        final Button settings_button = (Button) findViewById(R.id.settings_button);
+        final Button tutorial_button = (Button) findViewById(R.id.tutorial_button);
+        final Button quit_button = (Button) findViewById(R.id.quit_button);
+        final ImageView main_menu_background = (ImageView) findViewById(R.id.main_menu_background);
+        final ImageView gameplay = (ImageView) findViewById(R.id.gameplay);
+        main_menu_buttons = (ImageView) findViewById(R.id.main_menu_buttons);
+        final ImageView guidelabel1 = (ImageView) findViewById(R.id.guidelabel1);
+        final ImageView guidelabel2 = (ImageView) findViewById(R.id.guidelabel2);
+        final ImageView guidelabel3 = (ImageView) findViewById(R.id.guidelabel3);
+        final ImageView next_arrow = (ImageView) findViewById(R.id.next_arrow);
+        final ImageView previous_arrow = (ImageView) findViewById(R.id.previous_arrow);
+        final ImageView skip_arrow = (ImageView) findViewById(R.id.skip_arrow);
         SharedPreferences sharedPreferences = getSharedPreferences(SAVED_VALUES, Activity.MODE_PRIVATE);
+
         if(sharedPreferences.getBoolean(FIRST_TIMER_USER, true)){
             // First time user
             Toast.makeText(getApplicationContext(), "First Timer User", Toast.LENGTH_LONG).show();
+            guidelabel1.setVisibility(View.VISIBLE);
+            next_arrow.setVisibility(View.VISIBLE);
+            skip_arrow.setVisibility(View.VISIBLE);
+            main_menu_background.setOnTouchListener(null);
+            main_menu_buttons.setOnTouchListener(null);
+            guideNum = 1;
+            guidelabel1.setImageResource(R.drawable.mmlabel1);
+            guidelabel2.setImageResource(R.drawable.mmlabel2);
+            guidelabel3.setImageResource(R.drawable.mmlabel3);
+            data_button.setEnabled(false);
+            settings_button.setEnabled(false);
+            tutorial_button.setEnabled(false);
+            quit_button.setEnabled(false);
+            gameplay.setEnabled(false);
+        }
+        else{
+            //Swipe Listener, Covers only the background, not inside main_menu_button
+            assert main_menu_background != null;
+            main_menu_background.setOnTouchListener(swipeListener);
+
+            //Does not make a big difference, only areas without buttons can be registered
+            assert main_menu_buttons != null;
+            main_menu_buttons.setOnTouchListener(swipeListener);
         }
 
+        skip_arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guidelabel1.setVisibility(View.GONE);
+                guidelabel2.setVisibility(View.GONE);
+                guidelabel3.setVisibility(View.GONE);
+                next_arrow.setVisibility(View.GONE);
+                previous_arrow.setVisibility(View.GONE);
+                skip_arrow.setVisibility(View.GONE);
+                data_button.setEnabled(true);
+                settings_button.setEnabled(true);
+                tutorial_button.setEnabled(true);
+                quit_button.setEnabled(true);
+                gameplay.setEnabled(true);
+                main_menu_background.setOnTouchListener(swipeListener);
+                main_menu_buttons.setOnTouchListener(swipeListener);
+            }
+        });
+
+        assert next_arrow != null;
+        next_arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (guideNum){
+                    case 1:
+                        guidelabel1.setVisibility(View.GONE);
+                        guidelabel2.setVisibility(View.VISIBLE);
+                        previous_arrow.setVisibility(View.VISIBLE);
+                        guideNum++;
+                        break;
+                    case 2:
+                        guidelabel2.setVisibility(View.GONE);
+                        guidelabel3.setVisibility(View.VISIBLE);
+                        guideNum++;
+                        break;
+                    case 3:
+                        guidelabel3.setVisibility(View.GONE);
+                        next_arrow.setVisibility(View.GONE);
+                        previous_arrow.setVisibility(View.GONE);
+                        skip_arrow.setVisibility(View.GONE);
+                        data_button.setEnabled(true);
+                        settings_button.setEnabled(true);
+                        tutorial_button.setEnabled(true);
+                        quit_button.setEnabled(true);
+                        gameplay.setEnabled(true);
+                        break;
+                    default:
+                        guidelabel1.setVisibility(View.GONE);
+                        guidelabel2.setVisibility(View.GONE);
+                        guidelabel3.setVisibility(View.GONE);
+                        next_arrow.setVisibility(View.GONE);
+                        previous_arrow.setVisibility(View.GONE);
+                        skip_arrow.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        assert previous_arrow != null;
+        previous_arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (guideNum){
+                    case 1:
+                        break;
+                    case 2:
+                        guidelabel1.setVisibility(View.VISIBLE);
+                        guidelabel2.setVisibility(View.GONE);
+                        previous_arrow.setVisibility(View.GONE);
+                        guideNum--;
+                        break;
+                    case 3:
+                        guidelabel2.setVisibility(View.VISIBLE);
+                        guidelabel3.setVisibility(View.GONE);
+                        guideNum--;
+                        break;
+                    default:
+                        guidelabel1.setVisibility(View.GONE);
+                        guidelabel2.setVisibility(View.GONE);
+                        guidelabel3.setVisibility(View.GONE);
+                        next_arrow.setVisibility(View.GONE);
+                        previous_arrow.setVisibility(View.GONE);
+                }
+            }
+        });
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(FIRST_TIMER_USER, false);
         editor.apply();
+
+//        if(sharedPreferences.getBoolean(FIRST_TIMER_USER, true)){
+//            // First time user
+//            Toast.makeText(getApplicationContext(), "First Timer User", Toast.LENGTH_LONG).show();
+//        }
+//
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putBoolean(FIRST_TIMER_USER, false);
+//        editor.apply();
 
         String lang = "";
         switch (sharedPreferences.getInt(LANGUAGE_VALUE, 0)){
@@ -65,22 +197,6 @@ public class MainMenu extends AppCompatActivity {
         StringContainer.initializeStrings(getResources());
 
         createPlayBGM();
-
-        Button data_button = (Button) findViewById(R.id.data_button);
-        Button settings_button = (Button) findViewById(R.id.settings_button);
-        Button tutorial_button = (Button) findViewById(R.id.tutorial_button);
-        Button quit_button = (Button) findViewById(R.id.quit_button);
-        ImageView main_menu_background = (ImageView) findViewById(R.id.main_menu_background);
-        ImageView gameplay = (ImageView) findViewById(R.id.gameplay);
-        main_menu_buttons = (ImageView) findViewById(R.id.main_menu_buttons);
-
-        //Swipe Listener, Covers only the background, not inside main_menu_button
-        assert main_menu_background != null;
-        main_menu_background.setOnTouchListener(swipeListener);
-
-        //Does not make a big difference, only areas without buttons can be registered
-        assert main_menu_buttons != null;
-        main_menu_buttons.setOnTouchListener(swipeListener);
 
         assert data_button != null;
         data_button.setOnClickListener(new View.OnClickListener() {

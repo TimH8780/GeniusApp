@@ -16,7 +16,7 @@
         android:textStyle="bold"
         android:textColor="@color/red"
         android:shadowColor="@color/LightRed"
-        android:shadowRadius="30.0"
+        android:shadowRadius="25.0"
         android:shadowDx="1.0"
         android:shadowDy="1.0" />
 
@@ -27,7 +27,8 @@
         android:layout_marginTop="6dp"
         android:layout_marginBottom="6dp"
         android:gravity="center"
-        android:src="@drawable/logicbox1"/>
+        android:src="@drawable/logicbox"
+        android:id="@+id/imageView" />
 
     <TextView
         android:id="@+id/input2"
@@ -40,7 +41,7 @@
         android:textStyle="bold"
         android:textColor="@color/red"
         android:shadowColor="@color/LightRed"
-        android:shadowRadius="30.0"
+        android:shadowRadius="25.0"
         android:shadowDx="1.0"
         android:shadowDy="1.0" />
 
