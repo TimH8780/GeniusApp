@@ -41,7 +41,7 @@ public class Data extends AppCompatActivity {
         res = getResources();
         data = FunctionList.getInstance(res).getList();
         bgmManager = BGMManager.getInstance(this, R.raw.bgm_main);
-        bgmManager.startMusic();
+        bgmManager.startMusic(this);
 
         listView = (ExpandableListView) findViewById(R.id.list);
         if(listView != null) {
@@ -66,7 +66,7 @@ public class Data extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        bgmManager.startMusic();
+        bgmManager.startMusic(this);
     }
 
     private class ExampleListener implements View.OnClickListener{

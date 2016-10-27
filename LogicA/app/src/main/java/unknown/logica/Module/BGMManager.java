@@ -5,9 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 
-import unknown.logica.MainMenu;
-import unknown.logica.R;
-
 import static unknown.logica.Settings.MUSIC_ENABLE_VALUE;
 import static unknown.logica.Settings.SAVED_VALUES;
 
@@ -19,7 +16,6 @@ public class BGMManager {
     private static BGMManager instance;
     private static MediaPlayer player;
     private static int currentMusic;
-    private Context context;
 
     private BGMManager(Context context, int src){
         player = MediaPlayer.create(context, src);
@@ -27,7 +23,6 @@ public class BGMManager {
         player.start();
         player.setLooping(true);
         player.pause();
-        this.context = context;
     }
 
     public static BGMManager getInstance(Context context, int src){
@@ -44,7 +39,7 @@ public class BGMManager {
         return instance;
     }
 
-    public void startMusic(){
+    public void startMusic(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(SAVED_VALUES, Activity.MODE_PRIVATE);
 
         if (sharedPreferences.getBoolean(MUSIC_ENABLE_VALUE, true)) {

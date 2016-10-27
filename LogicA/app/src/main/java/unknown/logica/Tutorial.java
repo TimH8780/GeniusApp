@@ -20,7 +20,7 @@ public class Tutorial extends AppCompatActivity {
         setContentView(R.layout.activity_tutorial);
 
         bgmManager = BGMManager.getInstance(this, R.raw.bgm_main);
-        bgmManager.startMusic();
+        bgmManager.startMusic(this);
 
         fragMgr = getSupportFragmentManager();
         displayTutorial();
@@ -82,7 +82,7 @@ public class Tutorial extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        bgmManager.startMusic();
+        bgmManager.startMusic(this);
     }
 
 }

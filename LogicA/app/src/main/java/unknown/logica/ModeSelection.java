@@ -39,7 +39,7 @@ public class ModeSelection extends AppCompatActivity {
         }
 
         bgmManager = BGMManager.getInstance(this, R.raw.bgm_main);
-        bgmManager.startMusic();
+        bgmManager.startMusic(this);
 
         Button scoreMode = (Button) findViewById(R.id.score_mode);
         Button roundMode = (Button) findViewById(R.id.round_mode);
@@ -121,7 +121,7 @@ public class ModeSelection extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        bgmManager.startMusic();
+        bgmManager.startMusic(this);
     }
 
     private View.OnTouchListener selectionEffect = new View.OnTouchListener() {

@@ -96,7 +96,7 @@ public class Game extends AppCompatActivity{
         res = getResources();
         initializeStrings(res);
         bgmManager = BGMManager.getInstance(this, R.raw.bgm_game);
-        bgmManager.startMusic();
+        bgmManager.startMusic(this);
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
@@ -168,7 +168,7 @@ public class Game extends AppCompatActivity{
                     editor.putBoolean(MUSIC_ENABLE_VALUE, true);
                 }
                 editor.apply();
-                bgmManager.startMusic();
+                bgmManager.startMusic(Game.this);
             }
         });
 
@@ -241,7 +241,7 @@ public class Game extends AppCompatActivity{
     @Override
     protected void onResume(){
         super.onResume();
-        bgmManager.startMusic();
+        bgmManager.startMusic(this);
     }
 
     // The onClickListener for the two answer buttons

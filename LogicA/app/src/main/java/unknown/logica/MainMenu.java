@@ -190,7 +190,7 @@ public class MainMenu extends AppCompatActivity {
         StringContainer.initializeStrings(getResources());
 
         bgmManager = BGMManager.getInstance(this, R.raw.bgm_main);
-        bgmManager.startMusic();
+        bgmManager.startMusic(this);
 
         assert data_button != null;
         data_button.setOnClickListener(new View.OnClickListener() {
@@ -259,7 +259,7 @@ public class MainMenu extends AppCompatActivity {
         if(!bgmManager.isSameMusic(R.raw.bgm_main)){
             bgmManager = BGMManager.getInstance(this, R.raw.bgm_main);
         }
-        bgmManager.startMusic();
+        bgmManager.startMusic(this);
     }
 
     private void startActivity(Class<?> cls){

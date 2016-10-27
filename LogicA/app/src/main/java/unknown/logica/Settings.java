@@ -68,7 +68,7 @@ public class Settings extends AppCompatActivity {
         } else {
             bgmManager = BGMManager.getInstance(this, R.raw.bgm_game);
         }
-        bgmManager.startMusic();
+        bgmManager.startMusic(this);
         isLanguageChanged = false;
 
         Music_Check_Box.setChecked(music_enable);
@@ -197,7 +197,7 @@ public class Settings extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        bgmManager.startMusic();
+        bgmManager.startMusic(this);
     }
 
     public void saveAndQuit(){
