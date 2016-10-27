@@ -14,6 +14,8 @@ import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import unknown.logica.Module.BGMManager;
+
 import static unknown.logica.Module.StringContainer.*;
 
 /**
@@ -24,6 +26,8 @@ public class ModeSelection extends AppCompatActivity {
     public static final String SCORE = "SCORE MODE";
     public static final String ROUND = "ROUND MODE";
 
+    private BGMManager bgmManager;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +37,9 @@ public class ModeSelection extends AppCompatActivity {
         if(actionBar != null){
             actionBar.hide();
         }
+
+        bgmManager = BGMManager.getInstance(this, R.raw.bgm_main);
+        bgmManager.startMusic();
 
         Button scoreMode = (Button) findViewById(R.id.score_mode);
         Button roundMode = (Button) findViewById(R.id.round_mode);
@@ -103,6 +110,18 @@ public class ModeSelection extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         finish();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        bgmManager.pauseMusic();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        bgmManager.startMusic();
     }
 
     private View.OnTouchListener selectionEffect = new View.OnTouchListener() {

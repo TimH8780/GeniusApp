@@ -6,18 +6,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Rect;
-import android.media.Image;
-import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Locale;
 
+import unknown.logica.Module.BGMManager;
 import unknown.logica.Module.OnSwipeTouchListener;
 import unknown.logica.Module.StringContainer;
 
@@ -28,7 +28,7 @@ public class MainMenu extends AppCompatActivity {
     private Rect rect;
     private ImageView main_menu_buttons;
     private Context context;
-    private MediaPlayer musicPlayer;
+    private BGMManager bgmManager;
     private int guideNum;
 
     @Override
@@ -50,36 +50,36 @@ public class MainMenu extends AppCompatActivity {
         final ImageView next_arrow = (ImageView) findViewById(R.id.next_arrow);
         final ImageView previous_arrow = (ImageView) findViewById(R.id.previous_arrow);
         final ImageView skip_arrow = (ImageView) findViewById(R.id.skip_arrow);
+        final TextView cover = (TextView) findViewById(R.id.cover);
         SharedPreferences sharedPreferences = getSharedPreferences(SAVED_VALUES, Activity.MODE_PRIVATE);
 
         if(sharedPreferences.getBoolean(FIRST_TIMER_USER, true)){
             // First time user
-            Toast.makeText(getApplicationContext(), "First Timer User", Toast.LENGTH_LONG).show();
             guidelabel1.setVisibility(View.VISIBLE);
             next_arrow.setVisibility(View.VISIBLE);
             skip_arrow.setVisibility(View.VISIBLE);
-            main_menu_background.setOnTouchListener(null);
-            main_menu_buttons.setOnTouchListener(null);
+            cover.setVisibility(View.VISIBLE);
             guideNum = 1;
-            guidelabel1.setImageResource(R.drawable.mmlabel1);
-            guidelabel2.setImageResource(R.drawable.mmlabel2);
-            guidelabel3.setImageResource(R.drawable.mmlabel3);
+
             data_button.setEnabled(false);
             settings_button.setEnabled(false);
             tutorial_button.setEnabled(false);
             quit_button.setEnabled(false);
             gameplay.setEnabled(false);
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(FIRST_TIMER_USER, false);
+            editor.apply();
         }
         else{
             //Swipe Listener, Covers only the background, not inside main_menu_button
-            assert main_menu_background != null;
             main_menu_background.setOnTouchListener(swipeListener);
 
             //Does not make a big difference, only areas without buttons can be registered
-            assert main_menu_buttons != null;
             main_menu_buttons.setOnTouchListener(swipeListener);
         }
 
+        assert skip_arrow != null;
         skip_arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,11 +89,14 @@ public class MainMenu extends AppCompatActivity {
                 next_arrow.setVisibility(View.GONE);
                 previous_arrow.setVisibility(View.GONE);
                 skip_arrow.setVisibility(View.GONE);
+                cover.setVisibility(View.GONE);
+
                 data_button.setEnabled(true);
                 settings_button.setEnabled(true);
                 tutorial_button.setEnabled(true);
                 quit_button.setEnabled(true);
                 gameplay.setEnabled(true);
+
                 main_menu_background.setOnTouchListener(swipeListener);
                 main_menu_buttons.setOnTouchListener(swipeListener);
             }
@@ -110,29 +113,32 @@ public class MainMenu extends AppCompatActivity {
                         previous_arrow.setVisibility(View.VISIBLE);
                         guideNum++;
                         break;
+
                     case 2:
                         guidelabel2.setVisibility(View.GONE);
                         guidelabel3.setVisibility(View.VISIBLE);
                         guideNum++;
                         break;
+
                     case 3:
                         guidelabel3.setVisibility(View.GONE);
                         next_arrow.setVisibility(View.GONE);
                         previous_arrow.setVisibility(View.GONE);
                         skip_arrow.setVisibility(View.GONE);
+                        cover.setVisibility(View.GONE);
+
                         data_button.setEnabled(true);
                         settings_button.setEnabled(true);
                         tutorial_button.setEnabled(true);
                         quit_button.setEnabled(true);
                         gameplay.setEnabled(true);
+
+                        main_menu_background.setOnTouchListener(swipeListener);
+                        main_menu_buttons.setOnTouchListener(swipeListener);
                         break;
+
                     default:
-                        guidelabel1.setVisibility(View.GONE);
-                        guidelabel2.setVisibility(View.GONE);
-                        guidelabel3.setVisibility(View.GONE);
-                        next_arrow.setVisibility(View.GONE);
-                        previous_arrow.setVisibility(View.GONE);
-                        skip_arrow.setVisibility(View.GONE);
+                        throw new RuntimeException("First Time Tutorial");
                 }
             }
         });
@@ -144,38 +150,25 @@ public class MainMenu extends AppCompatActivity {
                 switch (guideNum){
                     case 1:
                         break;
+
                     case 2:
                         guidelabel1.setVisibility(View.VISIBLE);
                         guidelabel2.setVisibility(View.GONE);
                         previous_arrow.setVisibility(View.GONE);
                         guideNum--;
                         break;
+
                     case 3:
                         guidelabel2.setVisibility(View.VISIBLE);
                         guidelabel3.setVisibility(View.GONE);
                         guideNum--;
                         break;
+
                     default:
-                        guidelabel1.setVisibility(View.GONE);
-                        guidelabel2.setVisibility(View.GONE);
-                        guidelabel3.setVisibility(View.GONE);
-                        next_arrow.setVisibility(View.GONE);
-                        previous_arrow.setVisibility(View.GONE);
+                        throw new RuntimeException("First Time Tutorial");
                 }
             }
         });
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(FIRST_TIMER_USER, false);
-        editor.apply();
-
-//        if(sharedPreferences.getBoolean(FIRST_TIMER_USER, true)){
-//            // First time user
-//            Toast.makeText(getApplicationContext(), "First Timer User", Toast.LENGTH_LONG).show();
-//        }
-//
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putBoolean(FIRST_TIMER_USER, false);
-//        editor.apply();
 
         String lang = "";
         switch (sharedPreferences.getInt(LANGUAGE_VALUE, 0)){
@@ -196,7 +189,8 @@ public class MainMenu extends AppCompatActivity {
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
         StringContainer.initializeStrings(getResources());
 
-        createPlayBGM();
+        bgmManager = BGMManager.getInstance(this, R.raw.bgm_main);
+        bgmManager.startMusic();
 
         assert data_button != null;
         data_button.setOnClickListener(new View.OnClickListener() {
@@ -256,19 +250,16 @@ public class MainMenu extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
-        musicPlayer.pause();
-    }
-
-    @Override
-    protected void onStop(){
-        super.onStop();
-        musicPlayer.release();
+        bgmManager.pauseMusic();
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        createPlayBGM();
+        if(!bgmManager.isSameMusic(R.raw.bgm_main)){
+            bgmManager = BGMManager.getInstance(this, R.raw.bgm_main);
+        }
+        bgmManager.startMusic();
     }
 
     private void startActivity(Class<?> cls){
@@ -280,25 +271,6 @@ public class MainMenu extends AppCompatActivity {
     private void quitGame(){
         finishAffinity();
         System.exit(0);
-    }
-
-    private void createPlayBGM(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SAVED_VALUES, Activity.MODE_PRIVATE);
-
-        if(musicPlayer != null) try{
-            musicPlayer.reset();
-        } catch (IllegalStateException e){
-            musicPlayer = null;
-        }
-
-        if (sharedPreferences.getBoolean(MUSIC_ENABLE_VALUE, true)) {
-            musicPlayer = MediaPlayer.create(MainMenu.this, R.raw.bgm_main);
-            musicPlayer.start();
-            musicPlayer.setLooping(true);
-        }
-        else {
-            musicPlayer = MediaPlayer.create(MainMenu.this, R.raw.bgm_main);    // Without this the game crashes when Settings is pressed
-        }
     }
 
     private OnSwipeTouchListener swipeListener = new OnSwipeTouchListener(context, false){

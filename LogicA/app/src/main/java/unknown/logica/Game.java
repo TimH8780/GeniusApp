@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +26,7 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import unknown.logica.Module.BGMManager;
 import unknown.logica.Module.CountDownTimerSeconds;
 import unknown.logica.Module.FunctionList;
 import unknown.logica.Module.RandomNumberGenerators;
@@ -86,7 +86,7 @@ public class Game extends AppCompatActivity{
     private String gameType;
     private int RoundCounter;
     private int gameLimit;
-    private MediaPlayer musicPlayer;
+    private BGMManager bgmManager;
     private boolean isInSuddenDeath;
 
     @Override
@@ -95,7 +95,8 @@ public class Game extends AppCompatActivity{
         setContentView(R.layout.activity_game);
         res = getResources();
         initializeStrings(res);
-        createPlayBGM();
+        bgmManager = BGMManager.getInstance(this, R.raw.bgm_game);
+        bgmManager.startMusic();
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
@@ -167,7 +168,7 @@ public class Game extends AppCompatActivity{
                     editor.putBoolean(MUSIC_ENABLE_VALUE, true);
                 }
                 editor.apply();
-                createPlayBGM();
+                bgmManager.startMusic();
             }
         });
 
@@ -234,38 +235,13 @@ public class Game extends AppCompatActivity{
     @Override
     protected void onPause(){
         super.onPause();
-        musicPlayer.pause();
-    }
-
-    @Override
-    protected void onStop(){
-        super.onStop();
-        musicPlayer.release();
+        bgmManager.pauseMusic();
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        createPlayBGM();
-    }
-
-    private void createPlayBGM(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SAVED_VALUES, Activity.MODE_PRIVATE);
-
-        if(musicPlayer != null) try{
-            musicPlayer.reset();
-        } catch(IllegalStateException e){
-            musicPlayer = null;
-        }
-
-        if (sharedPreferences.getBoolean(MUSIC_ENABLE_VALUE, true)) {
-            musicPlayer = MediaPlayer.create(Game.this, R.raw.bgm_game);
-            musicPlayer.start();
-            musicPlayer.setLooping(true);
-        }
-        else {
-            musicPlayer = MediaPlayer.create(Game.this, R.raw.bgm_game);        // Without this the game crashes when quitting the game
-        }
+        bgmManager.startMusic();
     }
 
     // The onClickListener for the two answer buttons
@@ -485,7 +461,7 @@ public class Game extends AppCompatActivity{
     public void nextRound(){
         // Display operator index and answer
         Toast toast = Toast.makeText(this, String.format(Locale.US, getString(R.string.time_up_label), unknownFunction.getFunctionIndex(), final_answer), Toast.LENGTH_LONG);
-        TextView message = (TextView) toast.getView().findViewById(android.R.id.message);
+        TextView message = (TextView) toast.getView().findViewById(R.id.message);
         if(message != null) message.setGravity(Gravity.CENTER);
         toast.show();
         previousAnswerIndex = unknownFunction.getFunctionIndex();

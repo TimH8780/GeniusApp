@@ -1,3 +1,6 @@
+ZH: 10/27
+Music across all activities
+
 ZH: 10/18
 Added difficulty
 Added the 'previous round solution' button

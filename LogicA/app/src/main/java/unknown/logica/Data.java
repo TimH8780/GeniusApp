@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import unknown.logica.Module.BGMManager;
 import unknown.logica.Module.FunctionList;
 import unknown.logica.Module.RandomNumberGenerators;
 import unknown.logica.Module.UnknownFunctionGenerator;
@@ -30,6 +31,7 @@ public class Data extends AppCompatActivity {
 
     private ExpandableListView listView;
     private ArrayList<Pair<String, String>> data;
+    private BGMManager bgmManager;
     private Resources res;
 
     protected void onCreate(final Bundle savedInstanceState) {
@@ -38,6 +40,8 @@ public class Data extends AppCompatActivity {
 
         res = getResources();
         data = FunctionList.getInstance(res).getList();
+        bgmManager = BGMManager.getInstance(this, R.raw.bgm_main);
+        bgmManager.startMusic();
 
         listView = (ExpandableListView) findViewById(R.id.list);
         if(listView != null) {
@@ -51,6 +55,18 @@ public class Data extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        bgmManager.pauseMusic();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        bgmManager.startMusic();
     }
 
     private class ExampleListener implements View.OnClickListener{

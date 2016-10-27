@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import java.util.Locale;
 
+import unknown.logica.Module.BGMManager;
 import unknown.logica.Module.StringContainer;
 
 //Reference: http://www.androhub.com/android-building-multi-language-supported-app/
@@ -42,6 +43,7 @@ public class Settings extends AppCompatActivity {
     private TextView title, language_label, music_label;
     private Button apply_button, contact_button;
     private RadioGroup radioGroup;
+    private BGMManager bgmManager;
 
     private String lang;
     private int lang_pos;
@@ -61,6 +63,12 @@ public class Settings extends AppCompatActivity {
         initViews();
         loadLocale();
         updateTexts();
+        if(getIntent().getStringExtra("location").equals("Main Menu")) {
+            bgmManager = BGMManager.getInstance(this, R.raw.bgm_main);
+        } else {
+            bgmManager = BGMManager.getInstance(this, R.raw.bgm_game);
+        }
+        bgmManager.startMusic();
         isLanguageChanged = false;
 
         Music_Check_Box.setChecked(music_enable);
@@ -178,6 +186,18 @@ public class Settings extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         finish();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        bgmManager.pauseMusic();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        bgmManager.startMusic();
     }
 
     public void saveAndQuit(){

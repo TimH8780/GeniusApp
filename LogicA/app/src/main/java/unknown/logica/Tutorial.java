@@ -7,14 +7,20 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import unknown.logica.Module.BGMManager;
+
 public class Tutorial extends AppCompatActivity {
 
     private FragmentManager fragMgr;
     private FragmentTransaction fragTrans;
+    private BGMManager bgmManager;
 
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
+
+        bgmManager = BGMManager.getInstance(this, R.raw.bgm_main);
+        bgmManager.startMusic();
 
         fragMgr = getSupportFragmentManager();
         displayTutorial();
@@ -65,6 +71,18 @@ public class Tutorial extends AppCompatActivity {
 
         fragTrans.replace(R.id.fragment_container, new Fragment_FAQ(), "FAQ");
         fragTrans.commit();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        bgmManager.pauseMusic();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        bgmManager.startMusic();
     }
 
 }
