@@ -45,8 +45,8 @@ public class Game extends AppCompatActivity{
     public static final int NUMBER_OF_HINTS = 6;
     public static final int ROUND_MAX_VALUE = 50;
     public static final int HINT_MAX_VALUE = 100;
-    public static final int SECOND_PER_ROUND = 21;  // 181
-    public static final int HINT_INPUT_WAIT_TIME = 5;   // 20
+    public static final int SECOND_PER_ROUND = 15;  // 181
+    public static final int HINT_INPUT_WAIT_TIME = 3;   // 20
     public static final int ANSWER_WAIT_TIME = 10;
     public static final int PENALTY_TIME = 30;
     public static final int HINT_CHECK_INTERVAL = 400;
@@ -108,9 +108,9 @@ public class Game extends AppCompatActivity{
         previousAnswerIndex = -1;
 
         // Obtain two random inputs and display them
-        input1 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
-        input2 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
-        randomNumber = RandomNumberGenerators.randomNumber(10);
+        input1 = RandomNumberGenerators.randomNumberMath(ROUND_MAX_VALUE);
+        input2 = RandomNumberGenerators.randomNumberMath(ROUND_MAX_VALUE);
+        randomNumber = RandomNumberGenerators.randomNumberMath(10);
 
         // Initialize info fields
         score = (TextView) findViewById(R.id.score);
@@ -467,9 +467,9 @@ public class Game extends AppCompatActivity{
         previousAnswerIndex = unknownFunction.getFunctionIndex();
 
         // Regenerate two numbers, unknown function and answer
-        input1 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
-        input2 = RandomNumberGenerators.randomNumber(ROUND_MAX_VALUE);
-        randomNumber = RandomNumberGenerators.randomNumber(10);
+        input1 = RandomNumberGenerators.randomNumberMath(ROUND_MAX_VALUE);
+        input2 = RandomNumberGenerators.randomNumberMath(ROUND_MAX_VALUE);
+        randomNumber = RandomNumberGenerators.randomNumberMath(10);
         input1_view.setText(String.valueOf(input1));
         input2_view.setText(String.valueOf(input2));
         unknownFunction = new UnknownFunctionGenerator(getSharedPreferences(SAVED_VALUES, Activity.MODE_PRIVATE));
@@ -719,7 +719,7 @@ public class Game extends AppCompatActivity{
     private void setRandomNumber(TextView view){
         int random;
         do {
-            random = RandomNumberGenerators.randomNumber(HINT_MAX_VALUE);
+            random = RandomNumberGenerators.randomNumberMath(HINT_MAX_VALUE);
         } while (isEqualQuestion(random));
 
         view.setText(String.valueOf(random));

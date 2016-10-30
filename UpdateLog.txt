@@ -1,3 +1,7 @@
+WL: 10/29
+Changes from 10/29 discussion
+New Functions
+
 ZH: 10/27
 Music across all activities
 

@@ -1,6 +1,7 @@
 package unknown.logica.Module;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import static unknown.logica.Module.HelperFunction.*;
 import static unknown.logica.Settings.*;
@@ -8,14 +9,16 @@ import static unknown.logica.Settings.*;
 public class UnknownFunctionGenerator {
 
     //Referenced http://stackoverflow.com/questions/4280727/java-creating-an-array-of-methods
-    public static final int MAX_FUNCTIONS = 22;
+    public static final int MAX_FUNCTIONS = 35;
     public static final int MIN_RANDOM_INDEX = 6;
     public static final int MAX_RANDOM_INDEX = 8;
-    private static final int HARD_START_INDEX = 14;
+    private static final int HARD_START_INDEX = 24;
 
     private UnknownFunction random_function;
     private int functionIndex;
     private interface UnknownFunction{ long calculate(int a, int b, int random); }
+
+    private static int start = 36;
 
     public UnknownFunctionGenerator(SharedPreferences sp){ random_function = unknownFunctionGenerator(sp); }
 
@@ -26,9 +29,19 @@ public class UnknownFunctionGenerator {
     private UnknownFunction unknownFunctionGenerator(SharedPreferences sp){
         int difficulty = sp.getInt(DIFFICULTY_VALUE, MIXED);
 
-        do {
-            functionIndex = RandomNumberGenerators.randomNumber(MAX_FUNCTIONS);
-        } while(!isValid(difficulty, functionIndex));
+        int i = 0;
+        int array[] = new int[40];
+        while(i < 20) {
+            do {
+                functionIndex = RandomNumberGenerators.randomNumberMath(MAX_FUNCTIONS);
+                array[functionIndex]++;
+                //functionIndex = start++;
+            } while (!isValid(difficulty, functionIndex));
+            i++;
+        }
+        for(int j = 0; j < 40; j++){
+            Log.d("Function Index - " + Integer.toString(j), String.valueOf(array[j]));
+        }
 
         return functionArray[functionIndex];
     }
@@ -61,6 +74,16 @@ public class UnknownFunctionGenerator {
             new UnknownFunction() { public long calculate(int a, int b, int random) { return totalDigitCount(a, b); }},               // functionArray[11]
             new UnknownFunction() { public long calculate(int a, int b, int random) { return digitDifference(a, b); }},               // functionArray[12]
             new UnknownFunction() { public long calculate(int a, int b, int random) { return printSumOfDigit(a, b); }},               // functionArray[13]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return printSmaller(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return printLarger(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return totalDigitCountSmaller(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return totalDigitCountLarger(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return reorderAscend(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return reorderDescend(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return reorderAscendSmall(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return reorderAscendLarge(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return reorderDescendSmall(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return reorderDescendLarge(a, b); }},
 
             /* ------------------ Hard ------------------ */
             new UnknownFunction() { public long calculate(int a, int b, int random) { return numberOfBinaryOne(a, b); }},             // functionArray[+ 1]
@@ -71,6 +94,14 @@ public class UnknownFunctionGenerator {
             new UnknownFunction() { public long calculate(int a, int b, int random) { return integerCounter(a, b); }},                // functionArray[+ 6]
             new UnknownFunction() { public long calculate(int a, int b, int random) { return digitSum(a, b); }},                      // functionArray[+ 7]
             new UnknownFunction() { public long calculate(int a, int b, int random) { return digitSub(a, b); }},                      // functionArray[+ 8]
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return sumSmaller(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return sumLarger(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return addDigitUntilOne(a, b); }},
+
+            /* ------------------ Undecided ------------------ */
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return bothEqual(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return bothNotEqual(a, b); }},
+
     };
 
     /* ------------------------------------- Functions (Easy)------------------------------------- */
@@ -187,5 +218,106 @@ public class UnknownFunctionGenerator {
         intCount(b, tableB);
 
         return Math.abs(sumOfDigit(tableA) - sumOfDigit(tableB));
+    }
+
+    //----------------------new---------------------------------
+    private long printSmaller(int a, int b){
+        return Math.min(a, b);
+    }
+
+    private long printLarger(int a, int b){
+        return Math.max(a, b);
+    }
+
+    private long sumSmaller(int a, int b){
+        int smaller = (int)printSmaller(a, b);
+        int[] smallerTable = new int[10];
+        intCount(smaller, smallerTable);
+        return sumOfDigit(smallerTable);
+    }
+
+    private long sumLarger(int a, int b){
+        int larger = (int)printLarger(a, b);
+        int[] largerTable = new int[10];
+        intCount(larger, largerTable);
+        return sumOfDigit(largerTable);
+    }
+
+    private long totalDigitCountSmaller(int a, int b){
+        int smaller = (int)printSmaller(a, b);
+        return (int)digitCount(smaller);
+    }
+
+    private long totalDigitCountLarger(int a, int b){
+        int larger = (int)printLarger(a, b);
+        return digitCount(larger);
+    }
+
+    private long bothEqual(int a, int b){
+        return a==b ? 1 : 0;
+    }
+
+    private long bothNotEqual(int a, int b){
+        return a!=b ? 1 : 0;
+    }
+
+    private long reorderDescend(int a, int b){
+        int[] tableA = new int[10];
+        intCount(a, tableA);
+        intCount(b, tableA);
+
+        return intArrayDescend(tableA);
+    }
+
+    private long reorderAscend(int a, int b){
+        int[] tableA = new int[10];
+        intCount(a, tableA);
+        intCount(b, tableA);
+
+        return intArrayAscend(tableA);
+    }
+
+    private long reorderDescendSmall(int a, int b){
+        int smaller = Math.min(a, b);
+        int[] tableA = new int[10];
+        intCount(smaller, tableA);
+
+        return intArrayDescend(tableA);
+    }
+
+    private long reorderDescendLarge(int a, int b){
+        int larger = Math.max(a, b);
+        int[] tableA = new int[10];
+        intCount(larger, tableA);
+
+        return intArrayDescend(tableA);
+    }
+
+    private long reorderAscendSmall(int a, int b){
+        int smaller = Math.min(a, b);
+        int[] tableA = new int[10];
+        intCount(smaller, tableA);
+
+        return intArrayAscend(tableA);
+    }
+
+    private long reorderAscendLarge(int a, int b){
+        int larger = Math.max(a, b);
+        int[] tableA = new int[10];
+        intCount(larger, tableA);
+
+        return intArrayAscend(tableA);
+    }
+
+    private long addDigitUntilOne(int a, int b){
+        if(a == 0 && b == 0) return 0;
+
+        long result = (a % 9) + (b % 9);
+        while(result > 9){
+            result %= 9;
+        }
+        if(result == 0) return 9;
+
+        return result;
     }
 }

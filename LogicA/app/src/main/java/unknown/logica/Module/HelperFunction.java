@@ -78,4 +78,26 @@ public class HelperFunction {
         }
         return result;
     }
+
+    public static long intArrayDescend(int[] array){
+        long result = 0;
+        for(int i = 9; i>=0; i--){
+            for(;array[i]>0; array[i]--){
+                result *= 10;
+                result += i;
+            }
+        }
+        return result;
+    }
+
+    public static long intArrayAscend(int[] array){
+        long result = 0;
+        for(int i = 0; i<=9; i++){
+            for(;array[i]>0; array[i]--){
+                result *= 10;
+                result += i;
+            }
+        }
+        return result;
+    }
 }

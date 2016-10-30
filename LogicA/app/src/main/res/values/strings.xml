@@ -38,7 +38,7 @@
     <string name="winner_message_label">Congratulations! %1$s wins the game!!</string>
     <string name="round_time_initial_label">Round_1 - 180 Seconds (20)</string>
     <string name="time_up_label">Time Up for this Round!\nOperator: #%1$d, Answer: %2$d</string>
-    <string name="next_game_label">Next Round</string>
+    <string name="new_game_label">New Game</string>
 
     <string name="title_01">01. Addition (Easy)</string>
     <string name="title_02">02. Subtraction (Easy)</string>
@@ -155,5 +155,6 @@
     <string name="tutorial_gameplay_title"><u>TUTORIAL - GAMEPLAY</u></string>
     <string name="tutorial_main_menu_title"><u>TUTORIAL - MAIN MENU</u></string>
     <string name="tutorial">Tutorial</string>
+
 
 </resources>

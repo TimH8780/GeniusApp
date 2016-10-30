@@ -29,7 +29,6 @@
     <string name="round_time_label">第%1$d回合</string>
     <string name="round_time_initial_label">第1回合 - 180秒 (20)</string>
     <string name="time_up_label">时间到了!\n运算符: #%1$d, 答案: %2$d</string>
-    <string name="next_game_label">下一回合</string>
     <string name="score_mode_description">游戏将在任何玩家到达指定分数的正负值时结束</string>
     <string name="start_game_label">开始游戏</string>
     <string name="round_mode_description">游戏将在到达指定回合时结束</string>
@@ -103,4 +102,5 @@
     <string name="title_13">数字量差（简单）</string>
     <string name="title_14">和的相并（简单）</string>
     <string name="title_15">二进制（困难）</string>
+    <string name="new_game_label">新游戏</string>
 </resources>

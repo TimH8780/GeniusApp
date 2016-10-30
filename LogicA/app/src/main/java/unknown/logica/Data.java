@@ -106,7 +106,7 @@ public class Data extends AppCompatActivity {
 
                             int input1 = Integer.valueOf(in1.getText().toString());
                             int input2 = Integer.valueOf(in2.getText().toString());
-                            int randomX = RandomNumberGenerators.randomNumber(10);
+                            int randomX = RandomNumberGenerators.randomNumberMath(10);
                             long result = function.getResult(input1, input2, randomX);
                             if(position >= MIN_RANDOM_INDEX && position <= MAX_RANDOM_INDEX) {
                                 randomView.setText(String.format(res.getString(R.string.random_text), randomX));

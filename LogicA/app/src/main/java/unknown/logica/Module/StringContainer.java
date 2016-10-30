@@ -38,7 +38,7 @@ public class StringContainer {
         answer_string = res.getString(R.string.answer_label);
         game_pause_string = res.getString(R.string.game_pause_label);
         game_over_string = res.getString(R.string.game_over_label);
-        next_game_string = res.getString(R.string.next_game_label);
+        next_game_string = res.getString(R.string.new_game_label);
         quit_string = res.getString(R.string.quit_label);
         click_string = res.getString(R.string.click_label);
         hint_input_title_string = res.getString(R.string.hint_input_title);
