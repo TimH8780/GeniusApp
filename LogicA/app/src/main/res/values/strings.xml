@@ -40,51 +40,51 @@
     <string name="time_up_label">Time Up for this Round!\nOperator: #%1$d, Answer: %2$d</string>
     <string name="new_game_label">New Game</string>
 
-    <string name="title_01">01. Addition (Easy)</string>
-    <string name="title_02">02. Subtraction (Easy)</string>
-    <string name="title_03">03. Multiplication (Easy)</string>
-    <string name="title_04">04. Close Area (Easy)</string>
-    <string name="title_05">05. Reverse Larger Number (Easy)</string>
-    <string name="title_06">06. Reverse Smaller Number (Easy)</string>
-    <string name="title_07">07. X Counter (Easy)</string>
-    <string name="title_08">08. Contain (Easy)</string>
-    <string name="title_09">09. Both Contain (Easy)</string>
-    <string name="title_10">10. GCF (Easy)</string>
-    <string name="title_11">11. LCM (Easy)</string>
-    <string name="title_12">12. Total Digits (Easy)</string>
-    <string name="title_13">13. Digit Difference (Easy)</string>
-    <string name="title_14">14. Print Sum of Digits (Easy)</string>
-    <string name="title_15">15. Binary One (Hard)</string>
-    <string name="title_16" translatable="false">16. Binary Addition under 10 (Hard)</string>
-    <string name="title_17" translatable="false">17. Binary Subtraction under 10 (Hard)</string>
-    <string name="title_18" translatable="false">18. Reverse of Sum (Hard)</string>
-    <string name="title_19" translatable="false">19. Reverse of Difference (Hard)</string>
-    <string name="title_20" translatable="false">20. Integer Counter (Hard)</string>
-    <string name="title_21" translatable="false">21. Digits Sum (Hard)</string>
-    <string name="title_22" translatable="false">22. Digits Subtract (Hard)</string>
+    <string name="title_E01">01. Addition (Easy)</string>
+    <string name="title_E02">02. Subtraction (Easy)</string>
+    <string name="title_E03">03. Multiplication (Easy)</string>
+    <string name="title_E04">04. Close Area (Easy)</string>
+    <string name="title_E05">05. Reverse Larger Number (Easy)</string>
+    <string name="title_E06">06. Reverse Smaller Number (Easy)</string>
+    <string name="title_E07">07. X Counter (Easy)</string>
+    <string name="title_E08">08. Contain (Easy)</string>
+    <string name="title_E09">09. Both Contain (Easy)</string>
+    <string name="title_E10">10. GCF (Easy)</string>
+    <string name="title_E11">11. LCM (Easy)</string>
+    <string name="title_E12">12. Total Digits (Easy)</string>
+    <string name="title_E13">13. Digit Difference (Easy)</string>
+    <string name="title_E14">14. Print Sum of Digits (Easy)</string>
+    <string name="title_H01">25. Binary One (Hard)</string>
+    <string name="title_H02" translatable="false">26. Binary Addition under 10 (Hard)</string>
+    <string name="title_H03" translatable="false">27. Binary Subtraction under 10 (Hard)</string>
+    <string name="title_H04" translatable="false">28. Reverse of Sum (Hard)</string>
+    <string name="title_H05" translatable="false">29. Reverse of Difference (Hard)</string>
+    <string name="title_H06" translatable="false">30. Integer Counter (Hard)</string>
+    <string name="title_H07" translatable="false">31. Sum of Digits Sum(Hard)</string>
+    <string name="title_H08" translatable="false">32. Subtract of Digits Sum (Hard)</string>
 
-    <string name="description_01">Sum of A and B</string>
-    <string name="description_02">Difference between A and B (Absolution value of A - B)</string>
-    <string name="description_03">Multiply of A and B</string>
-    <string name="description_04">Total amount of close areas in A and in B \u000Awhere 1, 2, 3, 5, 7 -> 0 Area | 0, 4, 6, 9 -> 1 Area | 8 -> 2 Areas</string>
-    <string name="description_05">Reverse Digits in larger number of A and B</string>
-    <string name="description_06">Reverse Digits in smaller number of A and B</string>
-    <string name="description_07">Total number of digit X appear in A and B</string>
-    <string name="description_08">Does either A or B contain the digit X? \u000AYes -> 1 | No -> 0</string>
-    <string name="description_09">Do both A and B contain the digit X? \u000AYes -> 1 | No -> 0</string>
-    <string name="description_10">Greatest common factor of A and B</string>
-    <string name="description_11">Least common multiple of A and B</string>
-    <string name="description_12">Total number of digits in A and B</string>
-    <string name="description_13">Difference between the number of digits in A and B</string>
-    <string name="description_14">Sum of individual digit in A print together with individual digit sum of B</string>
-    <string name="description_15" translatable="false">Total number of 1\'s in the binary representation of A and B</string>
-    <string name="description_16" translatable="false">Print binary representation of sum of least significant digit of A and B</string>
-    <string name="description_17" translatable="false">Print binary representation of difference between least significant digit of A and B</string>
-    <string name="description_18">Reverse Digits of A + B</string>
-    <string name="description_19">Reverse Digits of absolution number of A - B</string>
-    <string name="description_20">Display the frequency of each digit in A and B in descending order</string>
-    <string name="description_21">Sum of individual digit in A + sum of individual digit in B</string>
-    <string name="description_22">Absolute value of Sum of individual digit in A - sum of individual digit in A</string>
+    <string name="description_E01">Sum of A and B</string>
+    <string name="description_E02">Difference between A and B (Absolution value of A - B)</string>
+    <string name="description_E03">Multiply of A and B</string>
+    <string name="description_E04">Total amount of close areas in A and in B \u000Awhere 1, 2, 3, 5, 7 -> 0 Area | 0, 4, 6, 9 -> 1 Area | 8 -> 2 Areas</string>
+    <string name="description_E05">Reverse Digits in larger number of A and B</string>
+    <string name="description_E06">Reverse Digits in smaller number of A and B</string>
+    <string name="description_E07">Total number of digit X appear in A and B</string>
+    <string name="description_E08">Does either A or B contain the digit X? \u000AYes -> 1 | No -> 0</string>
+    <string name="description_E09">Do both A and B contain the digit X? \u000AYes -> 1 | No -> 0</string>
+    <string name="description_E10">Greatest common factor of A and B</string>
+    <string name="description_E11">Least common multiple of A and B</string>
+    <string name="description_E12">Total number of digits in A and B</string>
+    <string name="description_E13">Difference between the number of digits in A and B</string>
+    <string name="description_E14">Sum of individual digit in A print together with individual digit sum of B</string>
+    <string name="description_H01" translatable="false">Total number of 1\'s in the binary representation of A and B</string>
+    <string name="description_H02" translatable="false">Print binary representation of sum of least significant digit of A and B</string>
+    <string name="description_H03" translatable="false">Print binary representation of difference between least significant digit of A and B</string>
+    <string name="description_H04">Reverse Digits of A + B</string>
+    <string name="description_H05">Reverse Digits of absolution number of A - B</string>
+    <string name="description_H06">Display the frequency of each digit in A and B in descending order</string>
+    <string name="description_H07">Sum of individual digit in A + sum of individual digit in B</string>
+    <string name="description_H08">Absolute value of Sum of individual digit in A - sum of individual digit in A</string>
     <string name="start_game_label">Start Game</string>
     <string name="round_mode_description">The game ends when it reaches the target round</string>
     <string name="round_mode_title">Round Mode</string>
@@ -155,6 +155,32 @@
     <string name="tutorial_gameplay_title"><u>TUTORIAL - GAMEPLAY</u></string>
     <string name="tutorial_main_menu_title"><u>TUTORIAL - MAIN MENU</u></string>
     <string name="tutorial">Tutorial</string>
+    <string name="title_E15" translatable="false">15. Print Smaller Number (Easy)</string>
+    <string name="title_E16" translatable="false">16. Print Larger Number (Easy)</string>
+    <string name="title_E17" translatable="false">17. Total Digit Count - Smaller Number (Easy)</string>
+    <string name="title_E18" translatable="false">18. Total Digit Count - Larger Number (Easy)</string>
+    <string name="title_E19" translatable="false">19. Digit Ascending Order - All (Easy)</string>
+    <string name="title_E20" translatable="false">20. Digit Descending Order - All (Easy)</string>
+    <string name="title_E21" translatable="false">21. Digit Ascending Order - Smaller Number (Easy)</string>
+    <string name="title_E22" translatable="false">22. Digit Ascending Order - Larger Number (Easy)</string>
+    <string name="title_E23" translatable="false">23. Digit Descending Order - Smaller Number (Easy)</string>
+    <string name="title_E24" translatable="false">24. Digit Descending Order - Larger Number (Easy)</string>
+    <string name="title_H09" translatable="false">33. Smaller Number Digits Sum (Hard)</string>
+    <string name="title_H10" translatable="false">34. Larger Number Digits Sum (Hard)</string>
+    <string name="title_H11" translatable="false">35. Add Digits Until One (Hard)</string>
+    <string name="description_E15" translatable="false">Print the smaller number of A and B</string>
+    <string name="description_E16" translatable="false">Print the larger number of A and B</string>
+    <string name="description_E17" translatable="false">Total amount of digits combined in the smaller number of A and B</string>
+    <string name="description_E18" translatable="false">Total amount of digits combined in the larger number of A and B</string>
+    <string name="description_E19" translatable="false">Reorder the individual digits in both A and B in asceding order</string>
+    <string name="description_E20" translatable="false">Reorder the individual digits in both A and B in descending order</string>
+    <string name="description_E21" translatable="false">Reorder the individual digits asceding order for the smaller number of A and B</string>
+    <string name="description_E22" translatable="false">Reorder the individual digits asceding order for the larger number of A and B</string>
+    <string name="description_E23" translatable="false">Reorder the individual digits descending order for the smaller number of A and B</string>
+    <string name="description_E24" translatable="false">Reorder the individual digits descending order for the larger number of A and B</string>
+    <string name="description_H09" translatable="false">Sum the individual digits of the smaller number of A and B</string>
+    <string name="description_H10" translatable="false">Sum the individual digits of the larger number of A and B</string>
+    <string name="description_H11" translatable="false">Repeatly sum of all digits in both A and B until it becomes one single digit</string>
 
 
 </resources>

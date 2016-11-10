@@ -1,3 +1,7 @@
+ZH: 11/09
+Update function list
+More function ideas
+
 WL: 10/29
 Changes from 10/29 discussion
 New Functions
