@@ -101,6 +101,40 @@ public class UnknownFunctionGenerator {
             /* ------------------ Undecided ------------------ */
             new UnknownFunction() { public long calculate(int a, int b, int random) { return bothEqual(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return bothNotEqual(a, b); }},
+            //new UnknownFunction() { public long calculate(int a, int b, int random) { return digitCountMultiplication(a, b); }},
+            //new UnknownFunction() { public long calculate(int a, int b, int random) { return digitCountSubtraction(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return sumOfReverseLarger(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return sumOfReverseSmaller(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return subOfReverseLarger(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return subOfReverseSmall(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return nineComplementAll(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return nineComplementSmaller(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return nineComplementLarger(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return headAndTail(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return tailAndHead(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return average(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return reverseAll(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return oddDigitOnly(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return evenDigitOnly(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return oddPositionOnly(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return evenPositionOnly(a, b); }},
+            //new UnknownFunction() { public long calculate(int a, int b, int random) { return digitMedian(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return division(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return modulo(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return divAndMod(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return sumAndSub(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return removeLargestDigit(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return removeSmallerDigit(a, b); }},
+            //new UnknownFunction() { public long calculate(int a, int b, int random) { return removeRepeatedDigit(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return doubleDigits(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return halfDigits(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return printAll(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return sumOfDoubledDigits(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return subOfDoubledDigits(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return sumOfHalvedDigits(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return subOfHalvedDigits(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return indicatedDigit(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return mostOccurrence(a, b); }},
 
     };
 
@@ -166,8 +200,8 @@ public class UnknownFunctionGenerator {
         int[] tableB = new int[10];
         intCount(a, tableA);
         intCount(b, tableB);
-        String temp = String.valueOf(sumOfDigit(tableA)) + String.valueOf(sumOfDigit(tableB));
-        return Long.valueOf(temp);
+
+        return combinedTwoNumber(sumOfDigit(tableA), sumOfDigit(tableB));
     }
 
     /* ------------------------------------- Functions (Hard)------------------------------------- */
@@ -176,9 +210,7 @@ public class UnknownFunctionGenerator {
     }
 
     private long binarySumUnder10(int a, int b){
-        a %= 10;
-        b %= 10;
-        return Long.valueOf(Integer.toBinaryString(a + b));
+        return Long.valueOf(Integer.toBinaryString(a % 10 + b % 10));
     }
 
     private long binaryMinusUnder10(int a, int b){
@@ -203,12 +235,11 @@ public class UnknownFunctionGenerator {
     }
 
     private long digitSum(int a, int b){
-        int[] tableA = new int[10];
-        int[] tableB = new int[10];
-        intCount(a, tableA);
-        intCount(b, tableB);
+        int[] table = new int[10];
+        intCount(a, table);
+        intCount(b, table);
 
-        return sumOfDigit(tableA) + sumOfDigit(tableB);
+        return sumOfDigit(table);
     }
 
     private long digitSub(int a, int b){
@@ -229,83 +260,75 @@ public class UnknownFunctionGenerator {
     }
 
     private long sumSmaller(int a, int b){
-        int smaller = (int)printSmaller(a, b);
+        int smaller = Math.min(a, b);
         int[] smallerTable = new int[10];
         intCount(smaller, smallerTable);
         return sumOfDigit(smallerTable);
     }
 
     private long sumLarger(int a, int b){
-        int larger = (int)printLarger(a, b);
+        int larger = Math.max(a, b);
         int[] largerTable = new int[10];
         intCount(larger, largerTable);
         return sumOfDigit(largerTable);
     }
 
     private long totalDigitCountSmaller(int a, int b){
-        int smaller = (int)printSmaller(a, b);
-        return (int)digitCount(smaller);
+        int smaller = Math.min(a, b);
+        return digitCount(smaller);
     }
 
     private long totalDigitCountLarger(int a, int b){
-        int larger = (int)printLarger(a, b);
+        int larger = Math.max(a, b);
         return digitCount(larger);
     }
 
-    private long bothEqual(int a, int b){
-        return a==b ? 1 : 0;
-    }
-
-    private long bothNotEqual(int a, int b){
-        return a!=b ? 1 : 0;
-    }
-
     private long reorderDescend(int a, int b){
-        int[] tableA = new int[10];
-        intCount(a, tableA);
-        intCount(b, tableA);
+        int[] table = new int[10];
+        intCount(a, table);
+        intCount(b, table);
 
-        return intArrayDescend(tableA);
+        return intArrayDescend(table);
     }
 
     private long reorderAscend(int a, int b){
-        int[] tableA = new int[10];
-        intCount(a, tableA);
-        intCount(b, tableA);
+        int[] table = new int[10];
+        intCount(a, table);
+        intCount(b, table);
 
-        return intArrayAscend(tableA);
+        return intArrayAscend(table);
     }
 
     private long reorderDescendSmall(int a, int b){
         int smaller = Math.min(a, b);
-        int[] tableA = new int[10];
-        intCount(smaller, tableA);
+        int[] table = new int[10];
+        intCount(smaller, table);
 
-        return intArrayDescend(tableA);
+        return intArrayDescend(table);
     }
 
     private long reorderDescendLarge(int a, int b){
         int larger = Math.max(a, b);
-        int[] tableA = new int[10];
-        intCount(larger, tableA);
+        int[] table = new int[10];
+        intCount(larger, table);
 
-        return intArrayDescend(tableA);
+        return intArrayDescend(table);
     }
 
     private long reorderAscendSmall(int a, int b){
         int smaller = Math.min(a, b);
-        int[] tableA = new int[10];
-        intCount(smaller, tableA);
+        int[] table = new int[10];
+        intCount(smaller, table);
 
-        return intArrayAscend(tableA);
+        return intArrayAscend(table);
     }
 
     private long reorderAscendLarge(int a, int b){
         int larger = Math.max(a, b);
-        int[] tableA = new int[10];
-        intCount(larger, tableA);
+        int[] table = new int[10];
+        intCount(larger, table);
 
-        return intArrayAscend(tableA);
+        return intArrayAscend(table);
     }
 
     private long addDigitUntilOne(int a, int b){
@@ -319,4 +342,190 @@ public class UnknownFunctionGenerator {
 
         return result;
     }
+
+
+
+    /* ------------------------------------- Functions (Undecided)------------------------------------- */
+    private long bothEqual(int a, int b){
+        return a == b? 1 : 0;
+    }
+
+    private long bothNotEqual(int a, int b){
+        return a != b? 1 : 0;
+    }
+
+    private long digitCountMultiplication(int a, int b){
+        //TODO
+        return -1;
+    }
+
+    private long digitCountSubtraction(int a, int b){
+        //TODO
+        return -1;
+    }
+
+    private long sumOfReverseLarger(int a, int b){
+        return reverseLarger(a, b) + Math.min(a, b);
+    }
+
+    private long sumOfReverseSmaller(int a, int b){
+        return reverseSmaller(a, b) + Math.max(a, b);
+    }
+
+    private long subOfReverseLarger(int a, int b){
+        return Math.abs(reverseLarger(a, b) - Math.min(a, b));
+    }
+
+    private long subOfReverseSmall(int a, int b){
+        return Math.abs(reverseSmaller(a, b) - Math.max(a, b));
+    }
+
+    private long nineComplementAll(int a, int b){
+        long combined = numberOfBinaryOne(a, b);
+        long nines = generateNines(digitCount(combined));
+
+        return nines - combined;
+    }
+
+    private long nineComplementSmaller(int a, int b){
+        int smaller = Math.min(a, b);
+        long nines = generateNines(digitCount(smaller));
+
+        return nines - smaller;
+    }
+
+    private long nineComplementLarger(int a, int b){
+        long larger = Math.max(a, b);
+        long nines = generateNines(digitCount(larger));
+
+        return nines - larger;
+    }
+
+    private long headAndTail(int a, int b){
+        return combinedTwoNumber(getHeadDigit(a), getTailDigit(b));
+    }
+
+    private long tailAndHead(int a, int b){
+        return combinedTwoNumber(getTailDigit(a), getHeadDigit(b));
+    }
+
+    private long average(int a, int b){
+        return (a + b) / 2;
+    }
+
+    private long reverseAll(int a, int b){
+        long combined = combinedTwoNumber(a, b);
+        return reverseNumber(combined);
+    }
+
+    private long oddDigitOnly(int a, int b){
+        String combinedString = String.valueOf(a) + String.valueOf(b);
+        String processed = removeDigit(combinedString, REMOVE_EVEN_DIGIT);
+        return Long.valueOf(processed);
+    }
+
+    private long evenDigitOnly(int a, int b){
+        String combinedString = String.valueOf(a) + String.valueOf(b);
+        String processed = removeDigit(combinedString, REMOVE_ODD_DIGIT);
+        return Long.valueOf(processed);
+    }
+
+    private long oddPositionOnly(int a, int b){
+        String combinedString = String.valueOf(a) + String.valueOf(b);
+        String processed = removePositionDigit(combinedString, REMOVE_EVEN_POSITION);
+        return Long.valueOf(processed);
+    }
+
+    private long evenPositionOnly(int a, int b){
+        String combinedString = String.valueOf(a) + String.valueOf(b);
+        String processed = removePositionDigit(combinedString, REMOVE_ODD_POSITION);
+        return Long.valueOf(processed);
+    }
+
+    private long digitMedian(int a, int b){
+        //TODO
+        return -1;
+    }
+
+    private long division(int a, int b){
+        return a / b;
+    }
+
+    private long modulo(int a, int b){
+        return a % b;
+    }
+
+    private long divAndMod(int a, int b){
+        return combinedTwoNumber(division(a, b), modulo(a, b));
+    }
+
+    private long sumAndSub(int a, int b){
+        return combinedTwoNumber(addition(a, b), subtraction(a, b));
+    }
+
+    private long removeLargestDigit(int a, int b){
+        String combinedString = String.valueOf(a) + String.valueOf(b);
+        char largestDigit = getLargestDigit(combinedString);
+        return Long.valueOf(removeDesiredDigit(combinedString, largestDigit));
+    }
+
+    private long removeSmallerDigit(int a, int b){
+        String combinedString = String.valueOf(a) + String.valueOf(b);
+        char smallestDigit = getSmallerDigit(combinedString);
+        return Long.valueOf(removeDesiredDigit(combinedString, smallestDigit));
+    }
+
+    private long removeRepeatedDigit(int a, int b){
+        //TODO
+        return -1;
+    }
+
+    private long doubleDigits(int a, int b){
+        int doubledA = doubleDigit(a);
+        int doubledB = doubleDigit(b);
+        return combinedTwoNumber(doubledA, doubledB);
+    }
+
+    private long halfDigits(int a, int b){
+        int halvedA = halfDigit(a);
+        int halvedB = halfDigit(b);
+        return combinedTwoNumber(halvedA, halvedB);
+    }
+
+    private long printAll(int a, int b){
+        return combinedTwoNumber(a, b);
+    }
+
+    private long sumOfDoubledDigits(int a, int b){
+        return addition(doubleDigit(a), doubleDigit(b));
+    }
+
+    private long subOfDoubledDigits(int a, int b){
+        return subtraction(doubleDigit(a), doubleDigit(b));
+    }
+
+    private long sumOfHalvedDigits(int a, int b){
+        return addition(halfDigit(a), halfDigit(b));
+    }
+
+    private long subOfHalvedDigits(int a, int b){
+        return subtraction(halfDigit(a), halfDigit(b));
+    }
+
+    private long indicatedDigit(int a, int b){
+        int[] intArray = intToIntArray(combinedTwoNumber(a, b));
+        int firstDigit = intArray[0];
+        int targetPosition = (firstDigit % intArray.length) - 1;
+        if(targetPosition < 0) targetPosition += intArray.length;
+
+        return intArray[targetPosition];
+    }
+
+    private long mostOccurrence(int a, int b){
+        int[] table = new int[10];
+        intCount(a, table);
+        intCount(b, table);
+        return getLargestDigitOccurrence(table);
+    }
 }
+
