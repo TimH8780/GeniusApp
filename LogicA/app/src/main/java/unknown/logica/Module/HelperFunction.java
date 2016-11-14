@@ -1,5 +1,9 @@
 package unknown.logica.Module;
 
+import android.util.Log;
+
+import java.util.LinkedList;
+
 /**
  *Created by Tim on 08/20/16.
  */
@@ -201,25 +205,60 @@ public class HelperFunction {
         return array;
     }
 
-    public static int doubleDigit(int num){
-        int result = 0;
+    public static int[] doubleDigit(int num){
         int[] array = intToIntArray(num);
-        for(int i: array){
+        for(int i = 0; i < array.length; i++){
+            array[i] = (array[i] * 2) % 10;
+        }
+
+        return array;
+    }
+
+    public static int[] halfDigit(int num){
+        int[] array = intToIntArray(num);
+        for(int i = 0; i < array.length; i++){
+            array[i] = array[i] / 2;
+        }
+
+        return array;
+    }
+
+    public static int combinedTwoIntArray(int[] a, int[] b){
+        int result = 0;
+        for(int i: a){
             result *= 10;
-            result += ((i * 2) % 10);
+            result += i;
+        }
+        for(int i: b){
+            result *= 10;
+            result += i;
         }
 
         return result;
     }
 
-    public static int halfDigit(int num){
+    public static int intArrayToInt(int[] arr){
         int result = 0;
-        int[] array = intToIntArray(num);
-        for(int i: array){
+        for(int i: arr){
             result *= 10;
-            result += (i / 2);
+            result += i;
+        }
+        return result;
+    }
+
+    public static int insertX(int numb, int random){
+        long result = 0;
+        LinkedList<Integer> stack = new LinkedList<Integer>();
+        while (numb > 0) {
+            stack.push( numb % 10 );
+            numb = numb / 10;
         }
 
-        return result;
+        while (!stack.isEmpty()) {
+            result = (int)combinedTwoNumber(result, stack.pop());
+            result = (int)combinedTwoNumber(result, random);
+        }
+
+        return (int)(result /=10);
     }
 }

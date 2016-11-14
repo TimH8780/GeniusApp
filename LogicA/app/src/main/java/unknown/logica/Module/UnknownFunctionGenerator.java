@@ -3,6 +3,9 @@ package unknown.logica.Module;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+
 import static unknown.logica.Module.HelperFunction.*;
 import static unknown.logica.Settings.*;
 
@@ -18,7 +21,7 @@ public class UnknownFunctionGenerator {
     private int functionIndex;
     private interface UnknownFunction{ long calculate(int a, int b, int random); }
 
-    //private static int start = 36;
+    private static int start = 75;
 
     public UnknownFunctionGenerator(SharedPreferences sp){ random_function = unknownFunctionGenerator(sp); }
 
@@ -30,14 +33,14 @@ public class UnknownFunctionGenerator {
         int difficulty = sp.getInt(DIFFICULTY_VALUE, MIXED);
 
         //int i = 0;
-        //int array[] = new int[40];
+        int array[] = new int[40];
         //while(i < 20) {
             do {
                 functionIndex = RandomNumberGenerators.randomNumberMath(MAX_FUNCTIONS);
-                //array[functionIndex]++;
-                //functionIndex = start++;
+                array[functionIndex]++;
+                functionIndex = start++;
             } while (!isValid(difficulty, functionIndex));
-        //    i++;
+            //i++;
         //}
         //for(int j = 0; j < 40; j++){
         //    Log.d("Function Index - " + Integer.toString(j), String.valueOf(array[j]));
@@ -101,8 +104,8 @@ public class UnknownFunctionGenerator {
             /* ------------------ Undecided ------------------ */
             new UnknownFunction() { public long calculate(int a, int b, int random) { return bothEqual(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return bothNotEqual(a, b); }},
-            //new UnknownFunction() { public long calculate(int a, int b, int random) { return digitCountMultiplication(a, b); }},
-            //new UnknownFunction() { public long calculate(int a, int b, int random) { return digitCountSubtraction(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return digitCountMultiplication(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return digitCountSubtraction(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return sumOfReverseLarger(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return sumOfReverseSmaller(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return subOfReverseLarger(a, b); }},
@@ -118,14 +121,14 @@ public class UnknownFunctionGenerator {
             new UnknownFunction() { public long calculate(int a, int b, int random) { return evenDigitOnly(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return oddPositionOnly(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return evenPositionOnly(a, b); }},
-            //new UnknownFunction() { public long calculate(int a, int b, int random) { return digitMedian(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return digitMedian(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return division(a, b); }},
-            new UnknownFunction() { public long calculate(int a, int b, int random) { return modulo(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return moduloAB(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return divAndMod(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return sumAndSub(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return removeLargestDigit(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return removeSmallerDigit(a, b); }},
-            //new UnknownFunction() { public long calculate(int a, int b, int random) { return removeRepeatedDigit(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return removeRepeatedDigit(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return doubleDigits(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return halfDigits(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return printAll(a, b); }},
@@ -135,6 +138,15 @@ public class UnknownFunctionGenerator {
             new UnknownFunction() { public long calculate(int a, int b, int random) { return subOfHalvedDigits(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return indicatedDigit(a, b); }},
             new UnknownFunction() { public long calculate(int a, int b, int random) { return mostOccurrence(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return headAndHead(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return tailAndTail(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return additionOfModX(a, b, random); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return insertXInbetween(a, b, random); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return moduloAB(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return moduloBA(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return moduloBigSmall(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return amountDigitGreaterThan5(a, b); }},
+            new UnknownFunction() { public long calculate(int a, int b, int random) { return amountDigitLessThan5(a, b); }},
 
     };
 
@@ -356,12 +368,17 @@ public class UnknownFunctionGenerator {
 
     private long digitCountMultiplication(int a, int b){
         //TODO
-        return -1;
+        int digA = digitCount(a);
+        int digB = digitCount(b);
+        Log.d("digitCountMult", Integer.toString(digA));
+        return (digA * digB);
     }
 
     private long digitCountSubtraction(int a, int b){
         //TODO
-        return -1;
+        int digA = digitCount(a);
+        int digB = digitCount(b);
+        return Math.abs(digA-digB);
     }
 
     private long sumOfReverseLarger(int a, int b){
@@ -381,7 +398,7 @@ public class UnknownFunctionGenerator {
     }
 
     private long nineComplementAll(int a, int b){
-        long combined = numberOfBinaryOne(a, b);
+        long combined = combinedTwoNumber(a, b);
         long nines = generateNines(digitCount(combined));
 
         return nines - combined;
@@ -421,12 +438,14 @@ public class UnknownFunctionGenerator {
     private long oddDigitOnly(int a, int b){
         String combinedString = String.valueOf(a) + String.valueOf(b);
         String processed = removeDigit(combinedString, REMOVE_EVEN_DIGIT);
+        if(processed.equals("")) return 0;
         return Long.valueOf(processed);
     }
 
     private long evenDigitOnly(int a, int b){
         String combinedString = String.valueOf(a) + String.valueOf(b);
         String processed = removeDigit(combinedString, REMOVE_ODD_DIGIT);
+        if(processed.equals("")) return 0;
         return Long.valueOf(processed);
     }
 
@@ -444,19 +463,35 @@ public class UnknownFunctionGenerator {
 
     private long digitMedian(int a, int b){
         //TODO
-        return -1;
+        int  i = 0, median = 0;
+        //int combined = combinedTwoNumber(a, b);
+        String combined = String.valueOf(a) + String.valueOf(b);
+//        int[] combinedDigits = new int[String.valueOf(combined).length()];
+//        while (combined > 0) {
+//            combinedDigits[i] = (combined % 10 );
+//            combined = combined / 10;
+//            i++;
+//        }
+        char[] combinedDigits = combined.toCharArray();
+        Arrays.sort(combinedDigits);
+//        if (combinedDigits.length % 2 == 0)
+//            median = (combinedDigits[combinedDigits.length/2] + combinedDigits[combinedDigits.length/2 - 1])/2;
+//        else
+//            median = combinedDigits[combinedDigits.length/2];
+        if (combinedDigits.length % 2 == 0)
+            median = (Character.getNumericValue(combinedDigits[combinedDigits.length/2]) + Character.getNumericValue(combinedDigits[combinedDigits.length/2 - 1]))/2;
+        else
+            median = Character.getNumericValue(combinedDigits[combinedDigits.length/2]);
+        return median;
     }
 
     private long division(int a, int b){
+        if (b==0) return 0;
         return a / b;
     }
 
-    private long modulo(int a, int b){
-        return a % b;
-    }
-
     private long divAndMod(int a, int b){
-        return combinedTwoNumber(division(a, b), modulo(a, b));
+        return combinedTwoNumber(division(a, b), moduloAB(a, b));
     }
 
     private long sumAndSub(int a, int b){
@@ -466,30 +501,55 @@ public class UnknownFunctionGenerator {
     private long removeLargestDigit(int a, int b){
         String combinedString = String.valueOf(a) + String.valueOf(b);
         char largestDigit = getLargestDigit(combinedString);
-        return Long.valueOf(removeDesiredDigit(combinedString, largestDigit));
+        String remainingStr = removeDesiredDigit(combinedString, largestDigit);
+        if(remainingStr.equals("")) return 0;
+        return Long.valueOf(remainingStr);
     }
 
     private long removeSmallerDigit(int a, int b){
         String combinedString = String.valueOf(a) + String.valueOf(b);
         char smallestDigit = getSmallerDigit(combinedString);
-        return Long.valueOf(removeDesiredDigit(combinedString, smallestDigit));
+        String remainingStr = removeDesiredDigit(combinedString, smallestDigit);
+        if(remainingStr.equals("")) return 0;
+        return Long.valueOf(remainingStr);
     }
 
     private long removeRepeatedDigit(int a, int b){
         //TODO
-        return -1;
+        int result = 0, set = 0, rev = 0, combined = (int)combinedTwoNumber(a, b);  // result
+        int copy = combined;
+
+        while (combined > 0) {
+            rev = (rev * 10) + (combined % 10);
+            combined /= 10;
+        }
+
+        while (rev > 0) {
+            final int mod = rev % 10;
+            final int mask = 1 << mod;
+            if ((set & mask) == 0) {
+                result = (result * 10) + mod;
+                set |= mask;
+            }
+            rev /= 10;
+        }
+
+        if(copy % 10 == 0 && (set & 1) == 0){
+            result *= 10;
+        }
+        return result;
     }
 
     private long doubleDigits(int a, int b){
-        int doubledA = doubleDigit(a);
-        int doubledB = doubleDigit(b);
-        return combinedTwoNumber(doubledA, doubledB);
+        int[] doubledA = doubleDigit(a);
+        int[] doubledB = doubleDigit(b);
+        return combinedTwoIntArray(doubledA, doubledB);
     }
 
     private long halfDigits(int a, int b){
-        int halvedA = halfDigit(a);
-        int halvedB = halfDigit(b);
-        return combinedTwoNumber(halvedA, halvedB);
+        int[] halvedA = halfDigit(a);
+        int[] halvedB = halfDigit(b);
+        return combinedTwoIntArray(halvedA, halvedB);
     }
 
     private long printAll(int a, int b){
@@ -497,19 +557,19 @@ public class UnknownFunctionGenerator {
     }
 
     private long sumOfDoubledDigits(int a, int b){
-        return addition(doubleDigit(a), doubleDigit(b));
+        return addition(intArrayToInt(doubleDigit(a)), intArrayToInt(doubleDigit(b)));
     }
 
     private long subOfDoubledDigits(int a, int b){
-        return subtraction(doubleDigit(a), doubleDigit(b));
+        return subtraction(intArrayToInt(doubleDigit(a)), intArrayToInt(doubleDigit(b)));
     }
 
     private long sumOfHalvedDigits(int a, int b){
-        return addition(halfDigit(a), halfDigit(b));
+        return addition(intArrayToInt(halfDigit(a)), intArrayToInt(halfDigit(b)));
     }
 
     private long subOfHalvedDigits(int a, int b){
-        return subtraction(halfDigit(a), halfDigit(b));
+        return subtraction(intArrayToInt(halfDigit(a)), intArrayToInt(halfDigit(b)));
     }
 
     private long indicatedDigit(int a, int b){
@@ -526,6 +586,74 @@ public class UnknownFunctionGenerator {
         intCount(a, table);
         intCount(b, table);
         return getLargestDigitOccurrence(table);
+    }
+
+    private long headAndHead(int a, int b){
+        return combinedTwoNumber(getHeadDigit(a), getHeadDigit(b));
+    }
+
+    private long tailAndTail(int a, int b){
+        return combinedTwoNumber(getTailDigit(a), getTailDigit(b));
+    }
+
+    private long additionOfModX(int a, int b, int random){
+        if(a == 0 && b == 0) return 0;
+
+        long result = (a % random) + (b % random);
+        while(result > random){
+            result %= random;
+        }
+        if(result == 0) return random; //(result == random) return 0?
+
+        return result;
+    }
+
+    private long insertXInbetween(int a, int b, int random){
+        int combined = (int)combinedTwoNumber(a, b);
+        return insertX(combined, random);
+    }
+
+    private long moduloAB(int a, int b){
+        if(b==0) return 0;
+        return (a % b);
+    }
+
+    private long moduloBA(int a, int b){
+        if(a==0) return 0;
+        return (b % a);
+    }
+
+    private long moduloBigSmall(int a, int b){
+        int larger = Math.max(a, b);
+        int smaller = Math.min(a, b);
+        if(smaller==0) return 0;
+        return (larger % smaller);
+    }
+
+    private long amountDigitGreaterThan5(int a, int b){
+        int table[] = new int[10];
+        int medium = 5, result = 0;
+        intCount(a, table);
+        intCount(b, table);
+        do {
+            result += table[medium];
+            medium++;
+        }while (medium <= 9);
+
+        return result;
+    }
+
+    private long amountDigitLessThan5(int a, int b){
+        int table[] = new int[10];
+        int medium = 5, result = 0;
+        intCount(a, table);
+        intCount(b, table);
+        do {
+            result += table[medium-1];
+            medium--;
+        }while (medium > 0);
+
+        return result;
     }
 }
 
