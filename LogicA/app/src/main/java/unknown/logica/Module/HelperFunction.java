@@ -12,6 +12,8 @@ public class HelperFunction {
     public static final boolean REMOVE_ODD_DIGIT = true;
     public static final boolean REMOVE_EVEN_POSITION = false;
     public static final boolean REMOVE_ODD_POSITION = true;
+    public static final boolean REMOVE_LESS_5 = false;
+    public static final boolean REMOVE_GREATER_5 = true;
 
     /* ------------------------------------- Lookup Tables ------------------------------------- */
     public static int[] circleTable = {1, 0, 0, 0, 1, 0, 1, 0, 2, 1};
@@ -88,6 +90,16 @@ public class HelperFunction {
         return result;
     }
 
+    public static long productOfDigit(int[] digits){
+        long result = 1;
+        for(int i = 9; i >= 0; i--){
+            if(digits[i]!=0) {
+                result *= Math.pow(i, digits[i]);
+            }
+        }
+        return result;
+    }
+
     public static long intArrayDescend(int[] array){
         long result = 0;
         for(int i = 9; i >= 0; i--){
@@ -145,6 +157,20 @@ public class HelperFunction {
 
     private static boolean isOddDigit(char c){
         return c == '1' || c == '3' || c == '5' || c == '7' || c == '9';
+    }
+
+    private static boolean isGreaterThan5(char c){
+        return c == '5' || c == '6' || c == '7' || c == '8' || c == '9';
+    }
+
+    public static String removeGreaterLessThan5(String numStr, boolean which){
+        StringBuilder builder = new StringBuilder();
+        for(char c: numStr.toCharArray()){
+            if(isGreaterThan5(c) ^ which){
+                builder.append(c);
+            }
+        }
+        return builder.toString();
     }
 
     public static String removeDigit(String numStr, boolean which){
@@ -260,5 +286,21 @@ public class HelperFunction {
         }
 
         return (int)(result /=10);
+    }
+
+    public static int factorial(int num){
+        Log.d("factorial", String.valueOf(num));
+        if (num==0) return 0;
+        else if (num==1) return 1;
+        else
+            return num * factorial(num - 1);
+    }
+
+    public static int maxDigit(int n){
+        return n==0 ? 0 : Math.max(n%10, maxDigit(n/10));
+    }
+
+    public static int minDigit(int n){
+        return n==0 ? 0 : Math.min(n%10, minDigit(n/10));
     }
 }
